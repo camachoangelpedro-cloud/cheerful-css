@@ -27,8 +27,8 @@ export function Navbar() {
               <span className="mx-6">•</span>
               Diseño modular. Fabricación colombiana.
               <span className="mx-6">•</span>
-              Ensamblaje sin herramientas.
-              <span className="mx-6">•</span>
+               Ensamblaje sin herramientas       
+               <span className="mx-6">•</span>
             </span>
           )}
         </div>
