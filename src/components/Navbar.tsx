@@ -21,16 +21,19 @@ export function Navbar() {
       {/* Announcement Bar - Kismas style scrolling */}
       <div className="text-background py-2 overflow-hidden bg-primary">
         <div className="animate-marquee whitespace-nowrap flex">
-          {[...Array(4)].map((_, i) =>
-          <span key={i} className="mx-8 text-xs tracking-wide font-mono font-thin text-justify">
-              ​
-              <span className="mx-6">•</span>
-              Diseño modular. Fabricación colombiana.
-              <span className="mx-6">•</span>
-               Ensamblaje sin herramientas       
-               <span className="mx-6">•</span>
-            </span>
-          )}
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="flex shrink-0">
+              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+                Envío gratis en pedidos superiores a $500.000 COP
+              </span>
+              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+                Diseño modular. Fabricación Colombiana
+              </span>
+              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+                Ensamblaje sin herramientas
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
