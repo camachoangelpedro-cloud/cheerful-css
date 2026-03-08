@@ -2,65 +2,104 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/30 py-16">
-      <div className="nodo-container">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="bg-foreground text-background py-16 lg:py-24">
+      <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand */}
-          <div className="md:col-span-2">
-            <Link to="/" className="font-display text-2xl tracking-tight">
+          <div className="lg:col-span-2">
+            <Link to="/" className="font-display text-2xl tracking-[0.2em]">
               NODO
             </Link>
-            <p className="font-body text-sm text-muted-foreground mt-4 max-w-sm">
+            <p className="font-body text-sm text-background/60 mt-4 max-w-sm leading-relaxed">
               Sistemas modulares de precisión. Diseño colombiano que evoluciona contigo.
+              Fabricación directa, sin intermediarios.
             </p>
+            
+            {/* Newsletter */}
+            <div className="mt-8">
+              <p className="font-body text-sm mb-3">Suscríbete a nuestro newsletter</p>
+              <div className="flex gap-2">
+                <input 
+                  type="email"
+                  placeholder="E-mail"
+                  className="bg-transparent border border-background/30 px-4 py-2.5 text-sm font-body flex-1 focus:outline-none focus:border-background/60 placeholder:text-background/40"
+                />
+                <button className="border border-background/30 px-6 py-2.5 text-sm font-body hover:bg-background hover:text-foreground transition-colors">
+                  Suscribir
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Links */}
+          {/* Shop */}
           <div>
-            <p className="nodo-caption text-foreground mb-4">Explorar</p>
+            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">
+              Tienda
+            </p>
             <ul className="space-y-3">
               <li>
-                <Link to="/catalogo" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Catálogo
+                <Link to="/catalogo" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Shop all
                 </Link>
               </li>
               <li>
-                <Link to="/#about" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Estudio
+                <Link to="/catalogo?type=sistemas" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Sistemas
+                </Link>
+              </li>
+              <li>
+                <Link to="/catalogo?type=modulos" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Módulos
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Info */}
           <div>
-            <p className="nodo-caption text-foreground mb-4">Contacto</p>
+            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">
+              Información
+            </p>
             <ul className="space-y-3">
               <li>
-                <a href="mailto:hola@nodo.co" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  hola@nodo.co
+                <Link to="/#manifesto" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  About
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:hola@nodo.co" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Contacto
                 </a>
               </li>
               <li>
-                <span className="font-body text-sm text-muted-foreground">
-                  Bogotá, Colombia
-                </span>
+                <Link to="/shipping" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Envíos
+                </Link>
+              </li>
+              <li>
+                <Link to="/returns" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Devoluciones
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-border/30 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-body text-xs text-muted-foreground">
-            © {new Date().getFullYear()} NODO. Todos los derechos reservados.
+        {/* Bottom */}
+        <div className="border-t border-background/20 mt-16 pt-8 flex flex-col lg:flex-row items-center justify-between gap-4">
+          <p className="font-body text-xs text-background/40">
+            © {new Date().getFullYear()} NODO. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#" className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#" className="font-body text-xs text-background/60 hover:text-background transition-colors">
               Instagram
             </a>
-            <a href="#" className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#" className="font-body text-xs text-background/60 hover:text-background transition-colors">
               Pinterest
             </a>
+            <span className="font-body text-xs text-background/40">
+              Bogotá, Colombia
+            </span>
           </div>
         </div>
       </div>
