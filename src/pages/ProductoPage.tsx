@@ -165,10 +165,10 @@ export default function ProductoPage() {
                 {images.length > 1 && (
                   <div className="flex items-center gap-3 mb-4">
                     {[
-                      { name: 'Oxide Red', hex: '#A4343A' },
                       { name: 'Midnight Blue', hex: '#233746' },
-                      { name: 'Pine Green', hex: '#2F4538' },
+                      { name: 'Oxide Red', hex: '#A4343A' },
                       { name: 'Roman Ochre', hex: '#C9943C' },
+                      { name: 'Pine Green', hex: '#2F4538' },
                     ].slice(0, images.length).map((color, idx) => (
                       <button
                         key={color.name}
