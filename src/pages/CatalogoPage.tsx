@@ -1,5 +1,77 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const COLOR_SWATCHES = [
+  { name: 'Oxide Red', hex: '#A4343A' },
+  { name: 'Midnight Blue', hex: '#233746' },
+  { name: 'Pine Green', hex: '#2F4538' },
+  { name: 'Roman Ochre', hex: '#C9943C' },
+];
+
+function ProductCard({ product, index }: { product: any; index: number }) {
+  const [selectedColor, setSelectedColor] = useState(0);
+  const images = product.node.images.edges;
+  const hasMultipleImages = images.length > 1;
+  const displayImage = images[selectedColor] || images[0];
+
+  return (
+    <motion.div
+      key={product.node.id}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.05 }}
+    >
+      <Link 
+        to={`/producto/${product.node.handle}`}
+        className="block group"
+      >
+        <div className="aspect-[4/5] bg-muted/30 overflow-hidden mb-4">
+          {displayImage?.node.url ? (
+            <img 
+              src={displayImage.node.url}
+              alt={displayImage.node.altText || product.node.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+              Sin imagen
+            </div>
+          )}
+        </div>
+      </Link>
+      <h3 className="font-display text-lg mb-1">
+        <Link to={`/producto/${product.node.handle}`} className="hover:opacity-70 transition-opacity">
+          {product.node.title}
+        </Link>
+      </h3>
+      {/* Color Swatches */}
+      {hasMultipleImages && (
+        <div className="flex items-center gap-2 mb-1.5">
+          {COLOR_SWATCHES.slice(0, images.length).map((color, idx) => (
+            <button
+              key={color.name}
+              title={color.name}
+              onClick={() => setSelectedColor(idx)}
+              className={`w-5 h-5 rounded-full transition-transform ${
+                selectedColor === idx ? 'scale-110 ring-[1.5px] ring-foreground ring-offset-1 ring-offset-background' : ''
+              }`}
+              style={{
+                backgroundColor: color.hex,
+                border: '0.5px solid #000',
+              }}
+            />
+          ))}
+        </div>
+      )}
+      <p className="font-body text-sm text-muted-foreground">
+        {formatPrice(
+          product.node.priceRange.minVariantPrice.amount,
+          product.node.priceRange.minVariantPrice.currencyCode
+        )}
+      </p>
+    </motion.div>
+  );
+}
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
@@ -117,40 +189,7 @@ export default function CatalogoPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
               {filteredProducts.map((product, index) => (
-                <motion.div
-                  key={product.node.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.05 }}
-                >
-                  <Link 
-                    to={`/producto/${product.node.handle}`}
-                    className="block group"
-                  >
-                    <div className="aspect-[4/5] bg-muted/30 overflow-hidden mb-4">
-                      {product.node.images.edges[0]?.node.url ? (
-                        <img 
-                          src={product.node.images.edges[0].node.url}
-                          alt={product.node.images.edges[0].node.altText || product.node.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                          Sin imagen
-                        </div>
-                      )}
-                    </div>
-                    <h3 className="font-display text-lg mb-1 group-hover:opacity-70 transition-opacity">
-                      {product.node.title}
-                    </h3>
-                    <p className="font-body text-sm text-muted-foreground">
-                      {formatPrice(
-                        product.node.priceRange.minVariantPrice.amount,
-                        product.node.priceRange.minVariantPrice.currencyCode
-                      )}
-                    </p>
-                  </Link>
-                </motion.div>
+                <ProductCard key={product.node.id} product={product} index={index} />
               ))}
             </div>
           )}
