@@ -61,7 +61,7 @@ export function Navbar() {
             <Link
               to="/catalogo"
               className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
-              Sistemas
+              Productos
             </Link>
             <Link
               to="/#manifesto"
