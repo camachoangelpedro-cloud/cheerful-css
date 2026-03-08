@@ -61,46 +61,11 @@ export function Navbar() {
             <Link
               to="/catalogo"
               className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
-              
-              Shop all
+              Sistemas
             </Link>
-            <div className="relative group">
-              <button className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity flex items-center gap-1">
-                Products
-                <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {/* Dropdown */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="bg-background border border-border/30 rounded-lg shadow-lg p-5 min-w-[220px]">
-                  <h4 className="font-display text-xs tracking-[0.15em] uppercase text-muted-foreground mb-3">
-                    Sistema NODO
-                  </h4>
-                  <div className="space-y-1">
-                    <p className="font-body text-[11px] tracking-wide text-muted-foreground mb-2 uppercase">Bundles</p>
-                    <Link to="/catalogo" className="block font-body text-sm py-1.5 hover:opacity-60 transition-opacity text-foreground">
-                      Bundle 1
-                    </Link>
-                    <Link to="/catalogo" className="block font-body text-sm py-1.5 hover:opacity-60 transition-opacity text-foreground">
-                      Bundle 2
-                    </Link>
-                    <Link to="/catalogo" className="block font-body text-sm py-1.5 hover:opacity-60 transition-opacity text-foreground">
-                      Bundle 3
-                    </Link>
-                  </div>
-                  <div className="border-t border-border/20 mt-3 pt-3">
-                    <Link to="/catalogo" className="block font-body text-sm py-1.5 hover:opacity-60 transition-opacity text-foreground">
-                      Módulos individuales
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
             <Link
               to="/#manifesto"
               className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
-              
               About
             </Link>
           </div>
