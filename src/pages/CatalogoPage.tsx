@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const COLOR_SWATCHES = [
-  { name: 'Oxide Red', hex: '#A4343A' },
   { name: 'Midnight Blue', hex: '#233746' },
-  { name: 'Pine Green', hex: '#2F4538' },
+  { name: 'Oxide Red', hex: '#A4343A' },
   { name: 'Roman Ochre', hex: '#C9943C' },
+  { name: 'Pine Green', hex: '#2F4538' },
 ];
 
 function ProductCard({ product, index }: { product: any; index: number }) {
