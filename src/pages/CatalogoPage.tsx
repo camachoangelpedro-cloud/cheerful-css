@@ -39,13 +39,13 @@ export default function CatalogoPage() {
         <div className="nodo-container">
           {/* Header */}
           <div className="mb-16">
-            <motion.h1 
+             <motion.h1 
               className="nodo-heading-xl mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Catálogo
+              Sistemas
             </motion.h1>
             <motion.p 
               className="nodo-body text-muted-foreground max-w-lg"
@@ -53,7 +53,7 @@ export default function CatalogoPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Explora nuestra colección de sistemas modulares y módulos individuales.
+              Explora nuestros sistemas modulares y construye tu espacio soñado.
             </motion.p>
           </div>
 
