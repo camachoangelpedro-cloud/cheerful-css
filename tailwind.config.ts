@@ -18,8 +18,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Playfair Display", "Georgia", "serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
+        display: ["Space Mono", "Courier New", "monospace"],
+        body: ["Space Mono", "Courier New", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
