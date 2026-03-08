@@ -19,10 +19,10 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Announcement Bar - Kismas style scrolling */}
-      <div className="bg-foreground text-background py-2 overflow-hidden">
+      <div className="text-background py-2 overflow-hidden bg-primary">
         <div className="animate-marquee whitespace-nowrap flex">
-          {[...Array(4)].map((_, i) => (
-            <span key={i} className="mx-8 font-body text-xs tracking-wide">
+          {[...Array(4)].map((_, i) =>
+          <span key={i} className="mx-8 font-body text-xs tracking-wide">
               Envío gratis en pedidos superiores a $500.000 COP
               <span className="mx-6">•</span>
               Diseño modular. Fabricación colombiana.
@@ -30,35 +30,35 @@ export function Navbar() {
               Ensamblaje sin herramientas.
               <span className="mx-6">•</span>
             </span>
-          ))}
+          )}
         </div>
       </div>
 
       {/* Main Nav */}
-      <nav 
+      <nav
         className={`transition-all duration-300 ${
-          scrolled 
-            ? 'bg-background/95 backdrop-blur-md border-b border-border/20' 
-            : 'bg-transparent'
-        }`}
-      >
+        scrolled ?
+        'bg-background/95 backdrop-blur-md border-b border-border/20' :
+        'bg-transparent'}`
+        }>
+        
         <div className="max-w-[1800px] mx-auto px-6 lg:px-12 flex items-center justify-between h-16">
           {/* Logo - Left */}
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className={`font-display text-xl tracking-[0.2em] font-semibold transition-colors ${
-              scrolled ? 'text-foreground' : 'text-foreground'
-            }`}
-          >
+            scrolled ? 'text-foreground' : 'text-foreground'}`
+            }>
+            
             NODO
           </Link>
 
           {/* Center Links */}
           <div className="hidden lg:flex items-center gap-10">
-            <Link 
-              to="/catalogo" 
-              className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity"
-            >
+            <Link
+              to="/catalogo"
+              className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
+              
               Shop all
             </Link>
             <div className="relative group">
@@ -69,10 +69,10 @@ export function Navbar() {
                 </svg>
               </button>
             </div>
-            <Link 
-              to="/#manifesto" 
-              className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity"
-            >
+            <Link
+              to="/#manifesto"
+              className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
+              
               About
             </Link>
           </div>
@@ -85,20 +85,20 @@ export function Navbar() {
             <button className="hidden lg:block hover:opacity-60 transition-opacity">
               <User className="w-5 h-5" />
             </button>
-            <button 
+            <button
               onClick={() => setIsOpen(true)}
-              className="relative hover:opacity-60 transition-opacity"
-            >
+              className="relative hover:opacity-60 transition-opacity">
+              
               <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-body">
+              {totalItems > 0 &&
+              <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-body">
                   {totalItems}
                 </span>
-              )}
+              }
             </button>
           </div>
         </div>
       </nav>
-    </header>
-  );
+    </header>);
+
 }
