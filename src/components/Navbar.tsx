@@ -21,9 +21,9 @@ export function Navbar() {
       {/* Announcement Bar - Kismas style scrolling */}
       <div className="text-background py-2 overflow-hidden bg-primary">
         <div className="animate-marquee whitespace-nowrap flex">
-           {[...Array(4)].map((_, i) =>
-           <span key={i} className="mx-16 font-body text-xs tracking-wide">
-              Envío gratis en pedidos superiores a $500.000 COP
+          {[...Array(4)].map((_, i) =>
+          <span key={i} className="mx-8 text-xs tracking-wide font-mono font-thin text-justify">
+              ​
               <span className="mx-6">•</span>
               Diseño modular. Fabricación colombiana.
               <span className="mx-6">•</span>
