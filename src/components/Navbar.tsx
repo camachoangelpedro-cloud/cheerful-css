@@ -27,7 +27,7 @@ export function Navbar() {
                 Envío gratis en pedidos superiores a $500.000 COP
               </span>
               <span className="mx-10 text-xs tracking-wide font-mono font-thin">
-                Diseño modular. Fabricación Colombiana
+                Diseño modular, fabricación Colombiana
               </span>
               <span className="mx-10 text-xs tracking-wide font-mono font-thin">
                 Ensamblaje sin herramientas
