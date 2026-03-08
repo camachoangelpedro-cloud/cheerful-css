@@ -40,7 +40,7 @@ export default function CatalogoPage() {
           {/* Header */}
           <div className="mb-16">
              <motion.h1 
-              className="nodo-heading-xl mb-4"
+              className="font-display text-3xl lg:text-4xl mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -48,7 +48,7 @@ export default function CatalogoPage() {
               Sistemas
             </motion.h1>
             <motion.p 
-              className="nodo-body text-muted-foreground max-w-lg"
+              className="font-body text-base lg:text-lg text-muted-foreground leading-relaxed max-w-md"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
