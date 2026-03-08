@@ -161,6 +161,31 @@ export default function ProductoPage() {
               >
                 <h1 className="nodo-heading-lg mb-4">{product.title}</h1>
                 
+                {/* Color Swatches */}
+                {images.length > 1 && (
+                  <div className="flex items-center gap-3 mb-4">
+                    {[
+                      { name: 'Oxide Red', hex: '#A4343A' },
+                      { name: 'Midnight Blue', hex: '#233746' },
+                      { name: 'Pine Green', hex: '#2F4538' },
+                      { name: 'Roman Ochre', hex: '#C9943C' },
+                    ].slice(0, images.length).map((color, idx) => (
+                      <button
+                        key={color.name}
+                        title={color.name}
+                        onClick={() => setSelectedImage(idx)}
+                        className={`w-7 h-7 rounded-full transition-transform ${
+                          selectedImage === idx ? 'scale-110 ring-2 ring-foreground ring-offset-2 ring-offset-background' : ''
+                        }`}
+                        style={{
+                          backgroundColor: color.hex,
+                          border: '1px solid #000',
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <p className="font-display text-2xl mb-8">
                   {formatPrice(
                     selectedVariant?.price.amount || product.priceRange.minVariantPrice.amount,
