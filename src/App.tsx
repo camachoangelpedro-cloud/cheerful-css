@@ -14,6 +14,7 @@ function AppContent() {
       <Route path="/" element={<HomePage />} />
       <Route path="/catalogo" element={<CatalogoPage />} />
       <Route path="/producto/:handle" element={<ProductoPage />} />
+      <Route path="/configurador" element={<ConfiguradorPage />} />
     </Routes>
   );
 }
