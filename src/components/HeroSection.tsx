@@ -8,22 +8,22 @@ const heroSlides = [
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80',
     title: 'Sistema 01',
     subtitle: 'Discover all',
-    link: '/catalogo',
-    cta: 'Explorar'
+    link: '/configurador',
+    cta: 'Configura'
   },
   {
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&q=80',
     title: 'Módulos',
     subtitle: 'Discover all',
-    link: '/catalogo',
-    cta: 'Explorar'
+    link: '/configurador',
+    cta: 'Configura'
   },
   {
     image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80',
     title: 'Sistema 02',
     subtitle: 'Discover all',
-    link: '/catalogo',
-    cta: 'Explorar'
+    link: '/configurador',
+    cta: 'Configura'
   },
 ];
 
