@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import HomePage from '@/pages/HomePage';
 import CatalogoPage from '@/pages/CatalogoPage';
 import ProductoPage from '@/pages/ProductoPage';
+import ConfiguradorPage from '@/pages/ConfiguradorPage';
 import { useCartSync } from '@/hooks/useCartSync';
 
 function AppContent() {
