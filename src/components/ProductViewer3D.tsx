@@ -39,6 +39,14 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
   const clonedScene = React.useMemo(() => {
     const cloned = scene.clone(true);
     
+    // Scale model to fit nicely in scene (Rhino models are in mm, hundreds of units)
+    const box = new THREE.Box3().setFromObject(cloned);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const targetSize = 2.5; // target size in scene units
+    const scaleFactor = targetSize / maxDim;
+    cloned.scale.setScalar(scaleFactor);
+    
     // Apply clean material to all meshes
     const material = new THREE.MeshStandardMaterial({
       color: new THREE.Color(colorHex),
