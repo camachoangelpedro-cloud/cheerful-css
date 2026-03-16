@@ -130,8 +130,8 @@ export default function ProductViewer3D() {
           <OrbitControls
             enablePan={false}
             enableZoom={true}
-            minDistance={2.5}
-            maxDistance={7}
+            minDistance={3}
+            maxDistance={12}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI / 2.1}
             autoRotate
