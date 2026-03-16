@@ -1,4 +1,4 @@
-import { Suspense, useState, useRef, useEffect } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,29 +27,27 @@ function ModuleModel({ config }: { config: ModuleConfig }) {
   const key = getConfigKey(config);
   const modelPath = MODEL_MAP[key];
   const { scene } = useGLTF(modelPath);
-  const ref = useRef<THREE.Group>(null);
-
-  useEffect(() => {
-    if (ref.current) {
-      // Center the model
-      const box = new THREE.Box3().setFromObject(ref.current);
-      const center = box.getCenter(new THREE.Vector3());
-      ref.current.position.sub(center);
-      
-      // Scale to fit viewport nicely
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 2.2 / maxDim;
-      ref.current.scale.setScalar(scale);
-      ref.current.position.y += 0.1;
-    }
+  const clonedScene = React.useMemo(() => {
+    const cloned = scene.clone(true);
+    
+    // Compute bounding box and normalize
+    const box = new THREE.Box3().setFromObject(cloned);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2.2 / maxDim;
+    
+    cloned.scale.setScalar(scale);
+    cloned.position.set(
+      -center.x * scale,
+      -center.y * scale,
+      -center.z * scale
+    );
+    
+    return cloned;
   }, [scene]);
 
-  return (
-    <group ref={ref}>
-      <primitive object={scene.clone()} />
-    </group>
-  );
+  return <primitive object={clonedScene} />;
 }
 
 // Preload all models
