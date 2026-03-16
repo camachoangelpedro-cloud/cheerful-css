@@ -4,6 +4,7 @@ import HomePage from '@/pages/HomePage';
 import CatalogoPage from '@/pages/CatalogoPage';
 import ProductoPage from '@/pages/ProductoPage';
 import ConfiguradorPage from '@/pages/ConfiguradorPage';
+import ProductoM1Page from '@/pages/ProductoM1Page';
 import { useCartSync } from '@/hooks/useCartSync';
 
 function AppContent() {
