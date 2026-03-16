@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Environment, ContactShadows } from '@react-three/drei';
+import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -23,31 +23,46 @@ function getConfigKey(config: ModuleConfig): string {
   return 'standard';
 }
 
-function ModuleModel({ config }: { config: ModuleConfig }) {
+const NODO_COLORS = [
+  { id: 'adobe-clay', name: 'Adobe Clay', hex: '#B17A5D' },
+  { id: 'oxide-red', name: 'Oxide Red', hex: '#A4343A' },
+  { id: 'midnight-blue', name: 'Midnight Blue', hex: '#233746' },
+  { id: 'pine-green', name: 'Pine Green', hex: '#2F4538' },
+  { id: 'roman-ochre', name: 'Roman Ochre', hex: '#C9943C' },
+];
+
+function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: string }) {
   const key = getConfigKey(config);
   const modelPath = MODEL_MAP[key];
   const { scene } = useGLTF(modelPath);
+  
   const clonedScene = React.useMemo(() => {
     const cloned = scene.clone(true);
     
-    // Compute bounding box and normalize
-    const box = new THREE.Box3().setFromObject(cloned);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 2.2 / maxDim;
+    // Apply clean material to all meshes
+    const material = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(colorHex),
+      roughness: 0.35,
+      metalness: 0.05,
+      envMapIntensity: 0.8,
+    });
     
-    cloned.scale.setScalar(scale);
-    cloned.position.set(
-      -center.x * scale,
-      -center.y * scale,
-      -center.z * scale
-    );
+    cloned.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        (child as THREE.Mesh).material = material;
+        (child as THREE.Mesh).castShadow = true;
+        (child as THREE.Mesh).receiveShadow = true;
+      }
+    });
     
     return cloned;
-  }, [scene]);
+  }, [scene, colorHex]);
 
-  return <primitive object={clonedScene} />;
+  return (
+    <Center>
+      <primitive object={clonedScene} />
+    </Center>
+  );
 }
 
 // Preload all models
@@ -69,6 +84,7 @@ const PRICE_MAP: Record<string, number> = {
 
 export default function ProductViewer3D() {
   const [selected, setSelected] = useState('standard');
+  const [selectedColor, setSelectedColor] = useState(NODO_COLORS[0]);
   const currentOption = CONFIG_OPTIONS.find((o) => o.id === selected)!;
 
   return (
@@ -76,20 +92,27 @@ export default function ProductViewer3D() {
       {/* 3D Canvas */}
       <div className="relative bg-muted/20 min-h-[500px] lg:min-h-[80vh]">
         <Canvas
-          camera={{ position: [3, 2, 3], fov: 40 }}
-          gl={{ antialias: true, alpha: true }}
+          camera={{ position: [4, 3, 4], fov: 35 }}
+          gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
           style={{ background: 'transparent' }}
+          shadows
         >
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow />
-          <directionalLight position={[-3, 4, -2]} intensity={0.4} />
+          <ambientLight intensity={0.8} />
+          <directionalLight 
+            position={[5, 8, 5]} 
+            intensity={1.5} 
+            castShadow 
+            shadow-mapSize={[1024, 1024]}
+          />
+          <directionalLight position={[-4, 6, -3]} intensity={0.6} />
+          <directionalLight position={[0, -2, 5]} intensity={0.3} />
           
           <Suspense fallback={null}>
-            <ModuleModel config={currentOption.config} />
+            <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
             <ContactShadows
-              position={[0, -1.1, 0]}
-              opacity={0.3}
-              scale={6}
+              position={[0, -1.2, 0]}
+              opacity={0.4}
+              scale={8}
               blur={2.5}
               far={4}
             />
@@ -99,20 +122,19 @@ export default function ProductViewer3D() {
           <OrbitControls
             enablePan={false}
             enableZoom={true}
-            minDistance={2}
-            maxDistance={6}
+            minDistance={2.5}
+            maxDistance={7}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI / 2.1}
             autoRotate
-            autoRotateSpeed={0.5}
+            autoRotateSpeed={0.4}
           />
         </Canvas>
 
         {/* Drag hint */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-muted-foreground/60">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-            <path d="M8 12h8M12 8v8"/>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
           <span className="font-body text-xs tracking-wider uppercase">Arrastra para rotar</span>
         </div>
@@ -190,24 +212,24 @@ export default function ProductViewer3D() {
             </div>
           </div>
 
-          {/* Color selector placeholder */}
+          {/* Color selector - now functional */}
           <div className="mb-10">
-            <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
+            <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2">
               Color
             </p>
+            <p className="font-body text-sm text-foreground mb-4">{selectedColor.name}</p>
             <div className="flex gap-3">
-              {[
-                { name: 'Adobe Clay', hex: '#B17A5D' },
-                { name: 'Oxide Red', hex: '#A4343A' },
-                { name: 'Midnight Blue', hex: '#233746' },
-                { name: 'Pine Green', hex: '#2F4538' },
-                { name: 'Roman Ochre', hex: '#C9943C' },
-              ].map((color) => (
+              {NODO_COLORS.map((color) => (
                 <button
-                  key={color.name}
+                  key={color.id}
                   title={color.name}
-                  className="w-8 h-8 rounded-full border border-border/50 hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color.hex }}
+                  onClick={() => setSelectedColor(color)}
+                  className={`w-8 h-8 rounded-full transition-all duration-200 ${
+                    selectedColor.id === color.id 
+                      ? 'scale-110 ring-2 ring-foreground ring-offset-2 ring-offset-background' 
+                      : 'hover:scale-110'
+                  }`}
+                  style={{ backgroundColor: color.hex, border: '1px solid rgba(0,0,0,0.15)' }}
                 />
               ))}
             </div>
