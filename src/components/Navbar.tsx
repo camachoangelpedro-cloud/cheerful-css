@@ -59,7 +59,7 @@ export function Navbar() {
           {/* Center Links */}
           <div className="hidden lg:flex items-center gap-10">
             <Link
-              to="/catalogo"
+              to="/producto/m1-1"
               className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity">
               Productos
             </Link>
