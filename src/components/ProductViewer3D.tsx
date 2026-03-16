@@ -27,7 +27,7 @@ function ModuleModel({ config }: { config: ModuleConfig }) {
   const key = getConfigKey(config);
   const modelPath = MODEL_MAP[key];
   const { scene } = useGLTF(modelPath);
-  const clonedScene = useMemo(() => {
+  const clonedScene = React.useMemo(() => {
     const cloned = scene.clone(true);
     
     // Compute bounding box and normalize
