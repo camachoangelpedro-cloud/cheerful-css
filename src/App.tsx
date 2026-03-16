@@ -4,6 +4,7 @@ import HomePage from '@/pages/HomePage';
 import CatalogoPage from '@/pages/CatalogoPage';
 import ProductoPage from '@/pages/ProductoPage';
 import ConfiguradorPage from '@/pages/ConfiguradorPage';
+import ProductoM1Page from '@/pages/ProductoM1Page';
 import { useCartSync } from '@/hooks/useCartSync';
 
 function AppContent() {
@@ -15,6 +16,7 @@ function AppContent() {
       <Route path="/catalogo" element={<CatalogoPage />} />
       <Route path="/producto/:handle" element={<ProductoPage />} />
       <Route path="/configurador" element={<ConfiguradorPage />} />
+      <Route path="/producto/m1-1" element={<ProductoM1Page />} />
     </Routes>
   );
 }
