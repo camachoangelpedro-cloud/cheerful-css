@@ -1,7 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
-import { EffectComposer, N8AO, Bloom } from '@react-three/postprocessing';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -47,32 +46,19 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     const scaleFactor = targetSize / maxDim;
     cloned.scale.setScalar(scaleFactor);
     
-    // Only tint HPL material — leave MDF texture untouched
+    // Preserve embedded PBR materials (textures, normal maps, roughness maps)
+    // Only tint the base color — texture maps are multiplied by color in Three.js
     cloned.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        const origMat = mesh.material as THREE.MeshStandardMaterial;
         
-        mesh.material = materials.map((origMat) => {
-          const mat = (origMat as THREE.MeshStandardMaterial).clone();
-          const matName = (mat.name || '').toLowerCase();
-          
-          // Only apply color tint to HPL laminate surfaces
-          if (matName.includes('hpl')) {
-            mat.color.set(colorHex);
-          }
-          // MDF and other materials keep their original appearance
-          
-          mat.envMapIntensity = 1.2;
-          mat.needsUpdate = true;
-          return mat;
-        });
+        // Clone material so we don't mutate the cached original
+        const mat = origMat.clone();
+        mat.color.set(colorHex);
+        mat.needsUpdate = true;
         
-        // Unwrap single-element array
-        if (Array.isArray(mesh.material) && mesh.material.length === 1) {
-          mesh.material = mesh.material[0];
-        }
-        
+        mesh.material = mat;
         mesh.castShadow = true;
         mesh.receiveShadow = true;
       }
@@ -116,56 +102,30 @@ export default function ProductViewer3D() {
       <div className="relative bg-muted/20 min-h-[500px] lg:min-h-[80vh]">
         <Canvas
           camera={{ position: [5, 3.5, 5], fov: 35 }}
-          gl={{ 
-            antialias: true, 
-            alpha: true, 
-            toneMapping: THREE.ACESFilmicToneMapping, 
-            toneMappingExposure: 1.0,
-            
-          }}
+          gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
           style={{ background: 'transparent' }}
-          shadows="soft"
-          dpr={[1, 2]}
+          shadows
         >
-          {/* Key light — warm, soft */}
+          <ambientLight intensity={0.8} />
           <directionalLight 
             position={[5, 8, 5]} 
-            intensity={1.8} 
+            intensity={1.5} 
             castShadow 
-            shadow-mapSize={[2048, 2048]}
-            shadow-bias={-0.0001}
-            color="#fff5e6"
+            shadow-mapSize={[1024, 1024]}
           />
-          {/* Fill light — cool */}
-          <directionalLight position={[-4, 6, -3]} intensity={0.5} color="#e0e8ff" />
-          {/* Rim light */}
-          <directionalLight position={[0, 2, -6]} intensity={0.4} color="#ffffff" />
+          <directionalLight position={[-4, 6, -3]} intensity={0.6} />
+          <directionalLight position={[0, -2, 5]} intensity={0.3} />
           
           <Suspense fallback={null}>
             <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
             <ContactShadows
               position={[0, -1.2, 0]}
-              opacity={0.5}
-              scale={10}
-              blur={2}
+              opacity={0.4}
+              scale={8}
+              blur={2.5}
               far={4}
-              resolution={512}
             />
-            <Environment preset="studio" background={false} />
-            
-            {/* Post-processing for photorealism */}
-            <EffectComposer>
-              <N8AO 
-                aoRadius={0.5} 
-                intensity={1.5} 
-                distanceFalloff={0.5}
-              />
-              <Bloom 
-                luminanceThreshold={0.9} 
-                luminanceSmoothing={0.4} 
-                intensity={0.15}
-              />
-            </EffectComposer>
+            <Environment preset="apartment" />
           </Suspense>
           
           <OrbitControls
