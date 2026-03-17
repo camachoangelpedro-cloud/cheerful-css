@@ -24,11 +24,10 @@ function getConfigKey(config: ModuleConfig): string {
 }
 
 const NODO_COLORS = [
-  { id: 'adobe-clay', name: 'Adobe Clay', hex: '#B17A5D' },
-  { id: 'oxide-red', name: 'Oxide Red', hex: '#A4343A' },
-  { id: 'midnight-blue', name: 'Midnight Blue', hex: '#233746' },
-  { id: 'pine-green', name: 'Pine Green', hex: '#2F4538' },
-  { id: 'roman-ochre', name: 'Roman Ochre', hex: '#C9943C' },
+  { id: 'off-white', name: 'Off White', hex: '#F0EDE8' },
+  { id: 'terracotta', name: 'Terracotta', hex: '#7E4F4A' },
+  { id: 'sage', name: 'Sage', hex: '#9BA69B' },
+  { id: 'navy', name: 'Navy', hex: '#2A3A52' },
 ];
 
 function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: string }) {
