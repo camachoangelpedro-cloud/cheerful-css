@@ -113,7 +113,7 @@ export default function ProductViewer3D() {
       {/* 3D Canvas */}
       <div className="relative bg-muted/20 min-h-[500px] lg:min-h-[80vh]">
         <Canvas
-          camera={{ position: [4, 3, 5], fov: 35 }}
+          camera={{ position: [6, 4, 7], fov: 35 }}
           gl={{ 
             antialias: true, 
             alpha: true, 
