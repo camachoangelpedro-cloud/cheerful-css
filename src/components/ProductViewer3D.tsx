@@ -127,16 +127,16 @@ export default function ProductViewer3D() {
           {/* Key light — front-right, slightly above (like studio softbox) */}
           <directionalLight 
             position={[4, 5, 6]} 
-            intensity={0.6} 
+            intensity={0.84} 
             castShadow 
             shadow-mapSize={[2048, 2048]}
             shadow-bias={-0.0001}
             color="#ffffff"
           />
           {/* Fill light — opposite side, lower angle */}
-          <directionalLight position={[-6, 2, 2]} intensity={0.2} color="#f0f0f5" />
+          <directionalLight position={[-6, 2, 2]} intensity={0.32} color="#f0f0f5" />
           {/* Back light — behind and above for edge definition */}
-          <directionalLight position={[0, 6, -5]} intensity={0.15} color="#ffffff" />
+          <directionalLight position={[0, 6, -5]} intensity={0.23} color="#ffffff" />
           
           <Suspense fallback={null}>
             <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
@@ -148,7 +148,7 @@ export default function ProductViewer3D() {
               far={4}
               resolution={512}
             />
-            <Environment preset="studio" background={false} environmentIntensity={0.2} />
+            <Environment preset="studio" background={false} environmentIntensity={0.36} />
           </Suspense>
           
           <OrbitControls
