@@ -134,7 +134,7 @@ export default function ProductViewer3D() {
             color="#ffffff"
           />
           {/* Fill light — opposite side, lower angle */}
-          <directionalLight position={[-6, 2, 2]} intensity={0.35} color="#f0f0f5" />
+          <directionalLight position={[-6, 2, 2]} intensity={0.2} color="#f0f0f5" />
           {/* Back light — behind and above for edge definition */}
           <directionalLight position={[0, 6, -5]} intensity={0.25} color="#ffffff" />
           
