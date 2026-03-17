@@ -68,7 +68,7 @@ function ModuleModel({ colorHex }: { colorHex: string }) {
 }
 
 // Preload all models
-Object.values(MODEL_MAP).forEach((path) => useGLTF.preload(path));
+useGLTF.preload(MODEL_PATH);
 
 const CONFIG_OPTIONS = [
   { id: 'standard', label: 'Estándar', description: 'Sin puerta ni repisa', config: { hasShelf: false, hasDoor: false }, sku: 'M1:1' },
