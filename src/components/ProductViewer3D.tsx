@@ -116,30 +116,56 @@ export default function ProductViewer3D() {
       <div className="relative bg-muted/20 min-h-[500px] lg:min-h-[80vh]">
         <Canvas
           camera={{ position: [5, 3.5, 5], fov: 35 }}
-          gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
+          gl={{ 
+            antialias: true, 
+            alpha: true, 
+            toneMapping: THREE.ACESFilmicToneMapping, 
+            toneMappingExposure: 1.0,
+            physicallyCorrectLights: true,
+          }}
           style={{ background: 'transparent' }}
-          shadows
+          shadows="soft"
+          dpr={[1, 2]}
         >
-          <ambientLight intensity={0.8} />
+          {/* Key light — warm, soft */}
           <directionalLight 
             position={[5, 8, 5]} 
-            intensity={1.5} 
+            intensity={1.8} 
             castShadow 
-            shadow-mapSize={[1024, 1024]}
+            shadow-mapSize={[2048, 2048]}
+            shadow-bias={-0.0001}
+            color="#fff5e6"
           />
-          <directionalLight position={[-4, 6, -3]} intensity={0.6} />
-          <directionalLight position={[0, -2, 5]} intensity={0.3} />
+          {/* Fill light — cool */}
+          <directionalLight position={[-4, 6, -3]} intensity={0.5} color="#e0e8ff" />
+          {/* Rim light */}
+          <directionalLight position={[0, 2, -6]} intensity={0.4} color="#ffffff" />
           
           <Suspense fallback={null}>
             <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
             <ContactShadows
               position={[0, -1.2, 0]}
-              opacity={0.4}
-              scale={8}
-              blur={2.5}
+              opacity={0.5}
+              scale={10}
+              blur={2}
               far={4}
+              resolution={512}
             />
-            <Environment preset="apartment" />
+            <Environment preset="studio" background={false} />
+            
+            {/* Post-processing for photorealism */}
+            <EffectComposer>
+              <N8AO 
+                aoRadius={0.5} 
+                intensity={1.5} 
+                distanceFalloff={0.5}
+              />
+              <Bloom 
+                luminanceThreshold={0.9} 
+                luminanceSmoothing={0.4} 
+                intensity={0.15}
+              />
+            </EffectComposer>
           </Suspense>
           
           <OrbitControls
