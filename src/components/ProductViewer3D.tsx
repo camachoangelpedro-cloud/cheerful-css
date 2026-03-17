@@ -60,9 +60,8 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
           if (matName.includes('hpl')) {
             mat.color.set(colorHex);
           }
-          // MDF and other materials keep their original appearance
+          // Preserve all original PBR properties (roughness, metalness, envMapIntensity, maps)
           
-          mat.envMapIntensity = 1.2;
           mat.needsUpdate = true;
           return mat;
         });
