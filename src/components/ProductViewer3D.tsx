@@ -26,11 +26,8 @@ const NODO_COLORS = [
   { id: 'navy', name: 'Navy', hex: '#2A3A52' },
 ];
 
-function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: string }) {
-  const key = getConfigKey(config);
-  const modelPath = MODEL_MAP[key];
-  const { scene } = useGLTF(modelPath);
-  
+function ModuleModel({ colorHex }: { colorHex: string }) {
+  const { scene } = useGLTF(MODEL_PATH);
   const clonedScene = React.useMemo(() => {
     const cloned = scene.clone(true);
     
