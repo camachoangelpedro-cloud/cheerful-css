@@ -148,7 +148,7 @@ export default function ProductViewer3D() {
               far={4}
               resolution={512}
             />
-            <Environment preset="studio" background={false} environmentIntensity={0.2} />
+            <Environment preset="studio" background={false} environmentIntensity={0.36} />
           </Suspense>
           
           <OrbitControls
