@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
-import { ProductSpotlight } from '@/components/ProductSpotlight';
+
 import { CollectionCarousel } from '@/components/CollectionCarousel';
 import { ProductGrid } from '@/components/ProductGrid';
 import { Footer } from '@/components/FooterNodo';
@@ -29,7 +29,7 @@ export default function HomePage() {
       <main>
         <HeroSection />
         
-        <ProductSpotlight />
+        
         
         <CollectionCarousel 
           title="Sistemas Completos"
