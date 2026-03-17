@@ -125,19 +125,19 @@ export default function ProductViewer3D() {
           shadows
           dpr={[1, 2]}
         >
-          {/* Soft top-down key light */}
+          {/* Key light — front-right, slightly above (like studio softbox) */}
           <directionalLight 
-            position={[3, 10, 4]} 
+            position={[4, 5, 6]} 
             intensity={0.9} 
             castShadow 
             shadow-mapSize={[2048, 2048]}
             shadow-bias={-0.0001}
             color="#ffffff"
           />
-          {/* Gentle fill from left */}
-          <directionalLight position={[-5, 4, -2]} intensity={0.3} color="#f0f0f5" />
-          {/* Subtle bottom bounce */}
-          <directionalLight position={[0, -3, 3]} intensity={0.15} color="#ffffff" />
+          {/* Fill light — opposite side, lower angle */}
+          <directionalLight position={[-6, 2, 2]} intensity={0.35} color="#f0f0f5" />
+          {/* Back light — behind and above for edge definition */}
+          <directionalLight position={[0, 6, -5]} intensity={0.25} color="#ffffff" />
           
           <Suspense fallback={null}>
             <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
