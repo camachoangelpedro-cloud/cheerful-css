@@ -42,23 +42,25 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     const box = new THREE.Box3().setFromObject(cloned);
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const targetSize = 2.5; // target size in scene units
+    const targetSize = 2.5;
     const scaleFactor = targetSize / maxDim;
     cloned.scale.setScalar(scaleFactor);
     
-    // Apply clean material to all meshes
-    const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(colorHex),
-      roughness: 0.35,
-      metalness: 0.05,
-      envMapIntensity: 0.8,
-    });
-    
+    // Preserve embedded PBR materials (textures, normal maps, roughness maps)
+    // Only tint the base color — texture maps are multiplied by color in Three.js
     cloned.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        (child as THREE.Mesh).material = material;
-        (child as THREE.Mesh).castShadow = true;
-        (child as THREE.Mesh).receiveShadow = true;
+        const mesh = child as THREE.Mesh;
+        const origMat = mesh.material as THREE.MeshStandardMaterial;
+        
+        // Clone material so we don't mutate the cached original
+        const mat = origMat.clone();
+        mat.color.set(colorHex);
+        mat.needsUpdate = true;
+        
+        mesh.material = mat;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
       }
     });
     
