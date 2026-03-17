@@ -29,7 +29,7 @@ export default function HomePage() {
       <main>
         <HeroSection />
         
-        <ProductSpotlight />
+        
         
         <CollectionCarousel 
           title="Sistemas Completos"
