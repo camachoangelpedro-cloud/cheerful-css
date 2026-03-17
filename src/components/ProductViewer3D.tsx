@@ -152,20 +152,6 @@ export default function ProductViewer3D() {
               resolution={512}
             />
             <Environment preset="studio" background={false} />
-            
-            {/* Post-processing for photorealism */}
-            <EffectComposer>
-              <N8AO 
-                aoRadius={0.5} 
-                intensity={1.5} 
-                distanceFalloff={0.5}
-              />
-              <Bloom 
-                luminanceThreshold={0.9} 
-                luminanceSmoothing={0.4} 
-                intensity={0.15}
-              />
-            </EffectComposer>
           </Suspense>
           
           <OrbitControls
