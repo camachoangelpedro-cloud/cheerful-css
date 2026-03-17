@@ -121,7 +121,7 @@ export default function ProductViewer3D() {
             alpha: true, 
             toneMapping: THREE.ACESFilmicToneMapping, 
             toneMappingExposure: 1.0,
-            physicallyCorrectLights: true,
+            
           }}
           style={{ background: 'transparent' }}
           shadows="soft"
