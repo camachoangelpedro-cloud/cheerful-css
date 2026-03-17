@@ -79,9 +79,20 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     return cloned;
   }, [scene, colorHex]);
 
+  const groupRef = useRef<THREE.Group>(null);
+  
+  // Slow auto-rotation on the model itself, so lights stay fixed relative to viewer
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.15;
+    }
+  });
+
   return (
     <Center>
-      <primitive object={clonedScene} />
+      <group ref={groupRef}>
+        <primitive object={clonedScene} />
+      </group>
     </Center>
   );
 }
