@@ -120,7 +120,7 @@ export default function ProductViewer3D() {
             antialias: true, 
             alpha: true, 
             toneMapping: THREE.ACESFilmicToneMapping, 
-            toneMappingExposure: 1.0,
+            toneMappingExposure: 1.15,
             
           }}
           style={{ background: 'transparent' }}
