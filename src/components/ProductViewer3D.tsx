@@ -9,12 +9,8 @@ interface ModuleConfig {
   hasDoor: boolean;
 }
 
-const MODEL_MAP: Record<string, string> = {
-  'standard': '/models/m1-1.glb',
-  'shelf': '/models/m1-1f.glb',
-  'door': '/models/m1-1p.glb',
-  'both': '/models/m1-1fp.glb',
-};
+// Single GLB with embedded HPL + MDF materials
+const MODEL_PATH = '/models/m1-1.glb';
 
 function getConfigKey(config: ModuleConfig): string {
   if (config.hasDoor && config.hasShelf) return 'both';
@@ -30,11 +26,8 @@ const NODO_COLORS = [
   { id: 'navy', name: 'Navy', hex: '#2A3A52' },
 ];
 
-function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: string }) {
-  const key = getConfigKey(config);
-  const modelPath = MODEL_MAP[key];
-  const { scene } = useGLTF(modelPath);
-  
+function ModuleModel({ colorHex }: { colorHex: string }) {
+  const { scene } = useGLTF(MODEL_PATH);
   const clonedScene = React.useMemo(() => {
     const cloned = scene.clone(true);
     
@@ -75,7 +68,7 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
 }
 
 // Preload all models
-Object.values(MODEL_MAP).forEach((path) => useGLTF.preload(path));
+useGLTF.preload(MODEL_PATH);
 
 const CONFIG_OPTIONS = [
   { id: 'standard', label: 'Estándar', description: 'Sin puerta ni repisa', config: { hasShelf: false, hasDoor: false }, sku: 'M1:1' },
@@ -117,7 +110,7 @@ export default function ProductViewer3D() {
           <directionalLight position={[0, -2, 5]} intensity={0.3} />
           
           <Suspense fallback={null}>
-            <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
+            <ModuleModel colorHex={selectedColor.hex} />
             <ContactShadows
               position={[0, -1.2, 0]}
               opacity={0.4}
