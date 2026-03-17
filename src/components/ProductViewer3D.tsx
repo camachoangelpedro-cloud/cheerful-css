@@ -1,6 +1,7 @@
-import React, { Suspense, useState, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { Suspense, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
+import { EffectComposer, N8AO, Bloom } from '@react-three/postprocessing';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -60,8 +61,9 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
           if (matName.includes('hpl')) {
             mat.color.set(colorHex);
           }
-          // Preserve all original PBR properties (roughness, metalness, envMapIntensity, maps)
+          // MDF and other materials keep their original appearance
           
+          mat.envMapIntensity = 1.2;
           mat.needsUpdate = true;
           return mat;
         });
@@ -79,20 +81,9 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     return cloned;
   }, [scene, colorHex]);
 
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // Slow auto-rotation on the model itself, so lights stay fixed relative to viewer
-  useFrame((_, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.15;
-    }
-  });
-
   return (
     <Center>
-      <group ref={groupRef}>
-        <primitive object={clonedScene} />
-      </group>
+      <primitive object={clonedScene} />
     </Center>
   );
 }
@@ -124,42 +115,57 @@ export default function ProductViewer3D() {
       {/* 3D Canvas */}
       <div className="relative bg-muted/20 min-h-[500px] lg:min-h-[80vh]">
         <Canvas
-          camera={{ position: [6, 4, 7], fov: 35 }}
+          camera={{ position: [5, 3.5, 5], fov: 35 }}
           gl={{ 
             antialias: true, 
             alpha: true, 
             toneMapping: THREE.ACESFilmicToneMapping, 
-            toneMappingExposure: 0.85,
+            toneMappingExposure: 1.0,
+            
           }}
           style={{ background: 'transparent' }}
-          shadows
+          shadows="soft"
           dpr={[1, 2]}
         >
-          {/* Key light — front-right, slightly above (like studio softbox) */}
+          {/* Key light — warm, soft */}
           <directionalLight 
-            position={[4, 5, 6]} 
-            intensity={0.84} 
+            position={[5, 8, 5]} 
+            intensity={1.8} 
             castShadow 
             shadow-mapSize={[2048, 2048]}
             shadow-bias={-0.0001}
-            color="#ffffff"
+            color="#fff5e6"
           />
-          {/* Fill light — opposite side, lower angle */}
-          <directionalLight position={[-6, 2, 2]} intensity={0.32} color="#f0f0f5" />
-          {/* Back light — behind and above for edge definition */}
-          <directionalLight position={[0, 6, -5]} intensity={0.23} color="#ffffff" />
+          {/* Fill light — cool */}
+          <directionalLight position={[-4, 6, -3]} intensity={0.5} color="#e0e8ff" />
+          {/* Rim light */}
+          <directionalLight position={[0, 2, -6]} intensity={0.4} color="#ffffff" />
           
           <Suspense fallback={null}>
             <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
             <ContactShadows
               position={[0, -1.2, 0]}
-              opacity={0.3}
+              opacity={0.5}
               scale={10}
-              blur={3}
+              blur={2}
               far={4}
               resolution={512}
             />
-            <Environment preset="studio" background={false} environmentIntensity={0.36} />
+            <Environment preset="studio" background={false} />
+            
+            {/* Post-processing for photorealism */}
+            <EffectComposer>
+              <N8AO 
+                aoRadius={0.5} 
+                intensity={1.5} 
+                distanceFalloff={0.5}
+              />
+              <Bloom 
+                luminanceThreshold={0.9} 
+                luminanceSmoothing={0.4} 
+                intensity={0.15}
+              />
+            </EffectComposer>
           </Suspense>
           
           <OrbitControls
@@ -169,7 +175,8 @@ export default function ProductViewer3D() {
             maxDistance={12}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI / 2.1}
-            autoRotate={false}
+            autoRotate
+            autoRotateSpeed={0.4}
           />
         </Canvas>
 
