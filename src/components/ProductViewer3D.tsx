@@ -153,15 +153,22 @@ export default function ProductViewer3D() {
             />
             <Environment preset="studio" background={false} />
             
-            {/* Post-processing for photorealism */}
-            <EffectComposer>
-              <N8AO 
-                aoRadius={0.5} 
-                intensity={1.5} 
-                distanceFalloff={0.5}
-              />
-            </EffectComposer>
           </Suspense>
+          
+          {/* Post-processing outside Suspense to avoid reconciler crash */}
+          <EffectComposer multisampling={0}>
+            <N8AO 
+              aoRadius={0.5} 
+              intensity={1.5} 
+              distanceFalloff={0.5}
+            />
+            <Bloom 
+              luminanceThreshold={0.9} 
+              luminanceSmoothing={0.4} 
+              intensity={0.15} 
+              mipmapBlur
+            />
+          </EffectComposer>
           
           <OrbitControls
             enablePan={false}
