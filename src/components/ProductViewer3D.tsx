@@ -110,7 +110,7 @@ export default function ProductViewer3D() {
           <directionalLight position={[0, -2, 5]} intensity={0.3} />
           
           <Suspense fallback={null}>
-            <ModuleModel config={currentOption.config} colorHex={selectedColor.hex} />
+            <ModuleModel colorHex={selectedColor.hex} />
             <ContactShadows
               position={[0, -1.2, 0]}
               opacity={0.4}
