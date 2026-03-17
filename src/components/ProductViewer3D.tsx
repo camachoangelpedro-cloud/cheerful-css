@@ -130,7 +130,8 @@ export default function ProductViewer3D() {
             intensity={0.84} 
             castShadow 
             shadow-mapSize={[2048, 2048]}
-            shadow-bias={-0.0001}
+            shadow-bias={-0.001}
+            shadow-normalBias={0.02}
             color="#ffffff"
           />
           {/* Fill light — opposite side, lower angle */}
