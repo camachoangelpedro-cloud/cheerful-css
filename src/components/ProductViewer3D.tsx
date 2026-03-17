@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
-import { EffectComposer, N8AO, Bloom } from '@react-three/postprocessing';
+import { EffectComposer, N8AO } from '@react-three/postprocessing';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -60,6 +60,9 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
           // Only apply color tint to HPL laminate surfaces
           if (matName.includes('hpl')) {
             mat.color.set(colorHex);
+            // Subtle emissive to simulate bloom glow on HPL
+            mat.emissive = new THREE.Color(colorHex);
+            mat.emissiveIntensity = 0.04;
           }
           // MDF and other materials keep their original appearance
           
@@ -120,7 +123,7 @@ export default function ProductViewer3D() {
             antialias: true, 
             alpha: true, 
             toneMapping: THREE.ACESFilmicToneMapping, 
-            toneMappingExposure: 1.0,
+            toneMappingExposure: 1.15,
             
           }}
           style={{ background: 'transparent' }}
@@ -155,18 +158,12 @@ export default function ProductViewer3D() {
             
           </Suspense>
           
-          {/* Post-processing outside Suspense to avoid reconciler crash */}
+          {/* Post-processing — N8AO only (Bloom incompatible with three@0.170) */}
           <EffectComposer multisampling={0}>
             <N8AO 
               aoRadius={0.5} 
               intensity={1.5} 
               distanceFalloff={0.5}
-            />
-            <Bloom 
-              luminanceThreshold={0.9} 
-              luminanceSmoothing={0.4} 
-              intensity={0.15} 
-              mipmapBlur
             />
           </EffectComposer>
           
