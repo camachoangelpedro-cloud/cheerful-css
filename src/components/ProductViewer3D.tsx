@@ -1,5 +1,5 @@
-import React, { Suspense, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useState, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
@@ -79,9 +79,20 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     return cloned;
   }, [scene, colorHex]);
 
+  const groupRef = useRef<THREE.Group>(null);
+  
+  // Slow auto-rotation on the model itself, so lights stay fixed relative to viewer
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.15;
+    }
+  });
+
   return (
     <Center>
-      <primitive object={clonedScene} />
+      <group ref={groupRef}>
+        <primitive object={clonedScene} />
+      </group>
     </Center>
   );
 }
@@ -158,8 +169,7 @@ export default function ProductViewer3D() {
             maxDistance={12}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI / 2.1}
-            autoRotate
-            autoRotateSpeed={0.4}
+            autoRotate={false}
           />
         </Canvas>
 
