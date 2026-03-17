@@ -127,7 +127,7 @@ export default function ProductViewer3D() {
           {/* Key light — front-right, slightly above (like studio softbox) */}
           <directionalLight 
             position={[4, 5, 6]} 
-            intensity={0.9} 
+            intensity={0.6} 
             castShadow 
             shadow-mapSize={[2048, 2048]}
             shadow-bias={-0.0001}
