@@ -9,12 +9,8 @@ interface ModuleConfig {
   hasDoor: boolean;
 }
 
-const MODEL_MAP: Record<string, string> = {
-  'standard': '/models/m1-1.glb',
-  'shelf': '/models/m1-1f.glb',
-  'door': '/models/m1-1p.glb',
-  'both': '/models/m1-1fp.glb',
-};
+// Single GLB with embedded HPL + MDF materials
+const MODEL_PATH = '/models/m1-1.glb';
 
 function getConfigKey(config: ModuleConfig): string {
   if (config.hasDoor && config.hasShelf) return 'both';
