@@ -60,6 +60,9 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
           // Only apply color tint to HPL laminate surfaces
           if (matName.includes('hpl')) {
             mat.color.set(colorHex);
+            // Subtle emissive to simulate bloom glow on HPL
+            mat.emissive = new THREE.Color(colorHex);
+            mat.emissiveIntensity = 0.04;
           }
           // MDF and other materials keep their original appearance
           
