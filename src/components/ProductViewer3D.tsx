@@ -47,19 +47,32 @@ function ModuleModel({ config, colorHex }: { config: ModuleConfig; colorHex: str
     const scaleFactor = targetSize / maxDim;
     cloned.scale.setScalar(scaleFactor);
     
-    // Preserve embedded PBR materials (textures, normal maps, roughness maps)
-    // Only tint the base color — texture maps are multiplied by color in Three.js
+    // Only tint HPL material — leave MDF texture untouched
     cloned.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        const origMat = mesh.material as THREE.MeshStandardMaterial;
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
         
-        // Clone material so we don't mutate the cached original
-        const mat = origMat.clone();
-        mat.color.set(colorHex);
-        mat.needsUpdate = true;
+        mesh.material = materials.map((origMat) => {
+          const mat = (origMat as THREE.MeshStandardMaterial).clone();
+          const matName = (mat.name || '').toLowerCase();
+          
+          // Only apply color tint to HPL laminate surfaces
+          if (matName.includes('hpl')) {
+            mat.color.set(colorHex);
+          }
+          // MDF and other materials keep their original appearance
+          
+          mat.envMapIntensity = 1.2;
+          mat.needsUpdate = true;
+          return mat;
+        });
         
-        mesh.material = mat;
+        // Unwrap single-element array
+        if (Array.isArray(mesh.material) && mesh.material.length === 1) {
+          mesh.material = mesh.material[0];
+        }
+        
         mesh.castShadow = true;
         mesh.receiveShadow = true;
       }
