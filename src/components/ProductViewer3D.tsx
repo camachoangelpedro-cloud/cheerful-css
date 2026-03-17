@@ -2,7 +2,7 @@ import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, ContactShadows, Center } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as THREE from 'three';
 import * as THREE from 'three';
 
 interface ModuleConfig {
