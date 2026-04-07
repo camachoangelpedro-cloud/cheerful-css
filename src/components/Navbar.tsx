@@ -176,7 +176,7 @@ export function Navbar() {
                 className="group block"
                 onClick={() => setMegaOpen(false)}
               >
-                <h3 className={`font-semibold text-base mb-2 group-hover:opacity-70 transition-opacity ${col.muted ? 'text-muted-foreground' : 'text-foreground'}`}>
+                <h3 className={`font-normal text-base mb-2 group-hover:opacity-70 transition-opacity ${col.muted ? 'text-muted-foreground' : 'text-foreground'}`}>
                   {col.name}
                 </h3>
                 <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
