@@ -18,8 +18,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Space Mono", "Courier New", "monospace"],
-        body: ["Space Mono", "Courier New", "monospace"],
+        display: ["Playfair Display", "Georgia", "serif"],
+        body: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -55,12 +55,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // NODO custom colors
         nodo: {
-          cream: "hsl(var(--nodo-cream))",
-          charcoal: "hsl(var(--nodo-charcoal))",
-          "warm-gray": "hsl(var(--nodo-warm-gray))",
-          "soft-border": "hsl(var(--nodo-soft-border))",
+          "blanco-hueso": "hsl(var(--nodo-blanco-hueso))",
+          roble: "hsl(var(--nodo-roble))",
+          arena: "hsl(var(--nodo-arena))",
+          salvia: "hsl(var(--nodo-salvia))",
+          acero: "hsl(var(--nodo-acero))",
         },
       },
       borderRadius: {
