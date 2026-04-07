@@ -1,20 +1,48 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
+import { ShoppingBag, Search, User, Menu, X, ChevronDown } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect, useState, useRef } from 'react';
 
-const productCategories = [
-  { name: 'Sistemas', desc: 'Configuraciones listas para instalar', href: '/catalogo?categoria=sistemas' },
-  { name: 'Módulos', desc: 'Unidades individuales por dimensión', href: '/catalogo?categoria=modulos' },
-  { name: 'Accesorios', desc: 'Clips decorativos y complementos', href: '/catalogo?categoria=accesorios' },
-  { name: 'Próximamente', desc: 'Objetos para poblar tus estantes', href: '/catalogo?categoria=proximamente', soon: true },
+const megaColumns = [
+  {
+    name: 'Sistemas',
+    desc: 'Configuraciones completas listas para instalar',
+    href: '/catalogo?categoria=sistemas',
+    tag: 'Lo más popular',
+    muted: false,
+  },
+  {
+    name: 'Módulos',
+    desc: 'Unidades individuales por dimensión, combinables infinitamente',
+    href: '/catalogo?categoria=modulos',
+    tag: '21 referencias',
+    muted: false,
+  },
+  {
+    name: 'Accesorios',
+    desc: 'Clips decorativos, láminas base y complementos del sistema',
+    href: '/catalogo?categoria=accesorios',
+    tag: 'Brass · Acero · Negro',
+    muted: false,
+  },
+  {
+    name: 'Objetos',
+    heading: 'Objetos',
+    desc: 'Objetos de decoración para poblar tus estantes. En desarrollo.',
+    href: '/catalogo?categoria=proximamente',
+    tag: 'Próximamente',
+    muted: true,
+    badge: true,
+  },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navRef = useRef<HTMLElement>(null);
   const { items, setIsOpen } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -24,18 +52,17 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const openDropdown = () => {
-    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
-    setDropdownOpen(true);
+  const openMega = () => {
+    if (megaTimeout.current) clearTimeout(megaTimeout.current);
+    setMegaOpen(true);
   };
-  const closeDropdown = () => {
-    dropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 150);
+  const closeMega = () => {
+    megaTimeout.current = setTimeout(() => setMegaOpen(false), 120);
   };
 
   return (
@@ -61,17 +88,18 @@ export function Navbar() {
 
       {/* Main Nav */}
       <nav
-        className={`transition-all duration-300 ${
+        ref={navRef}
+        className={`transition-all duration-300 h-16 ${
           scrolled
             ? 'bg-background/95 backdrop-blur-md border-b border-border/20'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-[1800px] mx-auto px-6 lg:px-12 flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-full px-8 lg:px-16">
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl tracking-[0.2em] font-extrabold transition-colors text-foreground"
+            className="text-lg tracking-[0.2em] font-extrabold text-foreground"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
             NODO
@@ -79,65 +107,31 @@ export function Navbar() {
 
           {/* Centre Links — desktop */}
           <div className="hidden lg:flex items-center gap-10">
-            {/* Productos with dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={openDropdown}
-              onMouseLeave={closeDropdown}
-            >
-              <span className="font-body text-sm tracking-wide cursor-default hover:opacity-60 transition-opacity">
-                Productos
-              </span>
-
-              {/* Dropdown */}
-              <div
-                className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 bg-background border border-border/30 shadow-lg transition-all duration-200 ${
-                  dropdownOpen
-                    ? 'opacity-100 visible translate-y-0'
-                    : 'opacity-0 invisible -translate-y-1'
-                }`}
-              >
-                <div className="p-6">
-                  {productCategories.map((cat, idx) => (
-                    <div key={cat.name}>
-                      <Link
-                        to={cat.href}
-                        className={`block py-3 group ${cat.soon ? 'opacity-50' : ''}`}
-                        onClick={() => setDropdownOpen(false)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className={`text-sm font-medium group-hover:opacity-60 transition-opacity ${cat.soon ? 'text-muted-foreground' : 'text-foreground'}`}>
-                            {cat.name}
-                          </span>
-                          {cat.soon && (
-                            <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground font-medium tracking-wide uppercase">
-                              soon
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{cat.desc}</p>
-                      </Link>
-                      {idx < productCategories.length - 1 && (
-                        <div className="border-b border-border/20" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Configurador pill */}
+            {/* Configurador pill CTA */}
             <Link
               to="/configurador"
-              className="font-body text-sm tracking-wide border border-foreground/40 px-4 py-1.5 hover:bg-foreground hover:text-background transition-all"
+              className="text-sm tracking-wide border border-foreground px-5 py-1.5 hover:bg-foreground hover:text-background transition-all duration-200"
             >
               Configurador
             </Link>
 
+            {/* Productos with mega menu */}
+            <div
+              onMouseEnter={openMega}
+              onMouseLeave={closeMega}
+            >
+              <span className="text-sm tracking-wide cursor-default hover:opacity-60 transition-opacity flex items-center gap-1">
+                Productos
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${megaOpen ? 'rotate-180' : ''}`}
+                />
+              </span>
+            </div>
+
             {/* Nosotros */}
             <Link
               to="/nosotros"
-              className="font-body text-sm tracking-wide hover:opacity-60 transition-opacity"
+              className="text-sm tracking-wide hover:opacity-60 transition-opacity"
             >
               Nosotros
             </Link>
@@ -151,17 +145,6 @@ export function Navbar() {
             <button className="hidden lg:block hover:opacity-60 transition-opacity">
               <User className="w-5 h-5" />
             </button>
-            <button
-              onClick={() => setIsOpen(true)}
-              className="relative hover:opacity-60 transition-opacity"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-body">
-                  {totalItems}
-                </span>
-              )}
-            </button>
 
             {/* Mobile hamburger */}
             <button
@@ -170,9 +153,80 @@ export function Navbar() {
             >
               <Menu className="w-5 h-5" />
             </button>
+
+            <button
+              onClick={() => setIsOpen(true)}
+              className="relative hover:opacity-60 transition-opacity"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Mega Menu */}
+      <div
+        onMouseEnter={openMega}
+        onMouseLeave={closeMega}
+        className={`fixed left-0 right-0 z-40 bg-background border-t border-border/40 border-b border-border/40 transition-all duration-200 ease-out ${
+          megaOpen
+            ? 'opacity-100 visible translate-y-0'
+            : 'opacity-0 invisible -translate-y-2 pointer-events-none'
+        }`}
+        style={{ top: navRef.current ? navRef.current.getBoundingClientRect().bottom + 'px' : 'auto' }}
+      >
+        <div className="px-16 py-10">
+          <div className="grid grid-cols-4 gap-8">
+            {megaColumns.map((col) => (
+              <Link
+                key={col.name}
+                to={col.href}
+                className="group block"
+                onClick={() => setMegaOpen(false)}
+              >
+                <h3 className={`font-semibold text-base mb-2 group-hover:opacity-70 transition-opacity ${col.muted ? 'text-muted-foreground' : 'text-foreground'}`}>
+                  {col.name}
+                </h3>
+                <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+                  {col.desc}
+                </p>
+                <div className="border-b border-border/20" />
+                {col.badge ? (
+                  <span className="inline-block mt-3 bg-foreground/5 text-muted-foreground text-[10px] px-2 py-0.5">
+                    {col.tag}
+                  </span>
+                ) : (
+                  <span className="block mt-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+                    {col.tag}
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
+
+          {/* Bottom row */}
+          <div className="border-t border-border/20 pt-6 mt-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">¿No sabes por dónde empezar?</span>
+              <Link
+                to="/configurador"
+                className="text-sm font-medium text-foreground"
+                onClick={() => setMegaOpen(false)}
+              >
+                → Empieza por el Configurador
+              </Link>
+            </div>
+            <span className="text-xs text-muted-foreground text-right">
+              Fabricado en Bogotá, Colombia. Entrega en 14 días.
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Mobile overlay */}
       <div
@@ -180,10 +234,10 @@ export function Navbar() {
           mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
-        <div className="flex items-center justify-between px-6 h-16">
+        <div className="flex items-center justify-between px-8 h-16">
           <Link
             to="/"
-            className="text-xl tracking-[0.2em] font-extrabold text-foreground"
+            className="text-lg tracking-[0.2em] font-extrabold text-foreground"
             style={{ fontFamily: 'Syne, sans-serif' }}
             onClick={() => setMobileOpen(false)}
           >
@@ -194,38 +248,44 @@ export function Navbar() {
           </button>
         </div>
 
-        <div className="flex flex-col px-6 pt-8 gap-6">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">Productos</p>
-          {productCategories.map((cat) => (
-            <Link
-              key={cat.name}
-              to={cat.href}
-              className={`block ${cat.soon ? 'opacity-50' : ''}`}
-              onClick={() => setMobileOpen(false)}
-            >
-              <div className="flex items-center gap-2">
-                <span className={`text-lg font-medium ${cat.soon ? 'text-muted-foreground' : 'text-foreground'}`}>
-                  {cat.name}
-                </span>
-                {cat.soon && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground font-medium tracking-wide uppercase">
-                    soon
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{cat.desc}</p>
-            </Link>
-          ))}
-
-          <div className="border-b border-border/20 my-2" />
-
+        <div className="flex flex-col px-8 py-12 gap-6">
+          {/* Configurador pill */}
           <Link
             to="/configurador"
-            className="text-lg font-medium text-foreground"
+            className="self-start text-sm tracking-wide border border-foreground px-5 py-1.5 hover:bg-foreground hover:text-background transition-all duration-200"
             onClick={() => setMobileOpen(false)}
           >
             Configurador
           </Link>
+
+          {/* Productos expandable */}
+          <button
+            className="flex items-center gap-1 text-lg font-medium text-foreground"
+            onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+          >
+            Productos
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileProductsOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {mobileProductsOpen && (
+            <div className="flex flex-col gap-4 pl-4">
+              {megaColumns.map((col) => (
+                <Link
+                  key={col.name}
+                  to={col.href}
+                  className="block"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className={`text-base font-medium ${col.muted ? 'text-muted-foreground' : 'text-foreground'}`}>
+                    {col.name}
+                  </span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{col.desc}</p>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Nosotros */}
           <Link
             to="/nosotros"
             className="text-lg font-medium text-foreground"
