@@ -37,7 +37,6 @@ const megaColumns = [
 ];
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
@@ -46,11 +45,6 @@ export function Navbar() {
   const { items, setIsOpen } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
@@ -89,11 +83,7 @@ export function Navbar() {
       {/* Main Nav */}
       <nav
         ref={navRef}
-        className={`transition-all duration-300 h-16 ${
-          scrolled
-            ? 'bg-background/95 backdrop-blur-md border-b border-border/20'
-            : 'bg-transparent'
-        }`}
+        className="h-16 bg-background border-b border-border/20"
       >
         <div className="flex items-center justify-between h-full px-8 lg:px-16">
           {/* Logo */}
