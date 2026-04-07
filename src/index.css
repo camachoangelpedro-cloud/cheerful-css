@@ -14,19 +14,19 @@
 
   /* Semantic tokens mapped to NODO palette */
   --background: 60 14% 95%;           /* #FAFAF8 */
-  --foreground: 209 39% 17%;          /* #1A2B3C */
+  --foreground: 0 0% 11%;             /* #1C1C1A */
 
   --card: 35 33% 92%;
-  --card-foreground: 209 39% 17%;
+  --card-foreground: 0 0% 11%;
 
   --popover: 35 33% 92%;
-  --popover-foreground: 209 39% 17%;
+  --popover-foreground: 0 0% 11%;
 
-  --primary: 209 39% 17%;
+  --primary: 0 0% 11%;
   --primary-foreground: 35 33% 92%;
 
   --secondary: 32 27% 77%;
-  --secondary-foreground: 209 39% 17%;
+  --secondary-foreground: 0 0% 11%;
 
   --muted: 32 27% 77%;
   --muted-foreground: 209 20% 40%;
