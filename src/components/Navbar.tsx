@@ -49,10 +49,9 @@ export function Navbar() {
           {/* Logo - Left */}
           <Link
             to="/"
-            className={`font-display text-xl tracking-[0.2em] font-semibold transition-colors ${
-            scrolled ? 'text-foreground' : 'text-foreground'}`
-            }>
-            
+            className={`text-xl tracking-[0.15em] font-extrabold transition-colors ${
+            scrolled ? 'text-foreground' : 'text-foreground'}`}
+            style={{fontFamily:'Syne,sans-serif'}}>
             NODO
           </Link>
 
