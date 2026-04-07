@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Search, User, Menu, X, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect, useState, useRef } from 'react';
 
@@ -100,7 +100,7 @@ export function Navbar() {
             {/* Configurador pill CTA */}
             <Link
               to="/configurador"
-              className="text-sm tracking-wide border border-foreground px-5 py-1.5 hover:bg-foreground hover:text-background transition-all duration-200"
+              className="text-sm tracking-wide hover:opacity-60 transition-opacity"
             >
               Configurador
             </Link>
@@ -110,11 +110,8 @@ export function Navbar() {
               onMouseEnter={openMega}
               onMouseLeave={closeMega}
             >
-              <span className="text-sm tracking-wide cursor-default hover:opacity-60 transition-opacity flex items-center gap-1">
+              <span className="text-sm tracking-wide cursor-default hover:opacity-60 transition-opacity">
                 Productos
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${megaOpen ? 'rotate-180' : ''}`}
-                />
               </span>
             </div>
 
@@ -242,7 +239,7 @@ export function Navbar() {
           {/* Configurador pill */}
           <Link
             to="/configurador"
-            className="self-start text-sm tracking-wide border border-foreground px-5 py-1.5 hover:bg-foreground hover:text-background transition-all duration-200"
+            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
             onClick={() => setMobileOpen(false)}
           >
             Configurador
@@ -250,11 +247,10 @@ export function Navbar() {
 
           {/* Productos expandable */}
           <button
-            className="flex items-center gap-1 text-lg font-medium text-foreground"
+            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
             onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
           >
             Productos
-            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileProductsOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {mobileProductsOpen && (
