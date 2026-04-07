@@ -103,13 +103,13 @@
 
   body {
     @apply bg-background text-foreground antialiased leading-relaxed;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 400;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
     @apply tracking-tight;
   }
 
@@ -142,22 +142,22 @@
   }
 
   .nodo-heading-xl {
-    font-family: 'Playfair Display', Georgia, serif;
-    @apply text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight;
+    font-family: 'Syne', sans-serif;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
   }
 
   .nodo-heading-lg {
-    font-family: 'Playfair Display', Georgia, serif;
-    @apply text-3xl md:text-4xl font-normal tracking-tight;
+    font-family: 'Syne', sans-serif;
+    @apply text-3xl md:text-4xl font-semibold tracking-tight;
   }
 
   .nodo-body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     @apply text-sm md:text-base font-light leading-relaxed;
   }
 
   .nodo-caption {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     @apply text-xs tracking-wider uppercase;
   }
 
