@@ -204,3 +204,68 @@ export function findVariant(
     v.color === colorCode
   );
 }
+
+// ── BACKWARD COMPATIBILITY ───────────────────────────────────────────────
+// These exports keep the configurator components working until they are
+// migrated to the new NodoProduct types.
+
+export interface ModuleType {
+  id: string;
+  sku: string;
+  name: string;
+  description: string;
+  widthCm: number;
+  heightCm: number;
+  depthCm: number;
+  gridW: number;
+  gridH: number;
+  category: 'modulo' | 'placa' | 'conector';
+  hasShelf: boolean;
+  hasDoor: boolean;
+  price: number;
+}
+
+export interface ModuleColor {
+  id: string;
+  name: string;
+  hex: string;
+  hsl: string;
+}
+
+export const MODULE_COLORS: ModuleColor[] = [
+  { id: 'BH', name: 'Blanco Hueso', hex: '#F2EDE4', hsl: '37 38% 92%' },
+  { id: 'RO', name: 'Roble Natural', hex: '#D4B896', hsl: '33 43% 71%' },
+  { id: 'AR', name: 'Arena',         hex: '#D6C9B5', hsl: '36 28% 77%' },
+  { id: 'SA', name: 'Salvia',        hex: '#8FAF8C', hsl: '116 16% 62%' },
+  { id: 'AC', name: 'Acero',         hex: '#6B8E9F', hsl: '199 21% 52%' },
+];
+
+export const VISUAL_SCALE = 60;
+
+export const MODULE_CATALOG: ModuleType[] = [
+  { id: 'm1-05', sku: 'M1:05', name: 'M1:05', description: 'Módulo básico', widthCm: 36, heightCm: 18, depthCm: 36, gridW: 1, gridH: 0.5, category: 'modulo', hasShelf: false, hasDoor: false, price: 234000 },
+  { id: 'm1-07', sku: 'M1:07', name: 'M1:07', description: 'Módulo básico', widthCm: 36, heightCm: 24, depthCm: 36, gridW: 1, gridH: 0.667, category: 'modulo', hasShelf: false, hasDoor: false, price: 244000 },
+  { id: 'm1-1', sku: 'M1:1', name: 'M1:1', description: 'Módulo básico', widthCm: 36, heightCm: 36, depthCm: 36, gridW: 1, gridH: 1, category: 'modulo', hasShelf: false, hasDoor: false, price: 252000 },
+  { id: 'm1-1f', sku: 'M1:1F', name: 'M1:1F', description: 'Con repisa', widthCm: 36, heightCm: 36, depthCm: 36, gridW: 1, gridH: 1, category: 'modulo', hasShelf: true, hasDoor: false, price: 263000 },
+  { id: 'm1-1p', sku: 'M1:1P', name: 'M1:1P', description: 'Con puerta', widthCm: 36, heightCm: 36, depthCm: 36, gridW: 1, gridH: 1, category: 'modulo', hasShelf: false, hasDoor: true, price: 316000 },
+  { id: 'm1-1fp', sku: 'M1:1FP', name: 'M1:1FP', description: 'Con puerta y repisa', widthCm: 36, heightCm: 36, depthCm: 36, gridW: 1, gridH: 1, category: 'modulo', hasShelf: true, hasDoor: true, price: 326000 },
+  { id: 'm1-2', sku: 'M1:2', name: 'M1:2', description: 'Con puerta y repisa', widthCm: 36, heightCm: 72, depthCm: 36, gridW: 1, gridH: 2, category: 'modulo', hasShelf: true, hasDoor: true, price: 398000 },
+  { id: 'm2-05', sku: 'M2:05', name: 'M2:05', description: 'Doble ancho', widthCm: 72, heightCm: 18, depthCm: 36, gridW: 2, gridH: 0.5, category: 'modulo', hasShelf: false, hasDoor: false, price: 304000 },
+  { id: 'm2-07', sku: 'M2:07', name: 'M2:07', description: 'Doble ancho', widthCm: 72, heightCm: 24, depthCm: 36, gridW: 2, gridH: 0.667, category: 'modulo', hasShelf: false, hasDoor: false, price: 312000 },
+  { id: 'm2-1p', sku: 'M2:1P', name: 'M2:1P', description: 'Doble ancho con puerta', widthCm: 72, heightCm: 36, depthCm: 36, gridW: 2, gridH: 1, category: 'modulo', hasShelf: false, hasDoor: true, price: 402000 },
+  { id: 'm2-2p', sku: 'M2:2P', name: 'M2:2P', description: 'Doble ancho, 2 puertas', widthCm: 72, heightCm: 72, depthCm: 36, gridW: 2, gridH: 2, category: 'modulo', hasShelf: false, hasDoor: true, price: 541000 },
+  { id: 'p1-1', sku: 'P1:1', name: 'P1:1', description: 'Placa base', widthCm: 36, heightCm: 36, depthCm: 36, gridW: 1, gridH: 1, category: 'placa', hasShelf: false, hasDoor: false, price: 33000 },
+  { id: 'p2-1', sku: 'P2:1', name: 'P2:1', description: 'Placa base doble', widthCm: 72, heightCm: 36, depthCm: 36, gridW: 2, gridH: 1, category: 'placa', hasShelf: false, hasDoor: false, price: 35000 },
+  { id: 'clip', sku: 'CLIP', name: 'CLIP', description: 'Conector', widthCm: 4, heightCm: 4, depthCm: 4, gridW: 0, gridH: 0, category: 'conector', hasShelf: false, hasDoor: false, price: 5000 },
+];
+  product: NodoProduct,
+  interior: string,
+  panel: string,
+  colorCode: string
+): NodoVariant | undefined {
+  return product.variants.find(v =>
+    v.interior === interior &&
+    v.panel === panel &&
+    v.color === colorCode
+  );
+}
