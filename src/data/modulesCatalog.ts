@@ -258,4 +258,3 @@ export const MODULE_CATALOG: ModuleType[] = [
   { id: 'p2-1', sku: 'P2:1', name: 'P2:1', description: 'Placa base doble', widthCm: 72, heightCm: 36, depthCm: 36, gridW: 2, gridH: 1, category: 'placa', hasShelf: false, hasDoor: false, price: 35000 },
   { id: 'clip', sku: 'CLIP', name: 'CLIP', description: 'Conector', widthCm: 4, heightCm: 4, depthCm: 4, gridW: 0, gridH: 0, category: 'conector', hasShelf: false, hasDoor: false, price: 5000 },
 ];
-}
