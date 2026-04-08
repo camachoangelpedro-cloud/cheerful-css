@@ -1,198 +1,81 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const COLOR_SWATCHES = [
-  { name: 'Midnight Blue', hex: '#233746' },
-  { name: 'Oxide Red', hex: '#A4343A' },
-  { name: 'Roman Ochre', hex: '#C9943C' },
-  { name: 'Pine Green', hex: '#2F4538' },
-];
-
-function ProductCard({ product, index }: { product: any; index: number }) {
-  const [selectedColor, setSelectedColor] = useState(0);
-  const images = product.node.images.edges;
-  const hasMultipleImages = images.length > 1;
-  const displayImage = images[selectedColor] || images[0];
-
-  return (
-    <motion.div
-      key={product.node.id}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.05 }}
-    >
-      <Link 
-        to={`/producto/${product.node.handle}`}
-        className="block group"
-      >
-        <div className="aspect-[4/5] bg-muted/30 overflow-hidden mb-4">
-          {displayImage?.node.url ? (
-            <img 
-              src={displayImage.node.url}
-              alt={displayImage.node.altText || product.node.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              Sin imagen
-            </div>
-          )}
-        </div>
-      </Link>
-      <h3 className="font-display text-lg mb-1">
-        <Link to={`/producto/${product.node.handle}`} className="hover:opacity-70 transition-opacity">
-          {product.node.title}
-        </Link>
-      </h3>
-      {/* Color Swatches */}
-      {hasMultipleImages && (
-        <div className="flex items-center gap-2 mb-1.5">
-          {COLOR_SWATCHES.slice(0, images.length).map((color, idx) => (
-            <button
-              key={color.name}
-              title={color.name}
-              onClick={() => setSelectedColor(idx)}
-              className={`w-5 h-5 rounded-full transition-transform ${
-                selectedColor === idx ? 'scale-110 ring-[1.5px] ring-foreground ring-offset-1 ring-offset-background' : ''
-              }`}
-              style={{
-                backgroundColor: color.hex,
-                border: '0.5px solid #000',
-              }}
-            />
-          ))}
-        </div>
-      )}
-      <p className="font-body text-sm text-muted-foreground">
-        {formatPrice(
-          product.node.priceRange.minVariantPrice.amount,
-          product.node.priceRange.minVariantPrice.currencyCode
-        )}
-      </p>
-    </motion.div>
-  );
-}
-import { motion } from 'framer-motion';
+import { SlidersHorizontal } from 'lucide-react';
+import { toast } from 'sonner';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
-import { fetchProducts, formatPrice, ShopifyProduct } from '@/lib/shopify';
+import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
 
-type FilterType = 'all' | 'sistemas' | 'modulos';
+function ProductCard({ product }: { product: typeof NODO_PRODUCTS[number] }) {
+  const startingPrice = getStartingPrice(product);
+
+  return (
+    <Link to={`/producto/${product.handle}`} className="block group">
+      {/* Image */}
+      <div className="aspect-[4/5] bg-muted/30 overflow-hidden rounded-none">
+        <div className="w-full h-full flex items-center justify-center text-muted-foreground transition-transform duration-500 ease-in-out group-hover:scale-[1.03]">
+          <span className="font-body text-xs uppercase tracking-widest">{product.title}</span>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="pt-3 px-4 pb-4">
+        <h3 className="font-display font-normal text-sm tracking-wide group-hover:underline underline-offset-4 decoration-1">
+          {product.title}
+        </h3>
+        <p className="font-body text-xs text-muted-foreground mt-0.5">
+          {product.widthCm} × {product.heightCm} × {product.depthCm} cm
+        </p>
+        <p className="font-body text-xs text-muted-foreground mt-0.5">
+          Desde COP ${startingPrice.toLocaleString('es-CO')}
+        </p>
+        <div className="flex items-center gap-1.5 mt-2">
+          {NODO_COLORS.map((color) => (
+            <div
+              key={color.id}
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: color.hex }}
+            />
+          ))}
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function CatalogoPage() {
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<FilterType>('all');
-
-  useEffect(() => {
-    async function loadProducts() {
-      try {
-        const data = await fetchProducts(50);
-        setProducts(data);
-      } catch (error) {
-        console.error('Failed to load products:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadProducts();
-  }, []);
-
-  // Filter products based on selection (in real implementation, use product types/tags)
-  const filteredProducts = products;
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <CartDrawer />
-      
+
       <main className="pt-32 pb-24">
         <div className="nodo-container">
           {/* Header */}
-          <div className="mb-16">
-             <motion.h1 
-              className="font-display text-3xl lg:text-4xl mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              Sistemas
-            </motion.h1>
-            <motion.p 
-              className="font-body text-base lg:text-lg text-muted-foreground leading-relaxed max-w-md"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              Explora nuestros sistemas modulares y construye tu espacio soñado.
-            </motion.p>
+          <div className="pt-12 pb-8">
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="font-display font-semibold text-3xl">Catálogo</h1>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  Sistema modular NODO — configura tu espacio
+                </p>
+              </div>
+              <button
+                onClick={() => toast('Filtros próximamente')}
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Filtros"
+              >
+                <SlidersHorizontal size={18} />
+              </button>
+            </div>
           </div>
 
-          {/* Filters */}
-          <motion.div 
-            className="flex items-center gap-8 mb-12 border-b border-border/30 pb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <button
-              onClick={() => setFilter('all')}
-              className={`font-body text-sm tracking-wide transition-colors ${
-                filter === 'all' 
-                  ? 'text-foreground' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              Todos
-            </button>
-            <button
-              onClick={() => setFilter('sistemas')}
-              className={`font-body text-sm tracking-wide transition-colors ${
-                filter === 'sistemas' 
-                  ? 'text-foreground' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              Sistemas Completos
-            </button>
-            <button
-              onClick={() => setFilter('modulos')}
-              className={`font-body text-sm tracking-wide transition-colors ${
-                filter === 'modulos' 
-                  ? 'text-foreground' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              Módulos Individuales
-            </button>
-          </motion.div>
-
-          {/* Products Grid */}
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="aspect-[4/5] bg-muted mb-4" />
-                  <div className="h-4 bg-muted w-1/2 mb-2" />
-                  <div className="h-4 bg-muted w-1/4" />
-                </div>
-              ))}
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-24">
-              <p className="nodo-heading-lg mb-4">No hay productos disponibles</p>
-              <p className="nodo-body text-muted-foreground">
-                Estamos preparando nuestra colección. Vuelve pronto.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-              {filteredProducts.map((product, index) => (
-                <ProductCard key={product.node.id} product={product} index={index} />
-              ))}
-            </div>
-          )}
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {NODO_PRODUCTS.map((product) => (
+              <ProductCard key={product.handle} product={product} />
+            ))}
+          </div>
         </div>
       </main>
 
