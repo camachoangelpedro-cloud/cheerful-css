@@ -31,7 +31,7 @@ const C = ['BH','RO','AR','SA','AC'];
 export const NODO_PRODUCTS: NodoProduct[] = [
   // ── 36×18 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-36x18', title: 'Módulo 36×18', family: 'MOD',
+    handle: 'modulo-36-18', title: 'Módulo 36×18', family: 'MOD',
     widthCm: 36, heightCm: 18, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -41,7 +41,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 36×24 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-36x24', title: 'Módulo 36×24', family: 'MOD',
+    handle: 'modulo-36-24', title: 'Módulo 36×24', family: 'MOD',
     widthCm: 36, heightCm: 24, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -51,7 +51,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 36×36 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-36x36', title: 'Módulo 36×36', family: 'MOD',
+    handle: 'modulo-36-36', title: 'Módulo 36×36', family: 'MOD',
     widthCm: 36, heightCm: 36, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -65,7 +65,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 36×72 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-36x72', title: 'Módulo 36×72', family: 'MOD',
+    handle: 'modulo-36-72', title: 'Módulo 36×72', family: 'MOD',
     widthCm: 36, heightCm: 72, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -79,7 +79,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 72×18 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-72x18', title: 'Módulo 72×18', family: 'MOD',
+    handle: 'modulo-72-18', title: 'Módulo 72×18', family: 'MOD',
     widthCm: 72, heightCm: 18, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -89,7 +89,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 72×24 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-72x24', title: 'Módulo 72×24', family: 'MOD',
+    handle: 'modulo-72-24', title: 'Módulo 72×24', family: 'MOD',
     widthCm: 72, heightCm: 24, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -99,7 +99,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 72×36 ──────────────────────────────────────────────────────────────────
   {
-    handle: 'modulo-72x36', title: 'Módulo 72×36', family: 'MOD',
+    handle: 'modulo-72-36', title: 'Módulo 72×36', family: 'MOD',
     widthCm: 72, heightCm: 36, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -113,7 +113,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── 72×72 — one-off ────────────────────────────────────────────────────────
   {
-    handle: 'modulo-72x72', title: 'Módulo 72×72', family: 'MOD',
+    handle: 'modulo-72-72', title: 'Módulo 72×72', family: 'MOD',
     widthCm: 72, heightCm: 72, depthCm: 36,
     hasOptions: false, isOneOff: true,
     variants: [
@@ -122,7 +122,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── BASE 36×36 ─────────────────────────────────────────────────────────────
   {
-    handle: 'base-36x36', title: 'Base 36×36', family: 'PLT',
+    handle: 'base-36-36', title: 'Base 36×36', family: 'PLT',
     widthCm: 36, heightCm: 36, depthCm: 0,
     hasOptions: false, isOneOff: false,
     variants: [
@@ -131,7 +131,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   },
   // ── BASE 72×36 ─────────────────────────────────────────────────────────────
   {
-    handle: 'base-72x36', title: 'Base 72×36', family: 'PLT',
+    handle: 'base-72-36', title: 'Base 72×36', family: 'PLT',
     widthCm: 72, heightCm: 36, depthCm: 0,
     hasOptions: false, isOneOff: false,
     variants: [
