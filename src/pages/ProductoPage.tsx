@@ -422,8 +422,6 @@ export default function ProductoPage() {
                    field-of-view="45deg"
                    tone-mapping="commerce"
                    environment-image="neutral"
-                   skybox-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr"
-                   skybox-height="0.5m"
                    interaction-prompt="none"
                    disable-zoom
                    disable-tap
