@@ -412,7 +412,7 @@ export default function ProductoPage() {
                   shadow-intensity="1.5"
                   shadow-softness="0.6"
                   exposure="1.0"
-                  camera-orbit="30deg 80deg 600%"
+                  camera-orbit="30deg 80deg 450%"
                   min-camera-orbit="auto auto 600%"
                   max-camera-orbit="auto auto 600%"
                   field-of-view="45deg"
