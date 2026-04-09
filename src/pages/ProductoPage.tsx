@@ -150,30 +150,26 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
+    renderer.toneMapping = THREE.LinearToneMapping;
+    renderer.toneMappingExposure = 1.8;
     el.appendChild(renderer.domElement);
 
-    // Ambient light — soft base
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambient = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambient);
 
-    // Key light — main from top left front
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    keyLight.position.set(-1, 2, 1.5);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    keyLight.position.set(-300, 500, 400);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.001;
     scene.add(keyLight);
 
-    // Fill light — soft from right
-    const fillLight = new THREE.DirectionalLight(0xfff0e0, 0.5);
-    fillLight.position.set(2, 1, 1);
+    const fillLight = new THREE.DirectionalLight(0xfff8f0, 1.0);
+    fillLight.position.set(400, 200, 300);
     scene.add(fillLight);
 
-    // Rim light — edge definition from behind
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4);
-    rimLight.position.set(0, 2, -2);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    rimLight.position.set(0, 300, -400);
     scene.add(rimLight);
 
     const loader = new GLTFLoader();
@@ -187,21 +183,14 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
-          if (child.material) {
-            const mats = Array.isArray(child.material) ? child.material : [child.material];
-            mats.forEach((mat: any) => {
-              if (mat.roughness !== undefined) {
-                mat.roughness = 0.45;
-              }
-              if (mat.metalness !== undefined) {
-                mat.metalness = 0.0;
-              }
-              if (mat.envMapIntensity !== undefined) {
-                mat.envMapIntensity = 0.3;
-              }
-              mat.needsUpdate = true;
-            });
-          }
+          const mats = Array.isArray(child.material)
+            ? child.material
+            : [child.material];
+          mats.forEach((mat: any) => {
+            if (mat.roughness !== undefined) mat.roughness = 0.55;
+            if (mat.metalness !== undefined) mat.metalness = 0.0;
+            mat.needsUpdate = true;
+          });
         }
       });
 
@@ -213,16 +202,15 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       model.position.sub(center);
       scene.add(model);
 
-      const dist = maxDim * 3.2;
-      const radius = dist;
+      const radius = maxDim * 3.2;
+      const verticalOffset = maxDim * 0.5;
 
-      camera.position.set(0, maxDim * 0.5, radius);
+      camera.position.set(0, verticalOffset, radius);
       camera.lookAt(0, 0, 0);
 
       const animate = () => {
         animId = requestAnimationFrame(animate);
         angle += 0.002;
-        const verticalOffset = maxDim * 0.5;
         camera.position.x = Math.sin(angle) * radius;
         camera.position.z = Math.cos(angle) * radius;
         camera.position.y = verticalOffset;
