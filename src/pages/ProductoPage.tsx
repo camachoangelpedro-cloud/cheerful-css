@@ -1,3 +1,18 @@
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        src?: string;
+        'auto-rotate'?: boolean;
+        'camera-controls'?: boolean;
+        'shadow-intensity'?: string;
+        exposure?: string;
+        style?: React.CSSProperties;
+      }, HTMLElement>;
+    }
+  }
+}
+
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Loader2 } from 'lucide-react';
@@ -60,6 +75,63 @@ function parseDimensions(title: string): { ancho?: string; alto?: string; profun
   if (!m) return null;
   const isModule = m[1] === 'Módulo';
   return { ancho: m[2] + ' cm', alto: m[3] + ' cm', ...(isModule ? { profundidad: '36 cm' } : {}) };
+}
+
+const GITHUB_BASE = 'https://raw.githubusercontent.com/camachoangelpedro-cloud/cheerful-css/main/public/models';
+
+function resolveGlbUrl(
+  handle: string,
+  panel: string,
+  interior: string,
+  apertura: string,
+  cableHole: boolean,
+  colorCode: string
+): string {
+  const sinPanel = panel === 'Sin panel';
+
+  let intCode = 'A';
+  if (interior === 'Con repisa')          intCode = 'S';
+  if (interior === 'Con puerta')          intCode = 'D';
+  if (interior === 'Con puerta y repisa') intCode = 'DS';
+
+  const panelCode = sinPanel ? 'O' : 'B';
+
+  const singleDoorHandles = ['modulo-36-36', 'modulo-36-72'];
+  const hasSingleDoor = singleDoorHandles.includes(handle);
+
+  const tiradorSuffix = (hasSingleDoor && (interior === 'Con puerta' || interior === 'Con puerta y repisa'))
+    ? (apertura === 'Izquierda' ? '-IZQ' : '-DER')
+    : '';
+
+  const apSuffix = (!sinPanel && cableHole) ? '-AP' : '';
+
+  const SIZE_MAP: Record<string, string> = {
+    'modulo-36-18': '1X05',
+    'modulo-36-24': '1X07',
+    'modulo-36-36': '1X1',
+    'modulo-36-72': '1X2',
+    'modulo-72-18': '2X05',
+    'modulo-72-24': '2X07',
+    'modulo-72-36': '2X1',
+    'modulo-72-72': '2X2',
+    'base-36-36':   'PLT-1X1',
+    'base-72-36':   'PLT-2X1',
+  };
+
+  const sizeCode = SIZE_MAP[handle];
+  if (!sizeCode) return '';
+
+  if (handle.startsWith('base-')) {
+    return `${GITHUB_BASE}/${sizeCode}-${colorCode}.glb`;
+  }
+
+  if (handle === 'modulo-72-72') {
+    const ap = cableHole ? '-AP' : '';
+    return `${GITHUB_BASE}/MOD-2X2-DD-B${ap}-${colorCode}.glb`;
+  }
+
+  const skuBase = `MOD-${sizeCode}-${intCode}-${panelCode}${tiradorSuffix}${apSuffix}`;
+  return `${GITHUB_BASE}/${skuBase}-${colorCode}.glb`;
 }
 
 
@@ -127,6 +199,13 @@ export default function ProductoPage() {
     }
   }, [selectedPanel]);
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
+    document.head.appendChild(script);
+  }, []);
+
   /* Add to cart */
   const handleAddToCart = async () => {
     if (!product || !selectedVariant) return;
@@ -177,6 +256,17 @@ export default function ProductoPage() {
   const doorLocked = selectedPanel === 'Sin panel';
   const hasSingleDoor = product.title.includes('36×36') || product.title.includes('36×72');
   const is72x72 = product.title === 'Módulo 72×72';
+
+  const glbUrl = product && handle
+    ? resolveGlbUrl(
+        handle,
+        selectedPanel,
+        selectedInterior,
+        selectedApertura,
+        cableHole,
+        selectedColor.code
+      )
+    : '';
 
   const priceDisplay = selectedVariant
     ? 'COP $' + Number(selectedVariant.price.amount).toLocaleString('es-CO')
@@ -296,20 +386,29 @@ export default function ProductoPage() {
 
           {/* ── LEFT COLUMN ─────────────────────────────── */}
           <div className="lg:sticky lg:top-32 lg:self-start">
-            {/* Image area */}
+            {/* 3D Model Viewer */}
             <div
-              className="aspect-[4/5] w-full overflow-hidden relative transition-colors duration-500"
+              className="aspect-[4/5] w-full overflow-hidden relative"
               style={{ backgroundColor: selectedColor.hex }}
             >
-              {images.length > 0 ? (
-                <img
-                  src={images[0].node.url}
-                  alt={images[0].node.altText || product.title}
-                  className="w-full h-full object-cover relative z-10"
+              {glbUrl ? (
+                <model-viewer
+                  src={glbUrl}
+                  camera-controls
+                  auto-rotate
+                  shadow-intensity="0.8"
+                  exposure="0.85"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'transparent',
+                  }}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                  <span className="font-display font-semibold text-2xl text-foreground/25">{product.title}</span>
+                  <span className="font-display font-semibold text-2xl text-foreground/25">
+                    {product.title}
+                  </span>
                 </div>
               )}
             </div>
