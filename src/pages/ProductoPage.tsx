@@ -413,9 +413,9 @@ export default function ProductoPage() {
                   auto-rotate
                   auto-rotate-delay="500"
                   rotation-per-second="8deg"
-                   shadow-intensity="2.5"
-                   shadow-softness="0.3"
-                   exposure="1.1"
+                   shadow-intensity="1.0"
+                   shadow-softness="1.0"
+                   exposure="1.0"
                    camera-orbit="30deg 80deg 300%"
                    min-camera-orbit="auto auto 300%"
                    max-camera-orbit="auto auto 300%"
