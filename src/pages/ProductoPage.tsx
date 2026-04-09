@@ -1,6 +1,9 @@
 
 import { useEffect, useState, useRef } from 'react';
 import * as React from 'react';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
@@ -127,148 +130,101 @@ type VariantNode = ShopifyProduct['node']['variants']['edges'][0]['node'];
 /* ── NodoViewer ──────────────────────────────────────────── */
 
 function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
-  const mountRef = React.useRef<HTMLDivElement>(null);
-  const sceneRef = React.useRef<any>(null);
+  const mountRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!mountRef.current || !glbUrl) return;
 
     const el = mountRef.current;
-    const width = el.clientWidth;
-    const height = el.clientHeight;
+    const width = el.clientWidth || 400;
+    const height = el.clientHeight || 500;
 
-    const loadThree = async () => {
-      if (!(window as any).THREE) {
-        await new Promise<void>((resolve) => {
-          const s = document.createElement('script');
-          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-          s.onload = () => resolve();
-          document.head.appendChild(s);
-        });
-      }
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(backgroundColor);
 
-      const THREE = (window as any).THREE;
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
 
-      if (!(window as any).GLTFLoader) {
-        await new Promise<void>((resolve) => {
-          const s = document.createElement('script');
-          s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-          s.onload = () => resolve();
-          document.head.appendChild(s);
-        });
-      }
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    el.appendChild(renderer.domElement);
 
-      if (sceneRef.current) {
-        sceneRef.current.cleanup();
-      }
+    // Ambient light — soft base
+    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambient);
 
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(backgroundColor);
+    // Key light — main from top left front
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    keyLight.position.set(-1, 2, 1.5);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.001;
+    scene.add(keyLight);
 
-      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
-      camera.position.set(400, 300, 600);
+    // Fill light — soft from right
+    const fillLight = new THREE.DirectionalLight(0xfff0e0, 0.5);
+    fillLight.position.set(2, 1, 1);
+    scene.add(fillLight);
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-      renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.2;
-      el.appendChild(renderer.domElement);
+    // Rim light — edge definition from behind
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    rimLight.position.set(0, 2, -2);
+    scene.add(rimLight);
 
-      // ── LIGHTING SETUP ──────────────────────────────────────────
-      const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-      scene.add(ambient);
+    const loader = new GLTFLoader();
+    let animId: number;
+    let angle = 0;
 
-      const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-      keyLight.position.set(-300, 600, 400);
-      keyLight.castShadow = true;
-      keyLight.shadow.mapSize.width = 2048;
-      keyLight.shadow.mapSize.height = 2048;
-      keyLight.shadow.camera.near = 1;
-      keyLight.shadow.camera.far = 2000;
-      keyLight.shadow.camera.left = -500;
-      keyLight.shadow.camera.right = 500;
-      keyLight.shadow.camera.top = 500;
-      keyLight.shadow.camera.bottom = -500;
-      keyLight.shadow.bias = -0.001;
-      scene.add(keyLight);
+    loader.load(glbUrl, (gltf) => {
+      const model = gltf.scene;
 
-      const fillLight = new THREE.DirectionalLight(0xfff5e0, 0.4);
-      fillLight.position.set(400, 200, 200);
-      scene.add(fillLight);
-
-      const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
-      rimLight.position.set(0, 400, -500);
-      scene.add(rimLight);
-      // ────────────────────────────────────────────────────────────
-
-      const loader = new (window as any).GLTFLoader();
-      loader.load(glbUrl, (gltf: any) => {
-        const model = gltf.scene;
-
-        model.traverse((child: any) => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-        });
-
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 300 / maxDim;
-        model.scale.setScalar(scale);
-        model.position.sub(center.multiplyScalar(scale));
-
-        scene.add(model);
-
-        const fov = camera.fov * (Math.PI / 180);
-        const dist = (maxDim * scale * 1.6) / (2 * Math.tan(fov / 2));
-        camera.position.set(dist * 0.6, dist * 0.5, dist);
-        camera.lookAt(0, 0, 0);
+      model.traverse((child: any) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
       });
 
-      let angle = 0;
-      let animId: number;
-      const radius = camera.position.length();
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+
+      model.position.sub(center);
+      scene.add(model);
+
+      const dist = maxDim * 1.8;
+      const radius = dist;
+
+      camera.position.set(0, maxDim * 0.3, radius);
+      camera.lookAt(0, 0, 0);
 
       const animate = () => {
         animId = requestAnimationFrame(animate);
         angle += 0.005;
-        camera.position.x = Math.sin(angle) * radius * 0.8;
+        camera.position.x = Math.sin(angle) * radius;
         camera.position.z = Math.cos(angle) * radius;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       };
       animate();
-
-      sceneRef.current = {
-        cleanup: () => {
-          cancelAnimationFrame(animId);
-          renderer.dispose();
-          if (el.contains(renderer.domElement)) {
-            el.removeChild(renderer.domElement);
-          }
-        }
-      };
-    };
-
-    loadThree();
+    });
 
     return () => {
-      if (sceneRef.current) {
-        sceneRef.current.cleanup();
+      cancelAnimationFrame(animId);
+      renderer.dispose();
+      if (el.contains(renderer.domElement)) {
+        el.removeChild(renderer.domElement);
       }
     };
   }, [glbUrl, backgroundColor]);
 
-  return (
-    <div ref={mountRef} style={{ width: '100%', height: '100%', background: backgroundColor }} />
-  );
+  return <div ref={mountRef} style={{ width: '100%', height: '100%' }} />;
 }
 
 /* ── Component ───────────────────────────────────────────── */
