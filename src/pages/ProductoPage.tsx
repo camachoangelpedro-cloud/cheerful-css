@@ -390,6 +390,62 @@ export default function ProductoPage() {
               </>
             )}
 
+            {/* TYPE_72x72 — Statement module, fixed config */}
+            {is72x72 && (
+              <>
+                <StepHeader num="1" label="Interior" />
+                <div className="flex gap-2 flex-wrap mb-6">
+                  <OptionCard
+                    active={true}
+                    svg={
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+                        <rect x="3" y="3" width="34" height="34" rx="1" />
+                        <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+                        <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+                        <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
+                        <circle cx="16.5" cy="14" r="2" fill="currentColor" />
+                        <circle cx="23.5" cy="14" r="2" fill="currentColor" />
+                      </svg>
+                    }
+                    label="2 puertas + repisa"
+                    onClick={() => {}}
+                  />
+                </div>
+                <StepHeader num="2" label="Extras" />
+                <div className="flex gap-2 flex-wrap mb-6">
+                  <OptionCard
+                    active={cableHole}
+                    svg={
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+                        <rect x="3" y="3" width="34" height="34" rx="1" />
+                        <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".06" strokeWidth="1" />
+                        <circle cx="20" cy="30" r="4" fill="none" strokeWidth="2" strokeDasharray="3 2" />
+                      </svg>
+                    }
+                    label="Agujero cables"
+                    onClick={() => setCableHole(!cableHole)}
+                  />
+                </div>
+                {cableHole && (
+                  <p className="font-body text-[10px] text-muted-foreground italic -mt-4 mb-6">Sin coste adicional</p>
+                )}
+                <div className="border-t border-border mb-6" />
+                <StepHeader label="Color" />
+                <div className="flex gap-2 mt-1 mb-6 items-center">
+                  {NODO_COLORS.map(c => (
+                    <button
+                      key={c.code}
+                      onClick={() => setSelectedColor(c)}
+                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150 ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
+                      style={{ backgroundColor: c.hex }}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
+              </>
+            )}
+
             {/* TYPE_ACABADO — Clip Decorativo */}
             {pType === 'TYPE_ACABADO' && (
               <>
