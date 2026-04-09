@@ -4,9 +4,17 @@ declare global {
       'model-viewer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
         src?: string;
         'auto-rotate'?: boolean;
+        'auto-rotate-delay'?: string;
+        'rotation-per-second'?: string;
         'camera-controls'?: boolean;
         'shadow-intensity'?: string;
+        'shadow-softness'?: string;
         exposure?: string;
+        'camera-orbit'?: string;
+        'min-camera-orbit'?: string;
+        'max-camera-orbit'?: string;
+        'field-of-view'?: string;
+        'environment-image'?: string;
         style?: React.CSSProperties;
       }, HTMLElement>;
     }
@@ -396,8 +404,16 @@ export default function ProductoPage() {
                   src={glbUrl}
                   camera-controls
                   auto-rotate
-                  shadow-intensity="0.8"
-                  exposure="0.85"
+                  auto-rotate-delay="0"
+                  rotation-per-second="12deg"
+                  shadow-intensity="1.2"
+                  shadow-softness="0.8"
+                  exposure="0.9"
+                  camera-orbit="25deg 75deg 3m"
+                  min-camera-orbit="auto auto 1.5m"
+                  max-camera-orbit="auto auto 6m"
+                  field-of-view="30deg"
+                  environment-image="neutral"
                   style={{
                     width: '100%',
                     height: '100%',
