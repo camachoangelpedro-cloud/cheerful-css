@@ -187,6 +187,21 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
+          if (child.material) {
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach((mat: any) => {
+              if (mat.roughness !== undefined) {
+                mat.roughness = 0.45;
+              }
+              if (mat.metalness !== undefined) {
+                mat.metalness = 0.0;
+              }
+              if (mat.envMapIntensity !== undefined) {
+                mat.envMapIntensity = 0.3;
+              }
+              mat.needsUpdate = true;
+            });
+          }
         }
       });
 
