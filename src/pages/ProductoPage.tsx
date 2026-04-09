@@ -135,140 +135,84 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
     const canvas = canvasRef.current;
 
-    const loadBabylon = async () => {
+    const init = async () => {
       if (!(window as any).BABYLON) {
-        await new Promise<void>((resolve, reject) => {
+        await new Promise<void>((res) => {
           const s = document.createElement('script');
           s.src = 'https://cdn.babylonjs.com/babylon.js';
-          s.onload = () => resolve();
-          s.onerror = () => reject();
+          s.onload = () => res();
           document.head.appendChild(s);
         });
-        await new Promise<void>((resolve, reject) => {
+        await new Promise<void>((res) => {
           const s = document.createElement('script');
           s.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
-          s.onload = () => resolve();
-          s.onerror = () => reject();
+          s.onload = () => res();
           document.head.appendChild(s);
         });
       }
 
-      const BABYLON = (window as any).BABYLON;
+      const B = (window as any).BABYLON;
 
       if (engineRef.current) {
         engineRef.current.dispose();
         engineRef.current = null;
       }
 
-      const engine = new BABYLON.Engine(canvas, true, {
-        preserveDrawingBuffer: true,
-        stencil: true,
-      });
+      const engine = new B.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
       engineRef.current = engine;
 
-      const scene = new BABYLON.Scene(engine);
-      scene.clearColor = BABYLON.Color4.FromHexString(
-        backgroundColor.length === 7 ? backgroundColor + 'ff' : backgroundColor
-      );
+      const scene = new B.Scene(engine);
+      const hex = backgroundColor || '#F5F1EA';
+      const r = parseInt(hex.slice(1,3),16)/255;
+      const g = parseInt(hex.slice(3,5),16)/255;
+      const b2 = parseInt(hex.slice(5,7),16)/255;
+      scene.clearColor = new B.Color4(r, g, b2, 1);
+      scene.ambientColor = new B.Color3(1, 1, 1);
 
-      // ── CAMERA ──────────────────────────────────────────────
-      const camera = new BABYLON.ArcRotateCamera(
-        'cam',
-        -Math.PI / 4,
-        Math.PI / 3,
-        3,
-        BABYLON.Vector3.Zero(),
-        scene
-      );
+      const camera = new B.ArcRotateCamera('cam', -Math.PI/4, Math.PI/3, 10, B.Vector3.Zero(), scene);
       camera.lowerRadiusLimit = camera.radius;
       camera.upperRadiusLimit = camera.radius;
-      camera.lowerBetaLimit = Math.PI / 6;
-      camera.upperBetaLimit = Math.PI / 2;
       camera.inputs.clear();
 
-      // ── LIGHTING ────────────────────────────────────────────
-      // Hemisphere — sky above, ground below, creates ambient gradient
-      const hemiLight = new BABYLON.HemisphericLight(
-        'hemi',
-        new BABYLON.Vector3(0, 1, 0),
-        scene
-      );
-      hemiLight.intensity = 0.6;
-      hemiLight.diffuse = new BABYLON.Color3(1, 1, 1);
-      hemiLight.groundColor = new BABYLON.Color3(0.3, 0.3, 0.35);
-      hemiLight.specular = new BABYLON.Color3(0, 0, 0);
+      const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
+      hemi.intensity = 0.7;
+      hemi.diffuse = new B.Color3(1, 0.98, 0.95);
+      hemi.groundColor = new B.Color3(0.5, 0.45, 0.4);
+      hemi.specular = new B.Color3(0.1, 0.1, 0.1);
 
-      // Key light — directional from top-left-front
-      const keyLight = new BABYLON.DirectionalLight(
-        'key',
-        new BABYLON.Vector3(-1, -2, 1),
-        scene
-      );
-      keyLight.intensity = 1.8;
-      keyLight.diffuse = new BABYLON.Color3(1, 1, 0.97);
-      keyLight.specular = new BABYLON.Color3(0.2, 0.2, 0.2);
+      const key = new B.DirectionalLight('key', new B.Vector3(-1, -2, 1), scene);
+      key.intensity = 2.5;
+      key.diffuse = new B.Color3(1, 0.98, 0.95);
+      key.specular = new B.Color3(0.3, 0.3, 0.3);
 
-      // Shadows from key light
-      const shadowGen = new BABYLON.ShadowGenerator(1024, keyLight as any);
-      shadowGen.useBlurExponentialShadowMap = true;
-      shadowGen.blurKernel = 16;
+      const fill = new B.DirectionalLight('fill', new B.Vector3(2, -1, 0.5), scene);
+      fill.intensity = 0.8;
+      fill.diffuse = new B.Color3(1, 0.95, 0.85);
+      fill.specular = new B.Color3(0, 0, 0);
 
-      // Fill light — from right, warm
-      const fillLight = new BABYLON.DirectionalLight(
-        'fill',
-        new BABYLON.Vector3(2, -1, 1),
-        scene
-      );
-      fillLight.intensity = 0.7;
-      fillLight.diffuse = new BABYLON.Color3(1, 0.97, 0.9);
-      fillLight.specular = new BABYLON.Color3(0, 0, 0);
+      const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -1, -2), scene);
+      rim.intensity = 0.5;
+      rim.diffuse = new B.Color3(0.85, 0.9, 1);
+      rim.specular = new B.Color3(0, 0, 0);
 
-      // Rim light — from behind, defines edges
-      const rimLight = new BABYLON.DirectionalLight(
-        'rim',
-        new BABYLON.Vector3(0, -1, -2),
-        scene
-      );
-      rimLight.intensity = 0.4;
-      rimLight.diffuse = new BABYLON.Color3(0.9, 0.95, 1);
-      rimLight.specular = new BABYLON.Color3(0, 0, 0);
-
-      // ── LOAD GLB ────────────────────────────────────────────
       try {
-        const result = await BABYLON.SceneLoader.ImportMeshAsync(
-          '',
-          '',
-          glbUrl,
-          scene,
-          null,
-          '.glb'
-        );
+        const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
-        const meshes = result.meshes;
+        const shadows = new B.ShadowGenerator(2048, key);
+        shadows.useBlurExponentialShadowMap = true;
+        shadows.blurKernel = 32;
 
-        // Override roughness for better light reaction
-        scene.materials.forEach((mat: any) => {
-          if (mat.metallicTexture === undefined) return;
-          if (mat.roughness !== undefined) mat.roughness = 0.55;
-          if (mat.metallic !== undefined) mat.metallic = 0.0;
-        });
-
-        scene.meshes.forEach((mesh: any) => {
-          if (mesh.material && mesh.material.roughness !== undefined) {
-            mesh.material.roughness = 0.55;
-            mesh.material.metallic = 0.0;
-          }
-        });
-
-        // Add meshes to shadow caster/receiver
-        meshes.forEach((mesh: any) => {
+        result.meshes.forEach((mesh: any) => {
           if (mesh.getTotalVertices() > 0) {
-            shadowGen.addShadowCaster(mesh);
+            shadows.addShadowCaster(mesh);
             mesh.receiveShadows = true;
+            if (mesh.material) {
+              mesh.material.roughness = 0.5;
+              mesh.material.metallic = 0.0;
+            }
           }
         });
 
-        // Fit camera to model
         const bounds = scene.getWorldExtends();
         const size = bounds.max.subtract(bounds.min);
         const center = bounds.min.add(size.scale(0.5));
@@ -278,23 +222,14 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         camera.radius = maxDim * 2.8;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
-      } catch (e) {
-        console.error('Babylon GLB load error:', e);
-      }
+      } catch(e) { console.error('Babylon load error', e); }
 
-      // ── AUTO ROTATE ─────────────────────────────────────────
-      scene.registerBeforeRender(() => {
-        camera.alpha += 0.003;
-      });
-
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-
+      scene.registerBeforeRender(() => { camera.alpha += 0.0008; });
+      engine.runRenderLoop(() => { scene.render(); });
       window.addEventListener('resize', () => engine.resize());
     };
 
-    loadBabylon();
+    init();
 
     return () => {
       if (engineRef.current) {
@@ -304,12 +239,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     };
   }, [glbUrl, backgroundColor]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{ width: '100%', height: '100%', display: 'block' }}
-    />
-  );
+  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />;
 }
 
 /* ── Component ───────────────────────────────────────────── */
