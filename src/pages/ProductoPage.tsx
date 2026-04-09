@@ -85,6 +85,7 @@ export default function ProductoPage() {
   const [selectedInterior, setSelectedInterior] = useState('Abierto');
   const [selectedAcabado, setSelectedAcabado] = useState('Acero Cepillado');
   const [cableHole, setCableHole] = useState(false);
+  const [selectedApertura, setSelectedApertura] = useState('Derecha');
   const [selectedVariant, setSelectedVariant] = useState<VariantNode | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
 
@@ -342,6 +343,26 @@ export default function ProductoPage() {
                   <OptionCard active={selectedInterior === 'Con puerta'} locked={doorLocked} svg={interiorPuertaSvg} label="Con puerta" onClick={() => setSelectedInterior('Con puerta')} />
                   <OptionCard active={selectedInterior === 'Con puerta y repisa'} locked={doorLocked} svg={interiorPuertaRepisaSvg} label="Puerta+repisa" onClick={() => setSelectedInterior('Con puerta y repisa')} />
                 </div>
+
+                {/* Apertura sub-selector */}
+                {(selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
+                  <>
+                    <div className="flex items-center gap-3 mt-0 mb-2">
+                      <span className="font-body text-[10px] uppercase tracking-[.1em] text-muted-foreground min-w-[56px]">Apertura</span>
+                      {['Derecha', 'Izquierda'].map(a => (
+                        <button
+                          key={a}
+                          onClick={() => setSelectedApertura(a)}
+                          className={`font-body text-[10px] px-3 py-1.5 border rounded-none cursor-pointer transition-colors
+                            ${selectedApertura === a ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]' : 'border-border text-foreground hover:border-foreground/60'}`}
+                        >
+                          {a}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="font-body text-[10px] text-muted-foreground italic mb-6">La apertura se comunica al taller — sin coste adicional</p>
+                  </>
+                )}
               </>
             )}
 
