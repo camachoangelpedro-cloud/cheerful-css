@@ -333,6 +333,27 @@ export default function ProductoPage() {
 
             {/* ── CONFIGURATOR STEPS ────────────────────── */}
 
+            {/* COLOUR — always first, all types except is72x72 */}
+            {!is72x72 && (
+              <>
+                <StepHeader label="Color" />
+                <div className="flex gap-2 mt-1 mb-2 items-center">
+                  {NODO_COLORS.map(c => (
+                    <button
+                      key={c.code}
+                      onClick={() => setSelectedColor(c)}
+                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
+                      style={{ backgroundColor: c.hex }}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
+                <div className="border-t border-border mb-6" />
+              </>
+            )}
+
             {/* Step 1 — Panel trasero (TYPE_FULL & TYPE_PANEL) */}
             {(pType === 'TYPE_FULL' || pType === 'TYPE_PANEL') && (
               <>
@@ -355,7 +376,7 @@ export default function ProductoPage() {
                   <OptionCard active={selectedInterior === 'Con puerta y repisa'} locked={doorLocked} svg={interiorPuertaRepisaSvg} label="Puerta+repisa" onClick={() => setSelectedInterior('Con puerta y repisa')} />
                 </div>
 
-                {/* Apertura sub-selector */}
+                {/* Tirador sub-selector */}
                 {hasSingleDoor && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
                   <>
                     <div className="flex items-center gap-3 mt-0 mb-2">
@@ -390,9 +411,43 @@ export default function ProductoPage() {
               </>
             )}
 
+            {/* TYPE_ACABADO — Clip Decorativo */}
+            {pType === 'TYPE_ACABADO' && (
+              <>
+                <StepHeader label="Acabado" />
+                <div className="flex gap-2 mb-6">
+                  {['Acero Cepillado', 'Latón'].map(a => (
+                    <button
+                      key={a}
+                      onClick={() => setSelectedAcabado(a)}
+                      className={`font-body text-sm border px-4 py-2 rounded-none transition-colors
+                        ${selectedAcabado === a ? 'bg-foreground text-background border-foreground' : 'border-border hover:border-foreground'}`}
+                    >
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
             {/* TYPE_72x72 — Statement module, fixed config */}
             {is72x72 && (
               <>
+                <StepHeader label="Color" />
+                <div className="flex gap-2 mt-1 mb-2 items-center">
+                  {NODO_COLORS.map(c => (
+                    <button
+                      key={c.code}
+                      onClick={() => setSelectedColor(c)}
+                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
+                      style={{ backgroundColor: c.hex }}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
+                <div className="border-t border-border mb-6" />
                 <StepHeader num="1" label="Interior" />
                 <div className="flex gap-2 flex-wrap mb-6">
                   <OptionCard
@@ -429,39 +484,6 @@ export default function ProductoPage() {
                 {cableHole && (
                   <p className="font-body text-[10px] text-muted-foreground italic -mt-4 mb-6">Sin coste adicional</p>
                 )}
-                <div className="border-t border-border mb-6" />
-                <StepHeader label="Color" />
-                <div className="flex gap-2 mt-1 mb-6 items-center">
-                  {NODO_COLORS.map(c => (
-                    <button
-                      key={c.code}
-                      onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150 ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
-                      style={{ backgroundColor: c.hex }}
-                      title={c.name}
-                    />
-                  ))}
-                </div>
-                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
-              </>
-            )}
-
-            {/* TYPE_ACABADO — Clip Decorativo */}
-            {pType === 'TYPE_ACABADO' && (
-              <>
-                <StepHeader label="Acabado" />
-                <div className="flex gap-2 mb-6">
-                  {['Acero Cepillado', 'Latón'].map(a => (
-                    <button
-                      key={a}
-                      onClick={() => setSelectedAcabado(a)}
-                      className={`font-body text-sm border px-4 py-2 rounded-none transition-colors
-                        ${selectedAcabado === a ? 'bg-foreground text-background border-foreground' : 'border-border hover:border-foreground'}`}
-                    >
-                      {a}
-                    </button>
-                  ))}
-                </div>
               </>
             )}
 
