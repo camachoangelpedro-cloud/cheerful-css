@@ -18,6 +18,9 @@ declare global {
         'interaction-prompt'?: string;
         'tone-mapping'?: string;
         'disable-zoom'?: boolean;
+        'skybox-image'?: string;
+        'skybox-height'?: string;
+        'disable-tap'?: boolean;
         style?: React.CSSProperties;
       }, HTMLElement>;
     }
@@ -410,17 +413,20 @@ export default function ProductoPage() {
                   auto-rotate
                   auto-rotate-delay="500"
                   rotation-per-second="8deg"
-                  shadow-intensity="2.0"
-                  shadow-softness="0.4"
-                  exposure="1.1"
-                  camera-orbit="30deg 80deg 300%"
-                  min-camera-orbit="auto auto 300%"
-                  max-camera-orbit="auto auto 300%"
-                  field-of-view="45deg"
-                  tone-mapping="commerce"
-                  environment-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr"
-                  interaction-prompt="none"
-                  disable-zoom
+                   shadow-intensity="2.5"
+                   shadow-softness="0.3"
+                   exposure="1.1"
+                   camera-orbit="30deg 80deg 300%"
+                   min-camera-orbit="auto auto 300%"
+                   max-camera-orbit="auto auto 300%"
+                   field-of-view="45deg"
+                   tone-mapping="commerce"
+                   environment-image="neutral"
+                   skybox-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr"
+                   skybox-height="0.5m"
+                   interaction-prompt="none"
+                   disable-zoom
+                   disable-tap
                   style={{
                     width: '100%',
                     height: '100%',
