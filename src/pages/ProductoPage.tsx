@@ -142,7 +142,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(backgroundColor);
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100000);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -151,26 +151,8 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.LinearToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.0;
     el.appendChild(renderer.domElement);
-
-    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambient);
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    keyLight.position.set(-300, 500, 400);
-    keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(2048, 2048);
-    keyLight.shadow.bias = -0.001;
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0xfff8f0, 0.6);
-    fillLight.position.set(400, 200, 300);
-    scene.add(fillLight);
-
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    rimLight.position.set(0, 300, -400);
-    scene.add(rimLight);
 
     const loader = new GLTFLoader();
     let animId: number;
@@ -178,6 +160,14 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
     loader.load(glbUrl, (gltf) => {
       const model = gltf.scene;
+
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const D = maxDim;
+
+      model.position.sub(center);
 
       model.traverse((child: any) => {
         if (child.isMesh) {
@@ -194,16 +184,46 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         }
       });
 
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-
-      model.position.sub(center);
       scene.add(model);
 
-      const radius = maxDim * 3.2;
-      const verticalOffset = maxDim * 0.5;
+      // All lights positioned relative to actual model size
+      // Ambient — low base, let directional lights do the work
+      const ambient = new THREE.AmbientLight(0xffffff, 0.35);
+      scene.add(ambient);
+
+      // Key light — top left front, main shadow caster
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
+      keyLight.position.set(-D * 1.5, D * 2.5, D * 1.5);
+      keyLight.target.position.set(0, 0, 0);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.set(2048, 2048);
+      keyLight.shadow.camera.near = D * 0.1;
+      keyLight.shadow.camera.far = D * 10;
+      keyLight.shadow.camera.left = -D * 2;
+      keyLight.shadow.camera.right = D * 2;
+      keyLight.shadow.camera.top = D * 2;
+      keyLight.shadow.camera.bottom = -D * 2;
+      keyLight.shadow.bias = -0.001;
+      scene.add(keyLight);
+      scene.add(keyLight.target);
+
+      // Fill light — right side, warm, softer
+      const fillLight = new THREE.DirectionalLight(0xfff5e8, 0.7);
+      fillLight.position.set(D * 2, D * 1, D * 1);
+      fillLight.target.position.set(0, 0, 0);
+      scene.add(fillLight);
+      scene.add(fillLight.target);
+
+      // Rim light — back top, defines rear edges
+      const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      rimLight.position.set(0, D * 2, -D * 2);
+      rimLight.target.position.set(0, 0, 0);
+      scene.add(rimLight);
+      scene.add(rimLight.target);
+
+      // Camera orbit setup
+      const radius = D * 3.2;
+      const verticalOffset = D * 0.5;
 
       camera.position.set(0, verticalOffset, radius);
       camera.lookAt(0, 0, 0);
