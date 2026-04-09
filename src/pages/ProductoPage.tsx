@@ -176,6 +176,7 @@ export default function ProductoPage() {
   const images = product.images.edges;
   const doorLocked = selectedPanel === 'Sin panel';
   const hasSingleDoor = product.title.includes('36×36') || product.title.includes('36×72');
+  const is72x72 = product.title === 'Módulo 72×72';
 
   const priceDisplay = selectedVariant
     ? 'COP $' + Number(selectedVariant.price.amount).toLocaleString('es-CO')
