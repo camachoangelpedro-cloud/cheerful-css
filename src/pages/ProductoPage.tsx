@@ -183,7 +183,7 @@ export default function ProductoPage() {
     : '—';
 
   /* helpers */
-  const StepHeader = ({ num, label }: { num?: string; label: string }) => (
+  const StepHeader = ({ num, label, suffix }: { num?: string; label: string; suffix?: string }) => (
     <div className="flex items-center gap-2 mb-3">
       {num && (
         <span className="w-5 h-5 rounded-full border border-border flex items-center justify-center text-[10px] text-muted-foreground">
@@ -191,6 +191,12 @@ export default function ProductoPage() {
         </span>
       )}
       <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground font-medium">{label}</span>
+      {suffix && (
+        <>
+          <span className="font-body text-[10px] text-muted-foreground/50">—</span>
+          <span className="font-body text-[10px] text-foreground font-medium">{suffix}</span>
+        </>
+      )}
     </div>
   );
 
@@ -308,20 +314,6 @@ export default function ProductoPage() {
               )}
             </div>
 
-            {/* Colour dots */}
-            <div className="flex gap-2 mt-4 items-center">
-              {NODO_COLORS.map(c => (
-                <button
-                  key={c.code}
-                  onClick={() => setSelectedColor(c)}
-                  className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
-                    ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
-                  style={{ backgroundColor: c.hex }}
-                  title={c.name}
-                />
-              ))}
-            </div>
-            <p className="font-body text-xs text-muted-foreground mt-2">{selectedColor.name}</p>
           </div>
 
           {/* ── RIGHT COLUMN ────────────────────────────── */}
@@ -336,20 +328,22 @@ export default function ProductoPage() {
             {/* COLOUR — always first, all types except is72x72 */}
             {!is72x72 && (
               <>
-                <StepHeader label="Color" />
-                <div className="flex gap-2 mt-1 mb-2 items-center">
+                <StepHeader label="Color" suffix={selectedColor.name} />
+                <div className="flex gap-2 mt-1 mb-6 items-center">
                   {NODO_COLORS.map(c => (
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
-                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
-                      style={{ backgroundColor: c.hex }}
+                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
+                      style={{
+                        backgroundColor: c.hex,
+                        border: '1.5px solid rgba(28,28,26,0.18)',
+                      }}
                       title={c.name}
                     />
                   ))}
                 </div>
-                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
                 <div className="border-t border-border mb-6" />
               </>
             )}
@@ -392,7 +386,7 @@ export default function ProductoPage() {
                         </button>
                       ))}
                     </div>
-                    <p className="font-body text-[10px] text-muted-foreground italic mb-6">La posición del tirador se comunica al taller — sin coste adicional</p>
+                    
                   </>
                 )}
               </>
@@ -433,20 +427,22 @@ export default function ProductoPage() {
             {/* TYPE_72x72 — Statement module, fixed config */}
             {is72x72 && (
               <>
-                <StepHeader label="Color" />
-                <div className="flex gap-2 mt-1 mb-2 items-center">
+                <StepHeader label="Color" suffix={selectedColor.name} />
+                <div className="flex gap-2 mt-1 mb-6 items-center">
                   {NODO_COLORS.map(c => (
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
-                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
-                      style={{ backgroundColor: c.hex }}
+                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
+                      style={{
+                        backgroundColor: c.hex,
+                        border: '1.5px solid rgba(28,28,26,0.18)',
+                      }}
                       title={c.name}
                     />
                   ))}
                 </div>
-                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
                 <div className="border-t border-border mb-6" />
                 <StepHeader num="1" label="Interior" />
                 <div className="flex gap-2 flex-wrap mb-6">
