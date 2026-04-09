@@ -413,15 +413,15 @@ export default function ProductoPage() {
                   auto-rotate
                   auto-rotate-delay="500"
                   rotation-per-second="8deg"
-                   shadow-intensity="1.0"
-                   shadow-softness="1.0"
-                   exposure="1.0"
+                   shadow-intensity="2.5"
+                   shadow-softness="0.5"
+                   exposure="1.2"
                    camera-orbit="30deg 80deg 300%"
                    min-camera-orbit="auto auto 300%"
                    max-camera-orbit="auto auto 300%"
                    field-of-view="45deg"
                    tone-mapping="commerce"
-                   environment-image="neutral"
+                   environment-image="https://modelviewer.dev/shared-assets/environments/neutral.hdr"
                    interaction-prompt="none"
                    disable-zoom
                    disable-tap
