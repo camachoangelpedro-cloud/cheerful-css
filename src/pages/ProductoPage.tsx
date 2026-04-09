@@ -237,11 +237,12 @@ export default function ProductoPage() {
       <line x1="7" y1="20" x2="33" y2="20" strokeWidth="3" strokeLinecap="square" />
     </svg>
   );
+  const handleCx = selectedApertura === 'Izquierda' ? 13 : 27;
   const interiorPuertaSvg = (
     <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <circle cx="27" cy="20" r="2.5" fill="currentColor" />
+      <circle cx={handleCx} cy="20" r="2.5" fill="currentColor" />
     </svg>
   );
   const interiorPuertaRepisaSvg = (
@@ -249,7 +250,7 @@ export default function ProductoPage() {
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-      <circle cx="27" cy="13" r="2.5" fill="currentColor" />
+      <circle cx={handleCx} cy="13" r="2.5" fill="currentColor" />
     </svg>
   );
   const cableSvg = (
