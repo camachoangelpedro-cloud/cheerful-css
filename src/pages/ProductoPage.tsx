@@ -1,9 +1,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import * as React from 'react';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
@@ -130,126 +127,189 @@ type VariantNode = ShopifyProduct['node']['variants']['edges'][0]['node'];
 /* ── NodoViewer ──────────────────────────────────────────── */
 
 function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const engineRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!mountRef.current || !glbUrl) return;
+    if (!canvasRef.current || !glbUrl) return;
 
-    const el = mountRef.current;
-    const width = el.clientWidth || 400;
-    const height = el.clientHeight || 500;
+    const canvas = canvasRef.current;
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(backgroundColor);
+    const loadBabylon = async () => {
+      if (!(window as any).BABYLON) {
+        await new Promise<void>((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.babylonjs.com/babylon.js';
+          s.onload = () => resolve();
+          s.onerror = () => reject();
+          document.head.appendChild(s);
+        });
+        await new Promise<void>((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
+          s.onload = () => resolve();
+          s.onerror = () => reject();
+          document.head.appendChild(s);
+        });
+      }
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100000);
+      const BABYLON = (window as any).BABYLON;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.LinearToneMapping;
-    renderer.toneMappingExposure = 1.0;
-    el.appendChild(renderer.domElement);
+      if (engineRef.current) {
+        engineRef.current.dispose();
+        engineRef.current = null;
+      }
 
-    const loader = new GLTFLoader();
-    let animId: number;
-    let angle = 0;
+      const engine = new BABYLON.Engine(canvas, true, {
+        preserveDrawingBuffer: true,
+        stencil: true,
+      });
+      engineRef.current = engine;
 
-    loader.load(glbUrl, (gltf) => {
-      const model = gltf.scene;
+      const scene = new BABYLON.Scene(engine);
+      scene.clearColor = BABYLON.Color4.FromHexString(
+        backgroundColor.length === 7 ? backgroundColor + 'ff' : backgroundColor
+      );
 
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const D = maxDim;
+      // ── CAMERA ──────────────────────────────────────────────
+      const camera = new BABYLON.ArcRotateCamera(
+        'cam',
+        -Math.PI / 4,
+        Math.PI / 3,
+        3,
+        BABYLON.Vector3.Zero(),
+        scene
+      );
+      camera.lowerRadiusLimit = camera.radius;
+      camera.upperRadiusLimit = camera.radius;
+      camera.lowerBetaLimit = Math.PI / 6;
+      camera.upperBetaLimit = Math.PI / 2;
+      camera.inputs.clear();
 
-      model.position.sub(center);
+      // ── LIGHTING ────────────────────────────────────────────
+      // Hemisphere — sky above, ground below, creates ambient gradient
+      const hemiLight = new BABYLON.HemisphericLight(
+        'hemi',
+        new BABYLON.Vector3(0, 1, 0),
+        scene
+      );
+      hemiLight.intensity = 0.6;
+      hemiLight.diffuse = new BABYLON.Color3(1, 1, 1);
+      hemiLight.groundColor = new BABYLON.Color3(0.3, 0.3, 0.35);
+      hemiLight.specular = new BABYLON.Color3(0, 0, 0);
 
-      model.traverse((child: any) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-          const mats = Array.isArray(child.material)
-            ? child.material
-            : [child.material];
-          mats.forEach((mat: any) => {
-            if (mat.roughness !== undefined) mat.roughness = 0.55;
-            if (mat.metalness !== undefined) mat.metalness = 0.0;
-            mat.needsUpdate = true;
-          });
-        }
+      // Key light — directional from top-left-front
+      const keyLight = new BABYLON.DirectionalLight(
+        'key',
+        new BABYLON.Vector3(-1, -2, 1),
+        scene
+      );
+      keyLight.intensity = 1.8;
+      keyLight.diffuse = new BABYLON.Color3(1, 1, 0.97);
+      keyLight.specular = new BABYLON.Color3(0.2, 0.2, 0.2);
+
+      // Shadows from key light
+      const shadowGen = new BABYLON.ShadowGenerator(1024, keyLight as any);
+      shadowGen.useBlurExponentialShadowMap = true;
+      shadowGen.blurKernel = 16;
+
+      // Fill light — from right, warm
+      const fillLight = new BABYLON.DirectionalLight(
+        'fill',
+        new BABYLON.Vector3(2, -1, 1),
+        scene
+      );
+      fillLight.intensity = 0.7;
+      fillLight.diffuse = new BABYLON.Color3(1, 0.97, 0.9);
+      fillLight.specular = new BABYLON.Color3(0, 0, 0);
+
+      // Rim light — from behind, defines edges
+      const rimLight = new BABYLON.DirectionalLight(
+        'rim',
+        new BABYLON.Vector3(0, -1, -2),
+        scene
+      );
+      rimLight.intensity = 0.4;
+      rimLight.diffuse = new BABYLON.Color3(0.9, 0.95, 1);
+      rimLight.specular = new BABYLON.Color3(0, 0, 0);
+
+      // ── LOAD GLB ────────────────────────────────────────────
+      try {
+        const result = await BABYLON.SceneLoader.ImportMeshAsync(
+          '',
+          '',
+          glbUrl,
+          scene,
+          null,
+          '.glb'
+        );
+
+        const meshes = result.meshes;
+
+        // Override roughness for better light reaction
+        scene.materials.forEach((mat: any) => {
+          if (mat.metallicTexture === undefined) return;
+          if (mat.roughness !== undefined) mat.roughness = 0.55;
+          if (mat.metallic !== undefined) mat.metallic = 0.0;
+        });
+
+        scene.meshes.forEach((mesh: any) => {
+          if (mesh.material && mesh.material.roughness !== undefined) {
+            mesh.material.roughness = 0.55;
+            mesh.material.metallic = 0.0;
+          }
+        });
+
+        // Add meshes to shadow caster/receiver
+        meshes.forEach((mesh: any) => {
+          if (mesh.getTotalVertices() > 0) {
+            shadowGen.addShadowCaster(mesh);
+            mesh.receiveShadows = true;
+          }
+        });
+
+        // Fit camera to model
+        const bounds = scene.getWorldExtends();
+        const size = bounds.max.subtract(bounds.min);
+        const center = bounds.min.add(size.scale(0.5));
+        const maxDim = Math.max(size.x, size.y, size.z);
+
+        camera.target = center;
+        camera.radius = maxDim * 2.8;
+        camera.lowerRadiusLimit = camera.radius;
+        camera.upperRadiusLimit = camera.radius;
+      } catch (e) {
+        console.error('Babylon GLB load error:', e);
+      }
+
+      // ── AUTO ROTATE ─────────────────────────────────────────
+      scene.registerBeforeRender(() => {
+        camera.alpha += 0.003;
       });
 
-      scene.add(model);
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
 
-      // All lights positioned relative to actual model size
-      // Ambient — low base, let directional lights do the work
-      const ambient = new THREE.AmbientLight(0xffffff, 0.35);
-      scene.add(ambient);
+      window.addEventListener('resize', () => engine.resize());
+    };
 
-      // Key light — top left front, main shadow caster
-      const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
-      keyLight.position.set(-D * 1.5, D * 2.5, D * 1.5);
-      keyLight.target.position.set(0, 0, 0);
-      keyLight.castShadow = true;
-      keyLight.shadow.mapSize.set(2048, 2048);
-      keyLight.shadow.camera.near = D * 0.1;
-      keyLight.shadow.camera.far = D * 10;
-      keyLight.shadow.camera.left = -D * 2;
-      keyLight.shadow.camera.right = D * 2;
-      keyLight.shadow.camera.top = D * 2;
-      keyLight.shadow.camera.bottom = -D * 2;
-      keyLight.shadow.bias = -0.001;
-      scene.add(keyLight);
-      scene.add(keyLight.target);
-
-      // Fill light — right side, warm, softer
-      const fillLight = new THREE.DirectionalLight(0xfff5e8, 0.7);
-      fillLight.position.set(D * 2, D * 1, D * 1);
-      fillLight.target.position.set(0, 0, 0);
-      scene.add(fillLight);
-      scene.add(fillLight.target);
-
-      // Rim light — back top, defines rear edges
-      const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
-      rimLight.position.set(0, D * 2, -D * 2);
-      rimLight.target.position.set(0, 0, 0);
-      scene.add(rimLight);
-      scene.add(rimLight.target);
-
-      // Camera orbit setup
-      const radius = D * 3.2;
-      const verticalOffset = D * 0.5;
-
-      camera.position.set(0, verticalOffset, radius);
-      camera.lookAt(0, 0, 0);
-
-      const animate = () => {
-        animId = requestAnimationFrame(animate);
-        angle += 0.002;
-        camera.position.x = Math.sin(angle) * radius;
-        camera.position.z = Math.cos(angle) * radius;
-        camera.position.y = verticalOffset;
-        camera.lookAt(0, 0, 0);
-        renderer.render(scene, camera);
-      };
-      animate();
-    });
+    loadBabylon();
 
     return () => {
-      cancelAnimationFrame(animId);
-      renderer.dispose();
-      if (el.contains(renderer.domElement)) {
-        el.removeChild(renderer.domElement);
+      if (engineRef.current) {
+        engineRef.current.dispose();
+        engineRef.current = null;
       }
     };
   }, [glbUrl, backgroundColor]);
 
-  return <div ref={mountRef} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ width: '100%', height: '100%', display: 'block' }}
+    />
+  );
 }
 
 /* ── Component ───────────────────────────────────────────── */
