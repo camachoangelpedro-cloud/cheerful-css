@@ -414,7 +414,7 @@ export default function ProductoPage() {
                   exposure="1.0"
                   camera-orbit="30deg 80deg 600%"
                   min-camera-orbit="auto auto 600%"
-                  max-camera-orbit="auto auto 150%"
+                  max-camera-orbit="auto auto 600%"
                   field-of-view="45deg"
                   environment-image="neutral"
                   interaction-prompt="none"
