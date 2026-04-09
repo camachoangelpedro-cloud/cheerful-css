@@ -399,7 +399,7 @@ export default function ProductoPage() {
             {/* 3D Model Viewer */}
             <div
               className="aspect-[4/5] w-full overflow-hidden relative"
-              style={{ backgroundColor: selectedColor.hex }}
+              style={{ backgroundColor: '#1A2B3C' }}
             >
               {glbUrl ? (
                 <model-viewer
