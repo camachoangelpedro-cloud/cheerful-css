@@ -154,21 +154,21 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     renderer.toneMappingExposure = 1.1;
     el.appendChild(renderer.domElement);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambient);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
     keyLight.position.set(-300, 500, 400);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.001;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xfff8f0, 1.0);
+    const fillLight = new THREE.DirectionalLight(0xfff8f0, 0.6);
     fillLight.position.set(400, 200, 300);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
     rimLight.position.set(0, 300, -400);
     scene.add(rimLight);
 
