@@ -16,6 +16,7 @@ declare global {
         'field-of-view'?: string;
         'environment-image'?: string;
         'interaction-prompt'?: string;
+        'tone-mapping'?: string;
         'disable-zoom'?: boolean;
         style?: React.CSSProperties;
       }, HTMLElement>;
@@ -409,14 +410,15 @@ export default function ProductoPage() {
                   auto-rotate
                   auto-rotate-delay="500"
                   rotation-per-second="8deg"
-                  shadow-intensity="1.5"
-                  shadow-softness="0.6"
-                  exposure="1.0"
+                  shadow-intensity="2.0"
+                  shadow-softness="0.4"
+                  exposure="1.1"
                   camera-orbit="30deg 80deg 300%"
                   min-camera-orbit="auto auto 300%"
                   max-camera-orbit="auto auto 300%"
                   field-of-view="45deg"
-                  environment-image="neutral"
+                  tone-mapping="commerce"
+                  environment-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr"
                   interaction-prompt="none"
                   disable-zoom
                   style={{
