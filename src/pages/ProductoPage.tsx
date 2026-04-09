@@ -328,20 +328,22 @@ export default function ProductoPage() {
             {/* COLOUR — always first, all types except is72x72 */}
             {!is72x72 && (
               <>
-                <StepHeader label="Color" />
-                <div className="flex gap-2 mt-1 mb-2 items-center">
+                <StepHeader label="Color" suffix={selectedColor.name} />
+                <div className="flex gap-2 mt-1 mb-6 items-center">
                   {NODO_COLORS.map(c => (
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer border-2 border-transparent transition-all duration-150
-                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : ''}`}
-                      style={{ backgroundColor: c.hex }}
+                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
+                      style={{
+                        backgroundColor: c.hex,
+                        border: '1.5px solid rgba(28,28,26,0.18)',
+                      }}
                       title={c.name}
                     />
                   ))}
                 </div>
-                <p className="font-body text-xs text-muted-foreground mb-6">{selectedColor.name}</p>
                 <div className="border-t border-border mb-6" />
               </>
             )}
