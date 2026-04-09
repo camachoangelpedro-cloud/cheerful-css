@@ -15,6 +15,8 @@ declare global {
         'max-camera-orbit'?: string;
         'field-of-view'?: string;
         'environment-image'?: string;
+        'interaction-prompt'?: string;
+        'disable-zoom'?: boolean;
         style?: React.CSSProperties;
       }, HTMLElement>;
     }
@@ -401,19 +403,22 @@ export default function ProductoPage() {
             >
               {glbUrl ? (
                 <model-viewer
+                  key={glbUrl}
                   src={glbUrl}
                   camera-controls
                   auto-rotate
-                  auto-rotate-delay="0"
-                  rotation-per-second="12deg"
-                  shadow-intensity="1.2"
-                  shadow-softness="0.8"
-                  exposure="0.9"
-                  camera-orbit="30deg 70deg 105%"
-                  min-camera-orbit="auto auto 80%"
-                  max-camera-orbit="auto auto 200%"
+                  auto-rotate-delay="500"
+                  rotation-per-second="8deg"
+                  shadow-intensity="1.5"
+                  shadow-softness="0.6"
+                  exposure="1.0"
+                  camera-orbit="30deg 80deg 150%"
+                  min-camera-orbit="auto auto 150%"
+                  max-camera-orbit="auto auto 150%"
                   field-of-view="45deg"
                   environment-image="neutral"
+                  interaction-prompt="none"
+                  disable-zoom
                   style={{
                     width: '100%',
                     height: '100%',
