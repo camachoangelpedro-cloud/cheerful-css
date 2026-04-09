@@ -198,17 +198,19 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       model.position.sub(center);
       scene.add(model);
 
-      const dist = maxDim * 1.8;
+      const dist = maxDim * 3.2;
       const radius = dist;
 
-      camera.position.set(0, maxDim * 0.3, radius);
+      camera.position.set(0, maxDim * 0.5, radius);
       camera.lookAt(0, 0, 0);
 
       const animate = () => {
         animId = requestAnimationFrame(animate);
-        angle += 0.005;
+        angle += 0.002;
+        const verticalOffset = maxDim * 0.5;
         camera.position.x = Math.sin(angle) * radius;
         camera.position.z = Math.cos(angle) * radius;
+        camera.position.y = verticalOffset;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       };
