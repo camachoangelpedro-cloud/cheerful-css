@@ -184,6 +184,7 @@ export default function ProductoPage() {
   const showDoorWarning = pType === 'TYPE_FULL' && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa');
   const baseRec = showDoorWarning ? getBaseRecommendation(product.title) : null;
   const doorLocked = selectedPanel === 'Sin panel';
+  const hasSingleDoor = product.title.includes('36×36') || product.title.includes('36×72');
 
   const priceDisplay = selectedVariant
     ? 'COP $' + Number(selectedVariant.price.amount).toLocaleString('es-CO')
@@ -238,19 +239,36 @@ export default function ProductoPage() {
     </svg>
   );
   const handleCx = selectedApertura === 'Izquierda' ? 13 : 27;
-  const interiorPuertaSvg = (
+  const interiorPuertaSvg = hasSingleDoor ? (
     <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <circle cx={handleCx} cy="20" r="2.5" fill="currentColor" />
     </svg>
+  ) : (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <circle cx="16.5" cy="20" r="2" fill="currentColor" />
+      <circle cx="23.5" cy="20" r="2" fill="currentColor" />
+    </svg>
   );
-  const interiorPuertaRepisaSvg = (
+  const interiorPuertaRepisaSvg = hasSingleDoor ? (
     <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
       <circle cx={handleCx} cy="13" r="2.5" fill="currentColor" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
+      <circle cx="16.5" cy="14" r="2" fill="currentColor" />
+      <circle cx="23.5" cy="14" r="2" fill="currentColor" />
     </svg>
   );
   const cableSvg = (
@@ -346,7 +364,7 @@ export default function ProductoPage() {
                 </div>
 
                 {/* Apertura sub-selector */}
-                {(selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
+                {hasSingleDoor && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
                   <>
                     <div className="flex items-center gap-3 mt-0 mb-2">
                       <span className="font-body text-[10px] uppercase tracking-[.1em] text-muted-foreground min-w-[56px]">Apertura</span>
