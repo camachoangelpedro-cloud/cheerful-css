@@ -21,12 +21,11 @@ export interface NodoProduct {
 export const NODO_COLORS: NodoColor[] = [
   { id: 'BH', name: 'Blanco Hueso', hex: '#F2EDE4', code: 'BH' },
   { id: 'RO', name: 'Roble Natural', hex: '#D4B896', code: 'RO' },
-  { id: 'AR', name: 'Arena',         hex: '#D6C9B5', code: 'AR' },
   { id: 'SA', name: 'Salvia',        hex: '#8FAF8C', code: 'SA' },
   { id: 'AC', name: 'Acero',         hex: '#6B8E9F', code: 'AC' },
 ];
 
-const C = ['BH','RO','AR','SA','AC'];
+const C = ['BH','RO','SA','AC'];
 
 export const NODO_PRODUCTS: NodoProduct[] = [
   // ── 36×18 ──────────────────────────────────────────────────────────────────
