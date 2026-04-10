@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { X, Trash2 } from 'lucide-react';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
@@ -67,7 +68,7 @@ const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; 
 interface OptionBtnProps {
   active: boolean;
   locked?: boolean;
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   onClick: () => void;
 }
