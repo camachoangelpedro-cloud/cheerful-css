@@ -122,7 +122,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   // ── BASE 36×36 ─────────────────────────────────────────────────────────────
   {
     handle: 'base-36-36', title: 'Base 36×36', family: 'PLT',
-    widthCm: 36, heightCm: 1.8, depthCm: 36,
+    widthCm: 36, heightCm: 36, depthCm: 36,
     hasOptions: false, isOneOff: false,
     variants: [
       ...C.map(c => ({ sku: `PLT·1X1·${c}`, interior: '', panel: '', color: c, price: 33000 })),
@@ -131,7 +131,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
   // ── BASE 72×36 ─────────────────────────────────────────────────────────────
   {
     handle: 'base-72-36', title: 'Base 72×36', family: 'PLT',
-    widthCm: 72, heightCm: 1.8, depthCm: 36,
+    widthCm: 72, heightCm: 36, depthCm: 36,
     hasOptions: false, isOneOff: false,
     variants: [
       ...C.map(c => ({ sku: `PLT·2X1·${c}`, interior: '', panel: '', color: c, price: 35000 })),
