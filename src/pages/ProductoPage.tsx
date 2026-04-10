@@ -270,7 +270,6 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
 export default function ProductoPage() {
   const { handle } = useParams<{ handle: string }>();
-  const navigate = useNavigate();
 
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
