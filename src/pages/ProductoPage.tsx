@@ -601,99 +601,96 @@ export default function ProductoPage() {
           </div>
 
           {/* ── RIGHT: sticky product info ── */}
-          <div className="lg:sticky lg:top-8 space-y-0">
-            <h1 className="font-display font-semibold text-2xl leading-snug mb-1">{product.title}</h1>
-            {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mb-4">{dims}</p>}
-            <p className="font-body text-xl font-medium mb-6">{priceDisplay}</p>
-            <div className="h-px bg-border mb-6" />
+          <div className="lg:sticky lg:top-8">
+
+            {/* Title block — compact, name + dims + price read as one unit */}
+            <h1 className="font-display font-semibold text-2xl leading-snug">{product.title}</h1>
+            {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mt-1.5">{dims}</p>}
+            <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
+
+            {/* Divider — visual break between identity and configuration */}
+            <div className="h-px bg-border mt-8 mb-8" />
 
             {/* ── CONFIGURATOR STEPS ────────────────────── */}
 
-            {/* COLOUR — always first, all types except is72x72 */}
+            {/* COLOUR */}
             {!is72x72 && (
-              <>
+              <div className="mb-8">
                 <StepHeader label="Color" suffix={selectedColor.name} />
-                <div className="flex gap-2 mt-1 mb-6 items-center">
+                <div className="flex gap-2.5 mt-3 items-center">
                   {NODO_COLORS.map(c => (
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
                       className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
                         ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
-                      style={{
-                        backgroundColor: c.hex,
-                        border: '1.5px solid rgba(28,28,26,0.18)',
-                      }}
+                      style={{ backgroundColor: c.hex, border: '1.5px solid rgba(28,28,26,0.18)' }}
                       title={c.name}
                     />
                   ))}
                 </div>
-                <div className="border-t border-border mb-6" />
-              </>
+              </div>
             )}
 
-            {/* Step 1 — Panel trasero (TYPE_FULL & TYPE_PANEL) */}
+            {/* Step 1 — Panel trasero */}
             {(pType === 'TYPE_FULL' || pType === 'TYPE_PANEL') && (
-              <>
+              <div className="mb-8">
                 <StepHeader num="1" label="Panel trasero" />
-                <div className="flex gap-2 flex-wrap mb-6">
+                <div className="flex gap-2 flex-wrap mt-3">
                   <OptionCard active={selectedPanel === 'Con panel'} svg={panelConSvg} label="Con panel" onClick={() => setSelectedPanel('Con panel')} />
                   <OptionCard active={selectedPanel === 'Sin panel'} svg={panelSinSvg} label="Sin panel" onClick={() => setSelectedPanel('Sin panel')} />
                 </div>
-              </>
+              </div>
             )}
 
-            {/* Step 2 — Interior (TYPE_FULL only) */}
+            {/* Step 2 — Interior */}
             {pType === 'TYPE_FULL' && (
-              <>
+              <div className="mb-8">
                 <StepHeader num="2" label="Interior" />
-                <div className="flex gap-2 flex-wrap mb-6">
+                <div className="flex gap-2 flex-wrap mt-3">
                   <OptionCard active={selectedInterior === 'Abierto'} svg={interiorAbiertoSvg} label="Abierto" onClick={() => setSelectedInterior('Abierto')} />
                   <OptionCard active={selectedInterior === 'Con repisa'} svg={interiorRepisaSvg} label="Con repisa" onClick={() => setSelectedInterior('Con repisa')} />
                   <OptionCard active={selectedInterior === 'Con puerta'} locked={doorLocked} svg={interiorPuertaSvg} label="Con puerta" onClick={() => setSelectedInterior('Con puerta')} />
                   <OptionCard active={selectedInterior === 'Con puerta y repisa'} locked={doorLocked} svg={interiorPuertaRepisaSvg} label="Puerta+repisa" onClick={() => setSelectedInterior('Con puerta y repisa')} />
                 </div>
 
-                {/* Tirador sub-selector */}
+                {/* Tirador */}
                 {hasSingleDoor && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
-                  <>
-                    <div className="flex items-center gap-3 mt-0 mb-2">
-                      <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground min-w-[56px]">Tirador</span>
-                      {['Derecha', 'Izquierda'].map(a => (
-                        <button
-                          key={a}
-                          onClick={() => setSelectedApertura(a)}
-                          className={`font-body text-[10px] tracking-[.12em] uppercase px-3 py-1.5 border rounded-none cursor-pointer transition-colors
-                            ${selectedApertura === a ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]' : 'border-border text-foreground hover:border-foreground/60'}`}
-                        >
-                          {a}
-                        </button>
-                      ))}
-                    </div>
-                    
-                  </>
+                  <div className="flex items-center gap-3 mt-5">
+                    <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground w-14 shrink-0">Tirador</span>
+                    {['Derecha', 'Izquierda'].map(a => (
+                      <button
+                        key={a}
+                        onClick={() => setSelectedApertura(a)}
+                        className={`font-body text-[10px] tracking-[.12em] uppercase px-4 py-2 border rounded-none cursor-pointer transition-colors
+                          ${selectedApertura === a ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]' : 'border-border text-foreground hover:border-foreground/60'}`}
+                      >
+                        {a}
+                      </button>
+                    ))}
+                  </div>
                 )}
-              </>
+              </div>
             )}
 
-            {/* Step 3 — Extras (TYPE_FULL + Con panel) */}
+            {/* Step 3 — Extras */}
             {pType === 'TYPE_FULL' && selectedPanel === 'Con panel' && (
-              <>
+              <div className="mb-8">
                 <StepHeader num="3" label="Extras" />
-                <div className="flex gap-2 flex-wrap mb-6">
+                <div className="flex gap-2 flex-wrap mt-3">
                   <OptionCard active={cableHole} svg={cableSvg} label="Agujero cables" onClick={() => setCableHole(!cableHole)} />
                 </div>
                 {cableHole && (
-                  <p className="font-body text-[10px] text-muted-foreground italic mt-1 -mt-4 mb-6">Sin coste adicional</p>
+                  <p className="font-body text-[10px] text-muted-foreground italic mt-2">Sin coste adicional</p>
                 )}
-              </>
+              </div>
             )}
 
-            {/* TYPE_ACABADO — Clip Decorativo */}
+            {/* TYPE_ACABADO */}
             {pType === 'TYPE_ACABADO' && (
-              <>
+              <div className="mb-8">
                 <StepHeader label="Acabado" />
-                <div className="flex gap-2 mb-6">
+                <div className="flex gap-2 mt-3">
                   {['Acero Cepillado', 'Latón'].map(a => (
                     <button
                       key={a}
@@ -705,118 +702,122 @@ export default function ProductoPage() {
                     </button>
                   ))}
                 </div>
-              </>
+              </div>
             )}
 
-            {/* TYPE_72x72 — Statement module, fixed config */}
+            {/* TYPE_72x72 */}
             {is72x72 && (
               <>
-                <StepHeader label="Color" suffix={selectedColor.name} />
-                <div className="flex gap-2 mt-1 mb-6 items-center">
-                  {NODO_COLORS.map(c => (
-                    <button
-                      key={c.code}
-                      onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
-                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
-                      style={{
-                        backgroundColor: c.hex,
-                        border: '1.5px solid rgba(28,28,26,0.18)',
-                      }}
-                      title={c.name}
+                <div className="mb-8">
+                  <StepHeader label="Color" suffix={selectedColor.name} />
+                  <div className="flex gap-2.5 mt-3 items-center">
+                    {NODO_COLORS.map(c => (
+                      <button
+                        key={c.code}
+                        onClick={() => setSelectedColor(c)}
+                        className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                          ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
+                        style={{ backgroundColor: c.hex, border: '1.5px solid rgba(28,28,26,0.18)' }}
+                        title={c.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="h-px bg-border mb-8" />
+                <div className="mb-8">
+                  <StepHeader num="1" label="Interior" />
+                  <div className="flex gap-2 flex-wrap mt-3">
+                    <OptionCard
+                      active={true}
+                      svg={
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+                          <rect x="3" y="3" width="34" height="34" rx="1" />
+                          <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+                          <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+                          <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
+                          <circle cx="16.5" cy="14" r="2" fill="currentColor" />
+                          <circle cx="23.5" cy="14" r="2" fill="currentColor" />
+                        </svg>
+                      }
+                      label="2 puertas + repisa"
+                      onClick={() => {}}
                     />
-                  ))}
+                  </div>
                 </div>
-                <div className="border-t border-border mb-6" />
-                <StepHeader num="1" label="Interior" />
-                <div className="flex gap-2 flex-wrap mb-6">
-                  <OptionCard
-                    active={true}
-                    svg={
-                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-                        <rect x="3" y="3" width="34" height="34" rx="1" />
-                        <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-                        <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-                        <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-                        <circle cx="16.5" cy="14" r="2" fill="currentColor" />
-                        <circle cx="23.5" cy="14" r="2" fill="currentColor" />
-                      </svg>
-                    }
-                    label="2 puertas + repisa"
-                    onClick={() => {}}
-                  />
+                <div className="mb-8">
+                  <StepHeader num="2" label="Extras" />
+                  <div className="flex gap-2 flex-wrap mt-3">
+                    <OptionCard
+                      active={cableHole}
+                      svg={
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
+                          <rect x="3" y="3" width="34" height="34" rx="1" />
+                          <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".06" strokeWidth="1" />
+                          <circle cx="20" cy="30" r="4" fill="none" strokeWidth="2" strokeDasharray="3 2" />
+                        </svg>
+                      }
+                      label="Agujero cables"
+                      onClick={() => setCableHole(!cableHole)}
+                    />
+                  </div>
+                  {cableHole && (
+                    <p className="font-body text-[10px] text-muted-foreground italic mt-2">Sin coste adicional</p>
+                  )}
                 </div>
-                <StepHeader num="2" label="Extras" />
-                <div className="flex gap-2 flex-wrap mb-6">
-                  <OptionCard
-                    active={cableHole}
-                    svg={
-                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-                        <rect x="3" y="3" width="34" height="34" rx="1" />
-                        <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".06" strokeWidth="1" />
-                        <circle cx="20" cy="30" r="4" fill="none" strokeWidth="2" strokeDasharray="3 2" />
-                      </svg>
-                    }
-                    label="Agujero cables"
-                    onClick={() => setCableHole(!cableHole)}
-                  />
-                </div>
-                {cableHole && (
-                  <p className="font-body text-[10px] text-muted-foreground italic -mt-4 mb-6">Sin coste adicional</p>
-                )}
               </>
             )}
 
-            {/* Add to cart button */}
-            <button
-              onClick={handleAddToCart}
-              disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="w-full rounded-none py-4 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {cartLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : addedToCart ? (
-                'Añadido ✓'
-              ) : !selectedVariant ? (
-                'Combinación no disponible'
-              ) : !selectedVariant.availableForSale ? (
-                'Sin stock'
-              ) : (
-                'Añadir al carrito'
-              )}
-            </button>
+            {/* ── CTA block — generous separation from config ── */}
+            <div className="pt-2">
+              <button
+                onClick={handleAddToCart}
+                disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
+                className="w-full rounded-none py-[14px] bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {cartLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : addedToCart ? (
+                  'Añadido ✓'
+                ) : !selectedVariant ? (
+                  'Combinación no disponible'
+                ) : !selectedVariant.availableForSale ? (
+                  'Sin stock'
+                ) : (
+                  'Añadir al carrito'
+                )}
+              </button>
+              <p className="font-body text-[10px] text-muted-foreground text-center mt-4 leading-relaxed">
+                Entrega en Bogotá · Ensamblado en taller · Plug-and-play
+              </p>
+            </div>
 
-            <p className="font-body text-[10px] text-muted-foreground text-center mt-3">
-              Entrega en Bogotá  ·  Ensamblado en taller  ·  Plug-and-play
-            </p>
-
-            {/* ── ACCORDION ─────────────────────────────── */}
-            <div className="mt-10 border-t border-border pt-2">
+            {/* ── ACCORDION ── */}
+            <div className="mt-12 border-t border-border">
               <Accordion type="single" collapsible>
                 <AccordionItem value="description">
-                  <AccordionTrigger className="font-body text-sm font-medium py-4 hover:no-underline">Descripción</AccordionTrigger>
-                  <AccordionContent className="font-body text-sm text-muted-foreground pb-4 leading-relaxed">
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Descripción</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     {product.description || 'Sistema modular NODO. Melamina 18mm Tablemac Duratex. Ensamblado en taller en Bogotá.'}
                   </AccordionContent>
                 </AccordionItem>
 
                 {parsedDims && (
                   <AccordionItem value="dimensions">
-                    <AccordionTrigger className="font-body text-sm font-medium py-4 hover:no-underline">Dimensiones</AccordionTrigger>
-                    <AccordionContent className="font-body text-sm text-muted-foreground pb-4 leading-relaxed">
-                      <div className="w-full">
-                        <div className="border-b border-border/30 py-1.5 flex justify-between">
-                          <span className="text-muted-foreground text-sm">Ancho</span>
-                          <span className="font-medium text-sm">{parsedDims.ancho}</span>
+                    <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Dimensiones</AccordionTrigger>
+                    <AccordionContent className="font-body text-sm text-muted-foreground pb-6">
+                      <div className="w-full space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Ancho</span>
+                          <span className="font-medium">{parsedDims.ancho}</span>
                         </div>
-                        <div className="border-b border-border/30 py-1.5 flex justify-between">
-                          <span className="text-muted-foreground text-sm">Alto</span>
-                          <span className="font-medium text-sm">{parsedDims.alto}</span>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Alto</span>
+                          <span className="font-medium">{parsedDims.alto}</span>
                         </div>
                         {parsedDims.profundidad && (
-                          <div className="border-b border-border/30 py-1.5 flex justify-between">
-                            <span className="text-muted-foreground text-sm">Profundidad</span>
-                            <span className="font-medium text-sm">{parsedDims.profundidad}</span>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Profundidad</span>
+                            <span className="font-medium">{parsedDims.profundidad}</span>
                           </div>
                         )}
                       </div>
@@ -825,8 +826,8 @@ export default function ProductoPage() {
                 )}
 
                 <AccordionItem value="materials">
-                  <AccordionTrigger className="font-body text-sm font-medium py-4 hover:no-underline">Materiales</AccordionTrigger>
-                  <AccordionContent className="font-body text-sm text-muted-foreground pb-4 leading-relaxed">
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Materiales</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     Melamina 18mm Tablemac Duratex. Canto ABS 0.5mm. Panel trasero HDF 6mm remetido 25mm desde cara posterior. Acabado HPL matte. Ensamblado en taller en Bogotá.
                   </AccordionContent>
                 </AccordionItem>
