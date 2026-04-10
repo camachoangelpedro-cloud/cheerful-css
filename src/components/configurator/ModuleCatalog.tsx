@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
-import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice, PX_PER_CM } from '@/data/modulesCatalog';
+import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
 const COP = (n: number) =>
@@ -9,7 +9,7 @@ const COP = (n: number) =>
 const PREVIEW_SCALE = 0.5; // px per cm for card previews
 
 export default function ModuleCatalog() {
-  const { selectedColorCode, setDragHandle, setColorCode } = useConfiguratorStore();
+  const { selectedColorCode, dragHandle, setDragHandle, setColorCode } = useConfiguratorStore();
   const [modOpen, setModOpen] = useState(true);
   const [pltOpen, setPltOpen] = useState(true);
 
@@ -30,7 +30,11 @@ export default function ModuleCatalog() {
           setDragHandle(product.handle);
         }}
         onDragEnd={() => setDragHandle(null)}
-        className="flex flex-col items-center gap-1.5 p-2.5 border border-border hover:border-foreground/40 cursor-grab active:cursor-grabbing select-none transition-colors"
+        onClick={() => setDragHandle(dragHandle === product.handle ? null : product.handle)}
+        className={`flex flex-col items-center gap-1.5 p-2.5 border cursor-grab active:cursor-grabbing select-none transition-colors
+          ${dragHandle === product.handle
+            ? 'border-[#1A2B3C] bg-[#1A2B3C]/5'
+            : 'border-border hover:border-foreground/40'}`}
       >
         {/* Color swatch preview */}
         <div
