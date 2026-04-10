@@ -162,11 +162,8 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       engineRef.current = engine;
 
       const scene = new B.Scene(engine);
-      const hex = backgroundColor || '#F5F1EA';
-      const r = parseInt(hex.slice(1,3),16)/255;
-      const g = parseInt(hex.slice(3,5),16)/255;
-      const b2 = parseInt(hex.slice(5,7),16)/255;
-      scene.clearColor = new B.Color4(r, g, b2, 1);
+      // Fixed warm interior wall — home environment
+      scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
 
       // Cámara lateral: beta 1.25 rad ≈ 28° sobre el horizonte
@@ -175,35 +172,36 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       camera.upperRadiusLimit = camera.radius;
       camera.inputs.clear();
 
-      // Relleno mínimo fijo — las caras en sombra no son negro puro
+      // ── Fixed home lighting rig ───────────────────────────────
+      // Ceiling ambient — warm LED white, like a well-lit living room
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.15;
-      hemi.diffuse = new B.Color3(0.9, 0.92, 1);
-      hemi.groundColor = new B.Color3(0.2, 0.18, 0.15);
-      hemi.specular = new B.Color3(0, 0, 0);
+      hemi.intensity   = 0.30;
+      hemi.diffuse     = new B.Color3(1.0, 0.96, 0.90);
+      hemi.groundColor = new B.Color3(0.32, 0.26, 0.20);
+      hemi.specular    = new B.Color3(0, 0, 0);
 
-      // Key light — dirección se actualiza cada frame para seguir la cámara
-      const key = new B.DirectionalLight('key', new B.Vector3(-1, -0.5, 0), scene);
-      key.intensity = 2.2;
-      key.diffuse = new B.Color3(1, 0.97, 0.93);
-      key.specular = new B.Color3(0.18, 0.18, 0.18);
+      // Key — main window from upper-right, warm afternoon light (fixed)
+      const key = new B.DirectionalLight('key', new B.Vector3(-0.55, -0.75, -0.36), scene);
+      key.intensity = 1.9;
+      key.diffuse   = new B.Color3(1.0, 0.94, 0.84);
+      key.specular  = new B.Color3(0.10, 0.09, 0.07);
 
-      // Front fill — directo desde el frente, tenue, sin sombras
-      const front = new B.DirectionalLight('front', new B.Vector3(-1, -0.1, 0), scene);
-      front.intensity = 0.7;
-      front.diffuse = new B.Color3(1, 0.99, 0.97);
-      front.specular = new B.Color3(0.04, 0.04, 0.04);
+      // Fill — soft bounce from the opposite wall (fixed)
+      const fill = new B.DirectionalLight('fill', new B.Vector3(0.7, -0.25, 0.65), scene);
+      fill.intensity = 0.42;
+      fill.diffuse   = new B.Color3(0.92, 0.88, 0.82);
+      fill.specular  = new B.Color3(0, 0, 0);
 
-      // Fill light — lado opuesto, también sigue la cámara
-      const fill = new B.DirectionalLight('fill', new B.Vector3(1, -0.3, 0), scene);
-      fill.intensity = 0.25;
-      fill.diffuse = new B.Color3(0.88, 0.92, 1);
-      fill.specular = new B.Color3(0, 0, 0);
+      // Rim — back-top, slightly cool to separate silhouette (fixed)
+      const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -0.6, 0.78), scene);
+      rim.intensity = 0.28;
+      rim.diffuse   = new B.Color3(0.82, 0.87, 1.0);
+      rim.specular  = new B.Color3(0, 0, 0);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
-        // PCF — sombras que respetan la geometría del cubo
+        // PCF shadows from key light
         const shadows = new B.ShadowGenerator(2048, key);
         shadows.usePercentageCloserFiltering = true;
         shadows.filteringQuality = B.ShadowGenerator.QUALITY_HIGH;
@@ -214,67 +212,44 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
             shadows.addShadowCaster(mesh, true);
             mesh.receiveShadows = true;
             if (mesh.material) {
-              if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.78;
-              if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
+              if (mesh.material.roughness !== undefined)            mesh.material.roughness = 0.78;
+              if (mesh.material.metallic !== undefined)             mesh.material.metallic = 0.0;
               if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
             }
           }
         });
 
         const bounds = scene.getWorldExtends();
-        const size = bounds.max.subtract(bounds.min);
+        const size   = bounds.max.subtract(bounds.min);
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
 
-        // Plano de suelo que recibe la sombra proyectada
-        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 14, height: maxDim * 14 }, scene);
+        // Anchor key light position for correct shadow frustum
+        const lightDist = maxDim * 7;
+        key.position = new B.Vector3(
+          center.x + 0.55 * lightDist,
+          center.y + 0.75 * lightDist,
+          center.z + 0.36 * lightDist
+        );
+
+        // Solid floor — warm concrete / light stone, nearly matte
+        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 10, height: maxDim * 10 }, scene);
         ground.position.set(center.x, bounds.min.y - 0.001, center.z);
         ground.receiveShadows = true;
-        if (B.ShadowOnlyMaterial) {
-          const shadowMat = new B.ShadowOnlyMaterial('shadowOnly', scene);
-          shadowMat.shadowColor = new B.Color3(0.12, 0.10, 0.08);
-          shadowMat.alpha = 0.4;
-          ground.material = shadowMat;
-        } else {
-          const groundMat = new B.StandardMaterial('groundFallback', scene);
-          groundMat.diffuseColor = new B.Color3(r, g, b2);
-          groundMat.specularColor = B.Color3.Black();
-          ground.material = groundMat;
-        }
+        const groundMat = new B.StandardMaterial('floor', scene);
+        groundMat.diffuseColor  = new B.Color3(0.80, 0.75, 0.68);
+        groundMat.specularColor = new B.Color3(0.04, 0.04, 0.03);
+        ground.material = groundMat;
 
         camera.target = center;
         camera.radius = maxDim * 3.8;
-        camera.beta = 1.25;
+        camera.beta   = 1.25;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
 
-        const lightDist = maxDim * 6;
-
-        // Babylon.js ArcRotateCamera:
-        //   position.x = cos(alpha) * sin(beta) * r
-        //   position.z = sin(alpha) * sin(beta) * r
-        // → dirección cámara→target horizontal: (-cos(alpha), 0, -sin(alpha))
+        // Camera rotates slowly; all lights stay fixed
         scene.registerBeforeRender(() => {
           camera.alpha += 0.0008;
-
-          // Key: 30° a la derecha del espectador, ángulo lateral-bajo
-          const keyAlpha = camera.alpha + Math.PI / 6;
-          const kx = -Math.cos(keyAlpha);
-          const kz = -Math.sin(keyAlpha);
-          key.direction = new B.Vector3(kx, -0.55, kz).normalize();
-          key.position = new B.Vector3(
-            center.x + Math.cos(keyAlpha) * lightDist,
-            center.y + lightDist * 0.8,
-            center.z + Math.sin(keyAlpha) * lightDist
-          );
-
-          // Front: exactamente desde la dirección de la cámara, casi horizontal
-          const fx = -Math.cos(camera.alpha);
-          const fz = -Math.sin(camera.alpha);
-          front.direction = new B.Vector3(fx, -0.15, fz).normalize();
-
-          // Fill: lado opuesto al key, muy suave
-          fill.direction = new B.Vector3(Math.cos(camera.alpha) * 0.5, -0.1, Math.sin(camera.alpha) * 0.5).normalize();
         });
 
       } catch(e) { console.error('Babylon load error', e); }
