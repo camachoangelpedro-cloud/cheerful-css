@@ -250,28 +250,31 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
         const lightDist = maxDim * 6;
 
-        // Cada frame: rotar cámara Y actualizar luces relativas al espectador
+        // Babylon.js ArcRotateCamera:
+        //   position.x = cos(alpha) * sin(beta) * r
+        //   position.z = sin(alpha) * sin(beta) * r
+        // → dirección cámara→target horizontal: (-cos(alpha), 0, -sin(alpha))
         scene.registerBeforeRender(() => {
           camera.alpha += 0.0008;
 
-          // Key: 30° a la derecha del espectador, más lateral que vertical
+          // Key: 30° a la derecha del espectador, ángulo lateral-bajo
           const keyAlpha = camera.alpha + Math.PI / 6;
-          const kx = -Math.sin(keyAlpha);
-          const kz = -Math.cos(keyAlpha);
-          key.direction = new B.Vector3(kx * 1.0, -0.55, kz * 1.0).normalize();
+          const kx = -Math.cos(keyAlpha);
+          const kz = -Math.sin(keyAlpha);
+          key.direction = new B.Vector3(kx, -0.55, kz).normalize();
           key.position = new B.Vector3(
-            center.x - kx * lightDist,
+            center.x + Math.cos(keyAlpha) * lightDist,
             center.y + lightDist * 0.8,
-            center.z - kz * lightDist
+            center.z + Math.sin(keyAlpha) * lightDist
           );
 
-          // Front: directo desde el frente del espectador, casi horizontal
-          const fx = -Math.sin(camera.alpha);
-          const fz = -Math.cos(camera.alpha);
+          // Front: exactamente desde la dirección de la cámara, casi horizontal
+          const fx = -Math.cos(camera.alpha);
+          const fz = -Math.sin(camera.alpha);
           front.direction = new B.Vector3(fx, -0.15, fz).normalize();
 
           // Fill: lado opuesto al key, muy suave
-          fill.direction = new B.Vector3(-kx * 0.5, -0.1, -kz * 0.5).normalize();
+          fill.direction = new B.Vector3(Math.cos(camera.alpha) * 0.5, -0.1, Math.sin(camera.alpha) * 0.5).normalize();
         });
 
       } catch(e) { console.error('Babylon load error', e); }
