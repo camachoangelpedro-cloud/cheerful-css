@@ -364,7 +364,7 @@ export default function ProductoPage() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar /><CartDrawer />
-        <div className="pt-32 flex items-center justify-center min-h-[60vh]">
+        <div className="pt-36 flex items-center justify-center min-h-[60vh]">
           <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
         </div>
       </div>
@@ -376,7 +376,7 @@ export default function ProductoPage() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar /><CartDrawer />
-        <main className="pt-32 pb-24">
+        <main className="pt-36 pb-24">
           <div className="nodo-container text-center">
             <h1 className="nodo-heading-lg mb-4">Producto no encontrado</h1>
             <Link to="/catalogo" className="nodo-button-outline">Volver al catálogo</Link>
@@ -534,7 +534,7 @@ export default function ProductoPage() {
       </div>
 
       {/* ── Breadcrumb ── */}
-      <div ref={heroRef} className="nodo-container pt-6 pb-0">
+      <div ref={heroRef} className="nodo-container pt-28 pb-0">
         <Link
           to="/catalogo"
           className="inline-flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground hover:text-foreground transition-colors"
@@ -546,7 +546,7 @@ export default function ProductoPage() {
 
       {/* ── Main product grid ── */}
       <div className="nodo-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-8 pb-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-10 pb-20 items-start">
 
           {/* ── LEFT: scrollable image gallery ── */}
           <div className="space-y-1">
