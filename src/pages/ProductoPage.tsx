@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import * as React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -281,6 +281,7 @@ export default function ProductoPage() {
   const [selectedApertura, setSelectedApertura] = useState('Derecha');
   const [selectedVariant, setSelectedVariant] = useState<VariantNode | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [carouselIdx, setCarouselIdx] = useState(0);
 
   const { addItem, isLoading: cartLoading } = useCartStore();
 
@@ -505,17 +506,58 @@ export default function ProductoPage() {
 
       {/* Product grid */}
       <div className="nodo-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-16 pt-24 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-6 pb-32">
 
           {/* ── LEFT COLUMN ─────────────────────────────── */}
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            {/* 3D Model Viewer */}
+          <div className="lg:sticky lg:top-24 lg:self-start space-y-3">
+
+            {/* Photo carousel */}
+            {images.length > 0 ? (
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/20">
+                <img
+                  src={images[carouselIdx]?.node.url}
+                  alt={images[carouselIdx]?.node.altText ?? product.title}
+                  className="w-full h-full object-cover"
+                />
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => setCarouselIdx(i => (i - 1 + images.length) % images.length)}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setCarouselIdx(i => (i + 1) % images.length)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                    <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+                      {images.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setCarouselIdx(i)}
+                          className={`w-1.5 h-1.5 rounded-full transition-colors ${i === carouselIdx ? 'bg-foreground' : 'bg-foreground/30'}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="aspect-[4/3] w-full bg-muted/15 flex items-center justify-center">
+                <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground/40">Render próximamente</span>
+              </div>
+            )}
+
+            {/* 3D viewer — fixed height, never resizes */}
             <div
-              className="aspect-[4/5] w-full overflow-hidden relative"
-              style={{ backgroundColor: selectedColor.code === 'BH' ? '#D9D9D6' : '#F5F1EA' }}
+              className="h-[400px] w-full overflow-hidden relative"
+              style={{ backgroundColor: '#EDE9E1' }}
             >
               {glbUrl ? (
-                <NodoViewer glbUrl={glbUrl} backgroundColor={selectedColor.code === 'BH' ? '#D9D9D6' : '#F5F1EA'} />
+                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
                   <span className="font-display font-semibold text-2xl text-foreground/25">
@@ -529,7 +571,7 @@ export default function ProductoPage() {
 
           {/* ── RIGHT COLUMN ────────────────────────────── */}
           <div>
-            <h1 className="font-display font-semibold text-2xl leading-tight mb-1">{product.title}</h1>
+            <h1 className="font-display font-semibold text-3xl leading-tight mb-1">{product.title}</h1>
             {dims && <p className="font-body text-sm text-muted-foreground mb-6">{dims}</p>}
             <p className="font-body text-2xl font-medium mb-6">{priceDisplay}</p>
             <div className="border-t border-border mb-6" />
@@ -585,12 +627,12 @@ export default function ProductoPage() {
                 {hasSingleDoor && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
                   <>
                     <div className="flex items-center gap-3 mt-0 mb-2">
-                      <span className="font-body text-[10px] uppercase tracking-[.1em] text-muted-foreground min-w-[56px]">Tirador</span>
+                      <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground min-w-[56px]">Tirador</span>
                       {['Derecha', 'Izquierda'].map(a => (
                         <button
                           key={a}
                           onClick={() => setSelectedApertura(a)}
-                          className={`font-body text-[10px] px-3 py-1.5 border rounded-none cursor-pointer transition-colors
+                          className={`font-body text-[10px] tracking-[.12em] uppercase px-3 py-1.5 border rounded-none cursor-pointer transition-colors
                             ${selectedApertura === a ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]' : 'border-border text-foreground hover:border-foreground/60'}`}
                         >
                           {a}
@@ -698,7 +740,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="w-full rounded-none py-4 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.18em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full rounded-none py-4 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {cartLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
