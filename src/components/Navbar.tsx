@@ -1,28 +1,14 @@
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen]   = useState(false);
-  const [dropOpen, setDropOpen]       = useState(false);
+  const [mobileOpen, setMobileOpen]         = useState(false);
+  const [dropOpen, setDropOpen]             = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
-  const dropRef = useRef<HTMLDivElement>(null);
-  const navRef  = useRef<HTMLElement>(null);
   const { items, setIsOpen } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  /* Close dropdown on outside click */
-  useEffect(() => {
-    if (!dropOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
-        setDropOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [dropOpen]);
 
   /* Lock body scroll on mobile */
   useEffect(() => {
@@ -30,7 +16,7 @@ export function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const close = () => { setDropOpen(false); };
+  const close = () => setDropOpen(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -55,7 +41,7 @@ export function Navbar() {
       </div>
 
       {/* Main Nav */}
-      <nav ref={navRef} className="h-16 bg-background border-b border-border/20">
+      <nav className="h-16 bg-background border-b border-border/20">
         <div className="flex items-center justify-between h-full px-8 lg:px-16">
 
           {/* Logo */}
@@ -67,57 +53,17 @@ export function Navbar() {
             NODO
           </Link>
 
-          {/* Centre Links — desktop */}
+          {/* Centre Links */}
           <div className="hidden lg:flex items-center gap-10">
             <Link to="/configurador" className="text-sm tracking-wide hover:opacity-60 transition-opacity">
               Configurador
             </Link>
-
-            {/* Productos — click dropdown */}
-            <div ref={dropRef} className="relative">
-              <button
-                onClick={() => setDropOpen(v => !v)}
-                className="text-sm tracking-wide hover:opacity-60 transition-opacity"
-              >
-                Productos
-              </button>
-
-              {/* Simple dropdown */}
-              {dropOpen && (
-                <div className="absolute left-0 top-full mt-3 w-52 bg-background border border-border/60 shadow-sm py-2 z-50">
-                  <Link
-                    to="/catalogo"
-                    onClick={close}
-                    className="block px-4 py-2.5 text-sm text-foreground hover:bg-muted/40 transition-colors"
-                  >
-                    Todos los productos
-                  </Link>
-                  <Link
-                    to="/catalogo?familia=MOD"
-                    onClick={close}
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors pl-8"
-                  >
-                    Módulos individuales
-                  </Link>
-                  <Link
-                    to="/catalogo?familia=PLT"
-                    onClick={close}
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors pl-8"
-                  >
-                    Bases
-                  </Link>
-                  <div className="h-px bg-border/40 my-1.5 mx-4" />
-                  <Link
-                    to="/catalogo?familia=CLIP"
-                    onClick={close}
-                    className="block px-4 py-2.5 text-sm text-foreground hover:bg-muted/40 transition-colors"
-                  >
-                    Clips
-                  </Link>
-                </div>
-              )}
-            </div>
-
+            <button
+              onClick={() => setDropOpen(v => !v)}
+              className="text-sm tracking-wide hover:opacity-60 transition-opacity"
+            >
+              Productos
+            </button>
             <Link to="/nosotros" className="text-sm tracking-wide hover:opacity-60 transition-opacity">
               Nosotros
             </Link>
@@ -152,7 +98,72 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile overlay */}
+      {/* ── Full-width products dropdown ── */}
+      {dropOpen && (
+        <>
+          {/* Backdrop — closes on click outside the panel */}
+          <div className="fixed inset-0 z-30" onClick={close} />
+
+          {/* Panel — sits over the backdrop */}
+          <div className="relative z-40 bg-background border-b border-border/30 px-8 lg:px-16 py-10">
+            <div className="flex">
+              {/*
+                Spacer matching the NODO logo width so the vertical line
+                aligns with the right edge of the logo above.
+                text-lg extrabold "NODO" with tracking-[0.2em] ≈ 76px
+              */}
+              <div className="shrink-0" style={{ width: '76px' }} />
+
+              {/* Vertical line + items */}
+              <div className="border-l border-border/50 pl-10 flex flex-col gap-0">
+
+                <Link
+                  to="/catalogo"
+                  onClick={close}
+                  className="py-2.5 text-sm font-medium text-foreground hover:opacity-60 transition-opacity"
+                >
+                  Todos los productos
+                </Link>
+
+                <Link
+                  to="/catalogo?familia=SIS"
+                  onClick={close}
+                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors pl-6"
+                >
+                  Sistemas pre-configurados
+                </Link>
+                <Link
+                  to="/catalogo?familia=MOD"
+                  onClick={close}
+                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors pl-6"
+                >
+                  Módulos individuales
+                </Link>
+                <Link
+                  to="/catalogo?familia=PLT"
+                  onClick={close}
+                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors pl-6"
+                >
+                  Bases
+                </Link>
+
+                <div className="h-px bg-border/40 my-3 -ml-10 w-48" />
+
+                <Link
+                  to="/catalogo?familia=CLIP"
+                  onClick={close}
+                  className="py-2.5 text-sm font-medium text-foreground hover:opacity-60 transition-opacity"
+                >
+                  Clips
+                </Link>
+
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── Mobile overlay ── */}
       <div
         className={`fixed inset-0 z-[100] bg-background transition-opacity duration-300 ${
           mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
@@ -189,18 +200,21 @@ export function Navbar() {
           </button>
 
           {mobileProductsOpen && (
-            <div className="flex flex-col gap-2 -mt-2">
-              <Link to="/catalogo" className="text-base text-foreground" onClick={() => setMobileOpen(false)}>
+            <div className="flex flex-col gap-2 -mt-2 border-l border-border/50 pl-5">
+              <Link to="/catalogo" className="text-base text-foreground py-1" onClick={() => setMobileOpen(false)}>
                 Todos los productos
               </Link>
-              <Link to="/catalogo?familia=MOD" className="text-base text-muted-foreground pl-5" onClick={() => setMobileOpen(false)}>
+              <Link to="/catalogo?familia=SIS" className="text-base text-muted-foreground pl-4 py-1" onClick={() => setMobileOpen(false)}>
+                Sistemas pre-configurados
+              </Link>
+              <Link to="/catalogo?familia=MOD" className="text-base text-muted-foreground pl-4 py-1" onClick={() => setMobileOpen(false)}>
                 Módulos individuales
               </Link>
-              <Link to="/catalogo?familia=PLT" className="text-base text-muted-foreground pl-5" onClick={() => setMobileOpen(false)}>
+              <Link to="/catalogo?familia=PLT" className="text-base text-muted-foreground pl-4 py-1" onClick={() => setMobileOpen(false)}>
                 Bases
               </Link>
               <div className="h-px bg-border/40 my-1" />
-              <Link to="/catalogo?familia=CLIP" className="text-base text-foreground" onClick={() => setMobileOpen(false)}>
+              <Link to="/catalogo?familia=CLIP" className="text-base text-foreground py-1" onClick={() => setMobileOpen(false)}>
                 Clips
               </Link>
             </div>
