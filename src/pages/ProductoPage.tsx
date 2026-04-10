@@ -319,6 +319,13 @@ export default function ProductoPage() {
     const found = product.variants.edges.find(v =>
       built.every(b => v.node.selectedOptions.find(o => o.name === b.name && o.value === b.value))
     );
+    console.log('NODO_DEBUG variants:', product.variants.edges.map(v => ({
+      title: v.node.title,
+      options: v.node.selectedOptions,
+      price: v.node.price.amount
+    })));
+    console.log('NODO_DEBUG built:', JSON.stringify(built));
+    console.log('NODO_DEBUG found:', found?.node?.title ?? 'NOT FOUND');
     setSelectedVariant(found?.node ?? null);
   }, [product, selectedColor, selectedPanel, selectedInterior, selectedAcabado, selectedApertura]);
 
