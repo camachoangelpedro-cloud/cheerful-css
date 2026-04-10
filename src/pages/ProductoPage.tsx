@@ -166,8 +166,9 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
 
-      // Camera — mouse rotation enabled, zoom locked after model loads
-      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 1.15, 10, B.Vector3.Zero(), scene);
+      // Camera — attach to canvas so mouse events are captured
+      const camera = new B.ArcRotateCamera('cam', -3 * Math.PI / 4, 1.15, 10, B.Vector3.Zero(), scene);
+      camera.attachControl(canvas, true);
       camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
 
       // ── Fixed home lighting rig ───────────────────────────────
@@ -230,25 +231,42 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
           center.z + 0.36 * lightDist
         );
 
-        // Industrial concrete floor — PBR, cool gray, ultra-matte (NY loft)
+        // Industrial concrete floor — PBR with polyhaven texture (NY loft)
         const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 12, height: maxDim * 12 }, scene);
         ground.position.set(center.x, bounds.min.y - 0.001, center.z);
         ground.receiveShadows = true;
+
         const groundMat = new B.PBRMaterial('concrete', scene);
-        groundMat.albedoColor          = new B.Color3(0.46, 0.46, 0.44);
-        groundMat.roughness            = 0.96;
+        groundMat.roughness            = 0.94;
         groundMat.metallic             = 0.0;
         groundMat.environmentIntensity = 0;
+        groundMat.albedoColor          = new B.Color3(0.50, 0.50, 0.48); // fallback if texture fails
+
+        const tiles = Math.max(3, Math.round(maxDim * 3));
+        const BASE  = 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor_02';
+
+        const diffTex = new B.Texture(`${BASE}/concrete_floor_02_diff_1k.jpg`, scene);
+        diffTex.uScale = tiles; diffTex.vScale = tiles;
+        groundMat.albedoTexture = diffTex;
+
+        const normTex = new B.Texture(`${BASE}/concrete_floor_02_nor_gl_1k.jpg`, scene, false, false);
+        normTex.uScale = tiles; normTex.vScale = tiles;
+        groundMat.bumpTexture = normTex;
+
+        const aoTex = new B.Texture(`${BASE}/concrete_floor_02_ao_1k.jpg`, scene);
+        aoTex.uScale = tiles; aoTex.vScale = tiles;
+        groundMat.ambientTexture = aoTex;
+
         ground.material = groundMat;
 
         camera.target = center;
         camera.radius = maxDim * 3.8;
-        camera.alpha  = -Math.PI / 4;  // fixed 45° isometric angle
-        camera.beta   = 1.15;          // ~34° above horizontal — low, face-on
+        camera.alpha  = -3 * Math.PI / 4; // front-left isometric corner
+        camera.beta   = 1.24;             // ~29° above horizontal — isometric, 5° lower
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
-        camera.lowerBetaLimit   = 0.35; // can't flip to top-down
-        camera.upperBetaLimit   = 1.48; // can't dip below the floor
+        camera.lowerBetaLimit   = 0.35;
+        camera.upperBetaLimit   = 1.48;
 
       } catch(e) { console.error('Babylon load error', e); }
       engine.runRenderLoop(() => { scene.render(); });
