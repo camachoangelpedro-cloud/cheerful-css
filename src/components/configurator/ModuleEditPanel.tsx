@@ -2,88 +2,159 @@ import { X, Trash2 } from 'lucide-react';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 
+/* Single-door handles — the ones that have a tirador (handle) direction */
 const SINGLE_DOOR_HANDLES = ['modulo-36-36', 'modulo-36-72'];
+
+/* SVG icons matching product page */
+const PanelConSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+    <rect x="8" y="8" width="24" height="24" fill="currentColor" fillOpacity=".1" strokeWidth="1.5" />
+  </svg>
+);
+const PanelSinSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+    <path d="M10 10L30 30M30 10L10 30" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
+  </svg>
+);
+const InteriorAbiertoSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+  </svg>
+);
+const InteriorRepisaSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+    <line x1="7" y1="20" x2="33" y2="20" strokeWidth="3" strokeLinecap="square" />
+  </svg>
+);
+const InteriorPuertaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
+  isSingle ? (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <circle cx={handleLeft ? 13 : 27} cy="20" r="2.5" fill="currentColor" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <circle cx="16.5" cy="20" r="2" fill="currentColor" />
+      <circle cx="23.5" cy="20" r="2" fill="currentColor" />
+    </svg>
+  );
+const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
+  isSingle ? (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
+      <circle cx={handleLeft ? 13 : 27} cy="13" r="2.5" fill="currentColor" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+      <rect x="3" y="3" width="34" height="34" rx="1" />
+      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
+      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
+      <circle cx="16.5" cy="14" r="2" fill="currentColor" />
+      <circle cx="23.5" cy="14" r="2" fill="currentColor" />
+    </svg>
+  );
+
+interface OptionBtnProps {
+  active: boolean;
+  locked?: boolean;
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}
+function OptionBtn({ active, locked, icon, label, onClick }: OptionBtnProps) {
+  return (
+    <button
+      onClick={locked ? undefined : onClick}
+      className={`flex flex-col items-center gap-1 p-2 border flex-1 transition-colors
+        ${active  ? 'border-[#1A2B3C] bg-[#1A2B3C]/5 text-foreground' : 'border-border text-muted-foreground hover:border-foreground/40'}
+        ${locked  ? 'opacity-30 pointer-events-none' : ''}`}
+    >
+      {icon}
+      <span className="font-body text-[8px] uppercase tracking-[.08em] text-center leading-tight">{label}</span>
+    </button>
+  );
+}
 
 export default function ModuleEditPanel() {
   const { selectedId, placedModules, selectInstance, updateModule, removeModule } =
     useConfiguratorStore();
 
   if (!selectedId) return null;
-
   const mod = placedModules.find(m => m.instanceId === selectedId);
   if (!mod) return null;
-
   const product = NODO_PRODUCTS.find(p => p.handle === mod.handle);
   if (!product) return null;
 
-  /* Derive available options from this product's variants */
-  const uniqueInteriors = [...new Set(
-    product.variants.map(v => v.interior).filter(Boolean),
-  )];
-  const uniquePanels = [...new Set(
-    product.variants.map(v => v.panel).filter(Boolean),
-  )];
-  const hasDoor = mod.interior === 'Con puerta' || mod.interior === 'Con puerta y repisa';
-  const hasTirador = SINGLE_DOOR_HANDLES.includes(mod.handle) && hasDoor;
+  /* Derived state */
+  const hasPanelOption   = product.variants.some(v => v.panel === 'Sin panel');
+  const doorLocked       = mod.panel === 'Sin panel';
+  const uniqueInteriors  = [...new Set(product.variants.map(v => v.interior).filter(Boolean))];
+  const isSingleDoor     = SINGLE_DOOR_HANDLES.includes(mod.handle);
+  const hasDoor          = mod.interior === 'Con puerta' || mod.interior === 'Con puerta y repisa';
+  const showTirador      = isSingleDoor && hasDoor && !doorLocked;
+  const handleLeft       = mod.apertura === 'IZQ';
 
-  /* Validate a combination has a variant */
-  const isValidCombination = (interior: string, panel: string) =>
-    product.variants.some(v => v.interior === interior && v.panel === panel);
+  /* Handlers */
+  const handlePanel = (panel: string) => {
+    if (panel === 'Sin panel') {
+      /* Lock interior to Abierto when removing panel — mirrors product page */
+      updateModule(selectedId, { panel, interior: 'Abierto', apertura: '' });
+    } else {
+      updateModule(selectedId, { panel });
+    }
+  };
 
   const handleInterior = (interior: string) => {
-    /* Doors require Con panel */
     const needsPanel = interior.includes('puerta');
+    /* Doors require Con panel */
     const panel = needsPanel ? 'Con panel' : mod.panel;
-    if (!isValidCombination(interior, panel)) return;
-    updateModule(selectedId, { interior, panel });
+    /* Reset apertura if moving away from single-door */
+    const apertura = isSingleDoor && (interior === 'Con puerta' || interior === 'Con puerta y repisa')
+      ? (mod.apertura || 'DER')
+      : '';
+    updateModule(selectedId, { interior, panel, apertura });
   };
 
-  const handlePanel = (panel: string) => {
-    if (!isValidCombination(mod.interior, panel)) return;
-    updateModule(selectedId, { panel });
-  };
-
-  const handleColor = (colorCode: string) => {
-    updateModule(selectedId, { colorCode });
-  };
-
-  const handleApertura = (apertura: string) => {
-    updateModule(selectedId, { apertura });
-  };
+  const handleApertura = (apertura: string) => updateModule(selectedId, { apertura });
+  const handleColor    = (colorCode: string)  => updateModule(selectedId, { colorCode });
 
   return (
-    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm w-56 pointer-events-auto">
+    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm w-52 pointer-events-auto">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-border">
-        <span className="font-body text-[10px] uppercase tracking-[.12em] font-medium text-foreground">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+        <span className="font-body text-[9px] uppercase tracking-[.12em] font-medium">
           {product.title}
         </span>
-        <button
-          onClick={() => selectInstance(null)}
-          className="text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <X className="w-3.5 h-3.5" />
+        <button onClick={() => selectInstance(null)} className="text-muted-foreground hover:text-foreground">
+          <X className="w-3 h-3" />
         </button>
       </div>
 
       <div className="p-3 flex flex-col gap-3">
+
         {/* Color */}
         <div>
-          <p className="font-body text-[9px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
-            Color
-          </p>
+          <p className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">Color</p>
           <div className="flex gap-1.5">
             {NODO_COLORS.map(c => (
               <button
                 key={c.id}
                 onClick={() => handleColor(c.id)}
                 title={c.name}
-                className="w-6 h-6 transition-transform hover:scale-110"
+                className="w-5 h-5 transition-transform hover:scale-110"
                 style={{
                   background: c.hex,
-                  border: mod.colorCode === c.id
-                    ? '2px solid #1A2B3C'
-                    : '1.5px solid rgba(0,0,0,0.15)',
+                  border: mod.colorCode === c.id ? '2px solid #1A2B3C' : '1.5px solid rgba(0,0,0,0.15)',
                   outline: mod.colorCode === c.id ? '2px solid rgba(26,43,60,0.18)' : 'none',
                   outlineOffset: '1px',
                 }}
@@ -92,70 +163,91 @@ export default function ModuleEditPanel() {
           </div>
         </div>
 
-        {/* Interior */}
+        {/* Step 1 — Panel trasero (same as product page step 1) */}
+        {hasPanelOption && (
+          <div>
+            <p className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
+              1 · Panel trasero
+            </p>
+            <div className="flex gap-1.5">
+              <OptionBtn
+                active={mod.panel === 'Con panel'}
+                icon={<PanelConSvg />}
+                label="Con panel"
+                onClick={() => handlePanel('Con panel')}
+              />
+              <OptionBtn
+                active={mod.panel === 'Sin panel'}
+                icon={<PanelSinSvg />}
+                label="Sin panel"
+                onClick={() => handlePanel('Sin panel')}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 2 — Interior (only for products with multiple interiors) */}
         {uniqueInteriors.length > 1 && (
           <div>
-            <p className="font-body text-[9px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
-              Interior
+            <p className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
+              2 · Interior
             </p>
-            <div className="flex flex-col gap-1">
-              {uniqueInteriors.map(interior => (
-                <button
-                  key={interior}
-                  onClick={() => handleInterior(interior)}
-                  className={`text-left font-body text-[9px] px-2 py-1 border transition-colors
-                    ${mod.interior === interior
-                      ? 'border-[#1A2B3C] bg-[#1A2B3C]/5 text-foreground'
-                      : 'border-border text-muted-foreground hover:border-foreground/40'}`}
-                >
-                  {interior || 'Sin interior'}
-                </button>
-              ))}
+            <div className="flex gap-1 flex-wrap">
+              {uniqueInteriors.includes('Abierto') && (
+                <OptionBtn
+                  active={mod.interior === 'Abierto'}
+                  icon={<InteriorAbiertoSvg />}
+                  label="Abierto"
+                  onClick={() => handleInterior('Abierto')}
+                />
+              )}
+              {uniqueInteriors.includes('Con repisa') && (
+                <OptionBtn
+                  active={mod.interior === 'Con repisa'}
+                  icon={<InteriorRepisaSvg />}
+                  label="Repisa"
+                  onClick={() => handleInterior('Con repisa')}
+                />
+              )}
+              {uniqueInteriors.includes('Con puerta') && (
+                <OptionBtn
+                  active={mod.interior === 'Con puerta'}
+                  locked={doorLocked}
+                  icon={<InteriorPuertaSvg isSingle={isSingleDoor} handleLeft={handleLeft} />}
+                  label="Puerta"
+                  onClick={() => handleInterior('Con puerta')}
+                />
+              )}
+              {uniqueInteriors.includes('Con puerta y repisa') && (
+                <OptionBtn
+                  active={mod.interior === 'Con puerta y repisa'}
+                  locked={doorLocked}
+                  icon={<InteriorPuertaRepisaSvg isSingle={isSingleDoor} handleLeft={handleLeft} />}
+                  label="Puerta+rep."
+                  onClick={() => handleInterior('Con puerta y repisa')}
+                />
+              )}
             </div>
           </div>
         )}
 
-        {/* Panel */}
-        {uniquePanels.length > 1 && (
+        {/* Tirador — sub-step, only for single-door handles with door interior */}
+        {showTirador && (
           <div>
-            <p className="font-body text-[9px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
-              Panel trasero
+            <p className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
+              Tirador
             </p>
             <div className="flex gap-1.5">
-              {uniquePanels.map(panel => (
-                <button
-                  key={panel}
-                  onClick={() => handlePanel(panel)}
-                  disabled={!isValidCombination(mod.interior, panel)}
-                  className={`flex-1 font-body text-[9px] px-2 py-1 border transition-colors disabled:opacity-30
-                    ${mod.panel === panel
-                      ? 'border-[#1A2B3C] bg-[#1A2B3C]/5 text-foreground'
-                      : 'border-border text-muted-foreground hover:border-foreground/40'}`}
-                >
-                  {panel === 'Con panel' ? 'Con' : 'Sin'}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Apertura */}
-        {hasTirador && (
-          <div>
-            <p className="font-body text-[9px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
-              Apertura
-            </p>
-            <div className="flex gap-1.5">
-              {(['IZQ', 'DER'] as const).map(ap => (
+              {(['DER', 'IZQ'] as const).map(ap => (
                 <button
                   key={ap}
                   onClick={() => handleApertura(ap)}
-                  className={`flex-1 font-body text-[9px] px-2 py-1 border transition-colors
+                  className={`flex-1 font-body text-[8px] uppercase tracking-[.10em] px-2 py-1.5 border transition-colors
                     ${mod.apertura === ap
-                      ? 'border-[#1A2B3C] bg-[#1A2B3C]/5 text-foreground'
-                      : 'border-border text-muted-foreground hover:border-foreground/40'}`}
+                      ? 'border-[#1A2B3C] bg-[#1A2B3C] text-[#F2EDE4]'
+                      : 'border-border text-foreground hover:border-foreground/60'}`}
                 >
-                  {ap}
+                  {ap === 'DER' ? 'Derecha' : 'Izquierda'}
                 </button>
               ))}
             </div>
@@ -165,11 +257,12 @@ export default function ModuleEditPanel() {
         {/* Delete */}
         <button
           onClick={() => { removeModule(selectedId); selectInstance(null); }}
-          className="flex items-center gap-1.5 font-body text-[9px] uppercase tracking-[.10em] text-red-500 hover:text-red-700 transition-colors mt-1"
+          className="flex items-center gap-1.5 font-body text-[8px] uppercase tracking-[.10em] text-red-500 hover:text-red-700 transition-colors pt-1 border-t border-border"
         >
           <Trash2 className="w-3 h-3" />
           Eliminar módulo
         </button>
+
       </div>
     </div>
   );
