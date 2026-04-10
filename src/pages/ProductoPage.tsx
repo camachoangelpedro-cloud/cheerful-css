@@ -167,7 +167,6 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       const g = parseInt(hex.slice(3,5),16)/255;
       const b2 = parseInt(hex.slice(5,7),16)/255;
       scene.clearColor = new B.Color4(r, g, b2, 1);
-      // Sin ambientColor global — evita que todas las caras reciban luz uniforme
       scene.ambientColor = new B.Color3(0, 0, 0);
 
       // Cámara lateral: beta 1.25 rad ≈ 28° sobre el horizonte
@@ -176,30 +175,29 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       camera.upperRadiusLimit = camera.radius;
       camera.inputs.clear();
 
-      // Relleno mínimo — sólo para que las caras en sombra no sean negro puro
+      // Relleno mínimo fijo — las caras en sombra no son negro puro
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.18;
+      hemi.intensity = 0.15;
       hemi.diffuse = new B.Color3(0.9, 0.92, 1);
-      hemi.groundColor = new B.Color3(0.25, 0.22, 0.18);
+      hemi.groundColor = new B.Color3(0.2, 0.18, 0.15);
       hemi.specular = new B.Color3(0, 0, 0);
 
-      // Key light fija en world space — su dirección NO cambia al girar la cámara
-      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1.4, 0.7), scene);
-      key.position = new B.Vector3(5, 8, -5);
-      key.intensity = 3.2;
+      // Key light — dirección se actualiza cada frame para seguir la cámara
+      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1, 0), scene);
+      key.intensity = 2.8;
       key.diffuse = new B.Color3(1, 0.97, 0.93);
-      key.specular = new B.Color3(0.6, 0.6, 0.6);
+      key.specular = new B.Color3(0.5, 0.5, 0.5);
 
-      // Fill leve desde el lado opuesto — no proyecta sombras
-      const fill = new B.DirectionalLight('fill', new B.Vector3(1.2, -0.4, 0.6), scene);
-      fill.intensity = 0.35;
+      // Fill light — lado opuesto, también sigue la cámara
+      const fill = new B.DirectionalLight('fill', new B.Vector3(1, -0.3, 0), scene);
+      fill.intensity = 0.3;
       fill.diffuse = new B.Color3(0.88, 0.92, 1);
       fill.specular = new B.Color3(0, 0, 0);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
-        // PCF — sombras que respetan aristas duras de la geometría cúbica
+        // PCF — sombras que respetan la geometría del cubo
         const shadows = new B.ShadowGenerator(2048, key);
         shadows.usePercentageCloserFiltering = true;
         shadows.filteringQuality = B.ShadowGenerator.QUALITY_HIGH;
@@ -212,8 +210,6 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
             if (mesh.material) {
               if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.65;
               if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
-              // Cero environment map: elimina el reflejo de entorno relativo a cámara
-              // que hacía parecer que la luz giraba con el objeto
               if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
             }
           }
@@ -223,13 +219,6 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         const size = bounds.max.subtract(bounds.min);
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
-
-        // Key light posicionada relativa al bounding box real del modelo
-        key.position = new B.Vector3(
-          center.x + maxDim * 3,
-          center.y + maxDim * 4,
-          center.z - maxDim * 3
-        );
 
         // Plano de suelo que recibe la sombra proyectada
         const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 14, height: maxDim * 14 }, scene);
@@ -252,9 +241,30 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         camera.beta = 1.25;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
-      } catch(e) { console.error('Babylon load error', e); }
 
-      scene.registerBeforeRender(() => { camera.alpha += 0.0008; });
+        const lightDist = maxDim * 6;
+
+        // Cada frame: rotar cámara Y actualizar luces para que siempre iluminen
+        // desde el punto de vista del espectador (frente + ángulo arriba-derecha)
+        scene.registerBeforeRender(() => {
+          camera.alpha += 0.0008;
+
+          // Key: misma dirección horizontal que la cámara, 30° a la derecha, 45° abajo
+          const keyAlpha = camera.alpha + Math.PI / 6;
+          const kx = -Math.sin(keyAlpha);
+          const kz = -Math.cos(keyAlpha);
+          key.direction = new B.Vector3(kx * 0.7, -1.0, kz * 0.7).normalize();
+          key.position = new B.Vector3(
+            center.x - kx * lightDist,
+            center.y + lightDist * 1.5,
+            center.z - kz * lightDist
+          );
+
+          // Fill: lado opuesto al key, muy suave
+          fill.direction = new B.Vector3(-kx * 0.5, -0.2, -kz * 0.5).normalize();
+        });
+
+      } catch(e) { console.error('Babylon load error', e); }
       engine.runRenderLoop(() => { scene.render(); });
       window.addEventListener('resize', () => engine.resize());
     };
