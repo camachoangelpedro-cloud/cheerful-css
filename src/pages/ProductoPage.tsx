@@ -113,11 +113,11 @@ function resolveGlbUrl(
   }
 
   if (handle === 'modulo-72-72') {
-    const ap = cableHole ? '-AP' : '';
+    const ap = cableHole ? '.AP' : '';
     return `${GITHUB_BASE}/MOD-2X2-DD-B${ap}-${colorCode}.glb`;
   }
 
-  const skuBase = `MOD-${sizeCode}-${intCode}-${panelCode}${tiradorSuffix}${apSuffix}`;
+  const skuBase = `MOD-${sizeCode}-${intCode === 'DS' ? 'D' : intCode}-${panelCode}${tiradorSuffix}${apSuffix}`;
   return `${GITHUB_BASE}/${skuBase}-${colorCode}.glb`;
 }
 
