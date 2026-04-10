@@ -186,13 +186,13 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       const key = new B.DirectionalLight('key', new B.Vector3(-1, -0.5, 0), scene);
       key.intensity = 2.2;
       key.diffuse = new B.Color3(1, 0.97, 0.93);
-      key.specular = new B.Color3(0.5, 0.5, 0.5);
+      key.specular = new B.Color3(0.18, 0.18, 0.18);
 
       // Front fill — directo desde el frente, tenue, sin sombras
       const front = new B.DirectionalLight('front', new B.Vector3(-1, -0.1, 0), scene);
       front.intensity = 0.7;
       front.diffuse = new B.Color3(1, 0.99, 0.97);
-      front.specular = new B.Color3(0.1, 0.1, 0.1);
+      front.specular = new B.Color3(0.04, 0.04, 0.04);
 
       // Fill light — lado opuesto, también sigue la cámara
       const fill = new B.DirectionalLight('fill', new B.Vector3(1, -0.3, 0), scene);
@@ -214,7 +214,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
             shadows.addShadowCaster(mesh, true);
             mesh.receiveShadows = true;
             if (mesh.material) {
-              if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.65;
+              if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.78;
               if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
               if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
             }
