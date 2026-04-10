@@ -71,11 +71,12 @@ export default function IsometricCanvas() {
   const draggingIdRef       = useRef<string | null>(null);
   const dragPreviewRef      = useRef<{ xCm: number; yCm: number } | null>(null);
 
-  const dhRef            = useRef<string | null>(null);
-  const updateGhostRef   = useRef<((dh: string, sx: number, sy: number) => void) | null>(null);
-  const placeRef         = useRef<((dh: string, sx: number, sy: number) => void) | null>(null);
-  const escCleanupRef    = useRef<(() => void) | null>(null);
-  const resizeCleanupRef = useRef<(() => void) | null>(null);
+  const dhRef              = useRef<string | null>(null);
+  const updateGhostRef     = useRef<((dh: string, sx: number, sy: number) => void) | null>(null);
+  const placeRef           = useRef<((dh: string, sx: number, sy: number) => void) | null>(null);
+  const escCleanupRef      = useRef<(() => void) | null>(null);
+  const resizeCleanupRef   = useRef<(() => void) | null>(null);
+  const dragCleanupRef     = useRef<(() => void) | null>(null);
 
   const { placedModules, dragHandle, selectedId } = useConfiguratorStore();
 
@@ -305,7 +306,13 @@ export default function IsometricCanvas() {
         useConfiguratorStore.getState().selectInstance(null);
       };
 
-      scene.onPointerUp = () => {
+      /* ── Shared drag-commit/revert logic ────────────────────────────────
+         Called from both scene.onPointerUp (commit=true, released on canvas)
+         and the window 'pointerup' safety net (commit=false, released on an
+         overlay such as the edit panel).  The window listener fires AFTER the
+         scene listener for canvas releases, so the isDraggingPlacedRef guard
+         prevents any double-handling. */
+      const commitOrRevertDrag = (commit: boolean) => {
         if (!isDraggingPlacedRef.current) return;
         const id  = draggingIdRef.current;
         const pos = dragPreviewRef.current;
@@ -313,38 +320,56 @@ export default function IsometricCanvas() {
         draggingIdRef.current       = null;
         dragPreviewRef.current      = null;
 
-        if (id && pos) {
-          const st      = useConfiguratorStore.getState();
-          const mod     = st.placedModules.find(m => m.instanceId === id);
-          if (mod) {
-            const product = NODO_PRODUCTS.find(p => p.handle === mod.handle);
-            if (product) {
-              const others   = st.placedModules.filter(m => m.instanceId !== id);
-              const overlaps = others.some(m => {
-                const mp = NODO_PRODUCTS.find(p => p.handle === m.handle); if (!mp) return false;
-                return pos.xCm < m.xCm + mp.widthCm && pos.xCm + product.widthCm > m.xCm &&
-                       pos.yCm < m.yCm + stackHeight(mp) && pos.yCm + stackHeight(product) > m.yCm;
-              });
-              const supported = isModuleSupported(pos.xCm, pos.yCm, product.widthCm, mod.handle, others);
-              if (!overlaps && supported) {
-                st.updateModule(id, { xCm: pos.xCm, yCm: pos.yCm });
-              } else {
-                /* Revert mesh to original position */
-                const mesh   = meshMapRef.current.get(id);
-                const offset = meshOffsetMapRef.current.get(id);
-                if (mesh && offset) {
-                  mesh.position.x = mod.xCm + offset.dx;
-                  mesh.position.y = mod.yCm + offset.dy;
-                }
-              }
+        const st  = useConfiguratorStore.getState();
+        const mod = id ? st.placedModules.find(m => m.instanceId === id) : null;
+
+        if (commit && id && pos && mod) {
+          const product = NODO_PRODUCTS.find(p => p.handle === mod.handle);
+          if (product) {
+            const others   = st.placedModules.filter(m => m.instanceId !== id);
+            const overlaps = others.some(m => {
+              const mp = NODO_PRODUCTS.find(p => p.handle === m.handle); if (!mp) return false;
+              return pos.xCm < m.xCm + mp.widthCm && pos.xCm + product.widthCm > m.xCm &&
+                     pos.yCm < m.yCm + stackHeight(mp) && pos.yCm + stackHeight(product) > m.yCm;
+            });
+            const supported = isModuleSupported(pos.xCm, pos.yCm, product.widthCm, mod.handle, others);
+            if (!overlaps && supported) {
+              st.updateModule(id, { xCm: pos.xCm, yCm: pos.yCm });
+              const cam2 = cameraRef.current; const cvs2 = canvasRef.current;
+              if (cam2 && cvs2 && !dhRef.current) cam2.attachControl(cvs2, true);
+              return;
             }
           }
         }
 
-        /* Re-attach camera if not in catalog-drag mode */
+        /* Revert mesh + overlay to the stored position */
+        if (id && mod) {
+          const product = NODO_PRODUCTS.find(p => p.handle === mod.handle);
+          const mesh    = meshMapRef.current.get(id);
+          const offset  = meshOffsetMapRef.current.get(id);
+          if (mesh && offset) {
+            mesh.position.x = mod.xCm + offset.dx;
+            mesh.position.y = mod.yCm + offset.dy;
+          }
+          const ov = overlayMapRef.current.get(id);
+          if (ov && product) {
+            const d = product.depthCm || 36;
+            ov.position.x = mod.xCm + product.widthCm / 2;
+            ov.position.y = mod.yCm + product.heightCm / 2;
+            ov.position.z = -d / 2;
+          }
+        }
+
         const cam = cameraRef.current; const cvs = canvasRef.current;
         if (cam && cvs && !dhRef.current) cam.attachControl(cvs, true);
       };
+
+      scene.onPointerUp = () => commitOrRevertDrag(true);
+
+      /* Safety net: pointer released outside canvas (edit panel, toolbar, etc.) */
+      const onWindowPointerUp = () => commitOrRevertDrag(false);
+      window.addEventListener('pointerup', onWindowPointerUp);
+      dragCleanupRef.current = () => window.removeEventListener('pointerup', onWindowPointerUp);
 
       /* ESC — cancel drag/place */
       const onEsc = (e: KeyboardEvent) => {
@@ -367,6 +392,7 @@ export default function IsometricCanvas() {
     return () => {
       escCleanupRef.current?.();
       resizeCleanupRef.current?.();
+      dragCleanupRef.current?.();
       updateGhostRef.current  = null;
       placeRef.current        = null;
       ghostRef.current        = null;
