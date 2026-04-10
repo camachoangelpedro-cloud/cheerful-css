@@ -1,23 +1,26 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import HomePage from '@/pages/HomePage';
-import CatalogoPage from '@/pages/CatalogoPage';
-import ProductoPage from '@/pages/ProductoPage';
-import ConfiguradorPage from '@/pages/ConfiguradorPage';
-import ProductoM1Page from '@/pages/ProductoM1Page';
 import { useCartSync } from '@/hooks/useCartSync';
+
+const HomePage        = lazy(() => import('@/pages/HomePage'));
+const CatalogoPage    = lazy(() => import('@/pages/CatalogoPage'));
+const ProductoPage    = lazy(() => import('@/pages/ProductoPage'));
+const ConfiguradorPage = lazy(() => import('@/pages/ConfiguradorPage'));
+const ProductoM1Page  = lazy(() => import('@/pages/ProductoM1Page'));
 
 function AppContent() {
   useCartSync();
-  
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/catalogo" element={<CatalogoPage />} />
-      <Route path="/producto/:handle" element={<ProductoPage />} />
-      <Route path="/configurador" element={<ConfiguradorPage />} />
-      <Route path="/producto/m1-1" element={<ProductoM1Page />} />
-    </Routes>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/"              element={<HomePage />} />
+        <Route path="/catalogo"      element={<CatalogoPage />} />
+        <Route path="/producto/:handle" element={<ProductoPage />} />
+        <Route path="/configurador"  element={<ConfiguradorPage />} />
+        <Route path="/producto/m1-1" element={<ProductoM1Page />} />
+      </Routes>
+    </Suspense>
   );
 }
 
@@ -25,13 +28,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppContent />
-      <Toaster 
+      <Toaster
         position="top-center"
-        toastOptions={{
-          style: {
-            fontFamily: 'Inter, system-ui, sans-serif',
-          },
-        }}
+        toastOptions={{ style: { fontFamily: 'Inter, system-ui, sans-serif' } }}
       />
     </BrowserRouter>
   );
