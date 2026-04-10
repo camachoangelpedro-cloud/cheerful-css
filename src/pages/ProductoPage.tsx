@@ -166,11 +166,9 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
 
-      // Cámara lateral: beta 1.25 rad ≈ 28° sobre el horizonte
-      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 1.25, 10, B.Vector3.Zero(), scene);
-      camera.lowerRadiusLimit = camera.radius;
-      camera.upperRadiusLimit = camera.radius;
-      camera.inputs.clear();
+      // Camera — mouse rotation enabled, zoom locked after model loads
+      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 1.15, 10, B.Vector3.Zero(), scene);
+      camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
 
       // ── Fixed home lighting rig ───────────────────────────────
       // Ceiling ambient — warm LED white, like a well-lit living room
@@ -232,25 +230,25 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
           center.z + 0.36 * lightDist
         );
 
-        // Solid floor — warm concrete / light stone, nearly matte
-        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 10, height: maxDim * 10 }, scene);
+        // Industrial concrete floor — PBR, cool gray, ultra-matte (NY loft)
+        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 12, height: maxDim * 12 }, scene);
         ground.position.set(center.x, bounds.min.y - 0.001, center.z);
         ground.receiveShadows = true;
-        const groundMat = new B.StandardMaterial('floor', scene);
-        groundMat.diffuseColor  = new B.Color3(0.80, 0.75, 0.68);
-        groundMat.specularColor = new B.Color3(0.04, 0.04, 0.03);
+        const groundMat = new B.PBRMaterial('concrete', scene);
+        groundMat.albedoColor          = new B.Color3(0.46, 0.46, 0.44);
+        groundMat.roughness            = 0.96;
+        groundMat.metallic             = 0.0;
+        groundMat.environmentIntensity = 0;
         ground.material = groundMat;
 
         camera.target = center;
         camera.radius = maxDim * 3.8;
-        camera.beta   = 1.25;
+        camera.alpha  = -Math.PI / 4;  // fixed 45° isometric angle
+        camera.beta   = 1.15;          // ~34° above horizontal — low, face-on
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
-
-        // Camera rotates slowly; all lights stay fixed
-        scene.registerBeforeRender(() => {
-          camera.alpha += 0.0008;
-        });
+        camera.lowerBetaLimit   = 0.35; // can't flip to top-down
+        camera.upperBetaLimit   = 1.48; // can't dip below the floor
 
       } catch(e) { console.error('Babylon load error', e); }
       engine.runRenderLoop(() => { scene.render(); });
