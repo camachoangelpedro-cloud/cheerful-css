@@ -168,8 +168,8 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
 
-      // Camera — front-left isometric, mouse rotation enabled, zoom locked
-      const camera = new B.ArcRotateCamera('cam', 3 * Math.PI / 4, 1.24, 10, B.Vector3.Zero(), scene);
+      // Camera — front-left, slightly face-on (not full isometric), zoom locked
+      const camera = new B.ArcRotateCamera('cam', Math.PI / 3, 1.35, 10, B.Vector3.Zero(), scene);
       camera.attachControl(canvas, true);
       camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
       cameraRef.current = camera;
@@ -236,9 +236,9 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
         camera.target = center;
         camera.radius = maxDim * 3.8;
-        // Restore angle from previous color, or use default front-left isometric
-        camera.alpha  = camState.current ? camState.current.alpha : 3 * Math.PI / 4;
-        camera.beta   = camState.current ? camState.current.beta  : 1.24;
+        // Restore angle from previous color, or use default
+        camera.alpha  = camState.current ? camState.current.alpha : Math.PI / 3;
+        camera.beta   = camState.current ? camState.current.beta  : 1.35;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
         camera.lowerBetaLimit   = 0.35;
