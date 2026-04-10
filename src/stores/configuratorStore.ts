@@ -3,24 +3,15 @@ import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 
 /* ── Types ────────────────────────────────────────────────── */
 
-export interface Wall {
-  widthCm: number;
-  heightCm: number;
-  hasWindow: boolean;
-  windowXCm: number;
-  windowYCm: number;       // from floor
-  windowWidthCm: number;
-  windowHeightCm: number;
-}
-
 export interface PlacedModule {
   instanceId: string;
-  handle: string;          // NodoProduct.handle
-  xCm: number;             // from wall left edge
-  yCm: number;             // from floor (y=0 = floor)
-  colorCode: string;       // BH | RO | SA | AC
+  handle: string;
+  xCm: number;
+  yCm: number;
+  colorCode: string;
   interior: string;
   panel: string;
+  apertura: string;   // 'IZQ' | 'DER' | '' (for non-door modules)
 }
 
 export interface ModuleSummaryItem {
@@ -32,9 +23,47 @@ export interface ModuleSummaryItem {
   unitPrice: number;
 }
 
+/* ── Support check (exported for use in canvas) ─────────── */
+
+export function isModuleSupported(
+  xCm: number, yCm: number, widthCm: number, handle: string,
+  others: PlacedModule[],
+): boolean {
+  const product = NODO_PRODUCTS.find(p => p.handle === handle);
+  if (!product) return false;
+  if (product.family === 'PLT') return yCm === 0;     // PLT only on floor
+  if (yCm === 0) return true;                          // anything on floor
+  return others.some(m => {                            // on top of another module
+    const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
+    if (!mp) return false;
+    return (
+      m.yCm + mp.heightCm === yCm &&
+      xCm < m.xCm + mp.widthCm &&
+      xCm + widthCm > m.xCm
+    );
+  });
+}
+
+/* ── Highest valid Y for a new module at given X ─────── */
+export function getSupportY(
+  xCm: number, widthCm: number, handle: string,
+  others: PlacedModule[],
+): number {
+  const product = NODO_PRODUCTS.find(p => p.handle === handle);
+  if (!product) return 0;
+  if (product.family === 'PLT') return 0;
+  let highest = 0;
+  others.forEach(m => {
+    const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
+    if (!mp) return;
+    if (xCm < m.xCm + mp.widthCm && xCm + widthCm > m.xCm) {
+      highest = Math.max(highest, m.yCm + mp.heightCm);
+    }
+  });
+  return highest;
+}
+
 interface ConfigStore {
-  wall: Wall | null;
-  step: 1 | 2;
   placedModules: PlacedModule[];
   selectedId: string | null;
   dragHandle: string | null;
@@ -42,14 +71,13 @@ interface ConfigStore {
   undoStack: PlacedModule[][];
   redoStack: PlacedModule[][];
 
-  setWall: (w: Wall) => void;
-  setStep: (s: 1 | 2) => void;
   setDragHandle: (h: string | null) => void;
   setColorCode: (code: string) => void;
   dropModule: (handle: string, xCm: number, yCm: number) => void;
   removeModule: (id: string) => void;
   selectInstance: (id: string | null) => void;
   updateModule: (id: string, patch: Partial<Omit<PlacedModule, 'instanceId' | 'handle'>>) => void;
+  removeFloating: () => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -61,15 +89,12 @@ interface ConfigStore {
 
 let nextId = 1;
 const genId = () => `m-${nextId++}`;
-
 const pushHistory = (mods: PlacedModule[], stack: PlacedModule[][]): PlacedModule[][] =>
   [...stack, [...mods]].slice(-50);
 
 /* ── Store ────────────────────────────────────────────────── */
 
 export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
-  wall: null,
-  step: 1,
   placedModules: [],
   selectedId: null,
   dragHandle: null,
@@ -77,50 +102,38 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   undoStack: [],
   redoStack: [],
 
-  setWall: (wall) => set({ wall, step: 2 }),
-  setStep: (step) => set({ step }),
   setDragHandle: (h) => set({ dragHandle: h }),
-  setColorCode: (code) => set({ selectedColorCode: code }),
+  setColorCode:  (code) => set({ selectedColorCode: code }),
 
   dropModule: (handle, xCm, yCm) => {
     const state = get();
     const product = NODO_PRODUCTS.find(p => p.handle === handle);
-    if (!product || !state.wall) return;
+    if (!product) return;
 
-    // Bounds check
-    if (xCm + product.widthCm > state.wall.widthCm) return;
-    if (yCm + product.heightCm > state.wall.heightCm) return;
     if (xCm < 0 || yCm < 0) return;
 
-    // Module overlap check
+    // Overlap check
     const overlaps = state.placedModules.some(m => {
       const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!mp) return false;
       return (
-        xCm < m.xCm + mp.widthCm &&
-        xCm + product.widthCm > m.xCm &&
-        yCm < m.yCm + mp.heightCm &&
-        yCm + product.heightCm > m.yCm
+        xCm < m.xCm + mp.widthCm && xCm + product.widthCm > m.xCm &&
+        yCm < m.yCm + mp.heightCm && yCm + product.heightCm > m.yCm
       );
     });
     if (overlaps) return;
 
-    // Window overlap check
-    if (state.wall.hasWindow) {
-      const w = state.wall;
-      if (
-        xCm < w.windowXCm + w.windowWidthCm &&
-        xCm + product.widthCm > w.windowXCm &&
-        yCm < w.windowYCm + w.windowHeightCm &&
-        yCm + product.heightCm > w.windowYCm
-      ) return;
-    }
+    // Support check
+    if (!isModuleSupported(xCm, yCm, product.widthCm, handle, state.placedModules)) return;
 
-    // Pick best variant for selected color
     const colorCode = state.selectedColorCode;
     const colorVariant = product.variants.find(v => v.color === colorCode);
     const variant = colorVariant ?? product.variants[0];
     if (!variant) return;
+
+    const singleDoorHandles = ['modulo-36-36', 'modulo-36-72'];
+    const hasDoor = product.variants.some(v => v.interior.includes('puerta'));
+    const hasTirador = singleDoorHandles.includes(handle) && hasDoor;
 
     const newMod: PlacedModule = {
       instanceId: genId(),
@@ -130,6 +143,7 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       colorCode: variant.color,
       interior: variant.interior,
       panel: variant.panel,
+      apertura: hasTirador ? 'DER' : '',
     };
 
     set({
@@ -157,8 +171,24 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       undoStack: pushHistory(state.placedModules, state.undoStack),
       redoStack: [],
       placedModules: state.placedModules.map(m =>
-        m.instanceId === id ? { ...m, ...patch } : m
+        m.instanceId === id ? { ...m, ...patch } : m,
       ),
+    });
+  },
+
+  removeFloating: () => {
+    const state = get();
+    const supported = state.placedModules.filter(m => {
+      const p = NODO_PRODUCTS.find(pp => pp.handle === m.handle);
+      if (!p) return false;
+      const others = state.placedModules.filter(mm => mm.instanceId !== m.instanceId);
+      return isModuleSupported(m.xCm, m.yCm, p.widthCm, m.handle, others);
+    });
+    set({
+      undoStack: pushHistory(state.placedModules, state.undoStack),
+      redoStack: [],
+      placedModules: supported,
+      selectedId: null,
     });
   },
 
@@ -170,6 +200,7 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       placedModules: prev,
       undoStack: state.undoStack.slice(0, -1),
       redoStack: [...state.redoStack, [...state.placedModules]],
+      selectedId: null,
     });
   },
 
@@ -200,7 +231,7 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!product) return sum;
       const variant = product.variants.find(v =>
-        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode
+        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode,
       );
       return sum + (variant?.price ?? product.variants[0]?.price ?? 0);
     }, 0);
@@ -214,15 +245,12 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!product) return;
       const variant = product.variants.find(v =>
-        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode
+        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode,
       );
       const unitPrice = variant?.price ?? product.variants[0]?.price ?? 0;
       const existing = map.get(key);
-      if (existing) {
-        existing.count++;
-      } else {
-        map.set(key, { handle: m.handle, colorCode: m.colorCode, interior: m.interior, panel: m.panel, count: 1, unitPrice });
-      }
+      if (existing) existing.count++;
+      else map.set(key, { handle: m.handle, colorCode: m.colorCode, interior: m.interior, panel: m.panel, count: 1, unitPrice });
     });
     return Array.from(map.values());
   },
