@@ -183,14 +183,20 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       hemi.specular = new B.Color3(0, 0, 0);
 
       // Key light — dirección se actualiza cada frame para seguir la cámara
-      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1, 0), scene);
-      key.intensity = 2.8;
+      const key = new B.DirectionalLight('key', new B.Vector3(-1, -0.5, 0), scene);
+      key.intensity = 2.2;
       key.diffuse = new B.Color3(1, 0.97, 0.93);
       key.specular = new B.Color3(0.5, 0.5, 0.5);
 
+      // Front fill — directo desde el frente, tenue, sin sombras
+      const front = new B.DirectionalLight('front', new B.Vector3(-1, -0.1, 0), scene);
+      front.intensity = 0.7;
+      front.diffuse = new B.Color3(1, 0.99, 0.97);
+      front.specular = new B.Color3(0.1, 0.1, 0.1);
+
       // Fill light — lado opuesto, también sigue la cámara
       const fill = new B.DirectionalLight('fill', new B.Vector3(1, -0.3, 0), scene);
-      fill.intensity = 0.3;
+      fill.intensity = 0.25;
       fill.diffuse = new B.Color3(0.88, 0.92, 1);
       fill.specular = new B.Color3(0, 0, 0);
 
@@ -244,24 +250,28 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
 
         const lightDist = maxDim * 6;
 
-        // Cada frame: rotar cámara Y actualizar luces para que siempre iluminen
-        // desde el punto de vista del espectador (frente + ángulo arriba-derecha)
+        // Cada frame: rotar cámara Y actualizar luces relativas al espectador
         scene.registerBeforeRender(() => {
           camera.alpha += 0.0008;
 
-          // Key: misma dirección horizontal que la cámara, 30° a la derecha, 45° abajo
+          // Key: 30° a la derecha del espectador, más lateral que vertical
           const keyAlpha = camera.alpha + Math.PI / 6;
           const kx = -Math.sin(keyAlpha);
           const kz = -Math.cos(keyAlpha);
-          key.direction = new B.Vector3(kx * 0.7, -1.0, kz * 0.7).normalize();
+          key.direction = new B.Vector3(kx * 1.0, -0.55, kz * 1.0).normalize();
           key.position = new B.Vector3(
             center.x - kx * lightDist,
-            center.y + lightDist * 1.5,
+            center.y + lightDist * 0.8,
             center.z - kz * lightDist
           );
 
+          // Front: directo desde el frente del espectador, casi horizontal
+          const fx = -Math.sin(camera.alpha);
+          const fz = -Math.cos(camera.alpha);
+          front.direction = new B.Vector3(fx, -0.15, fz).normalize();
+
           // Fill: lado opuesto al key, muy suave
-          fill.direction = new B.Vector3(-kx * 0.5, -0.2, -kz * 0.5).normalize();
+          fill.direction = new B.Vector3(-kx * 0.5, -0.1, -kz * 0.5).normalize();
         });
 
       } catch(e) { console.error('Babylon load error', e); }
