@@ -140,6 +140,9 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 ];
 
 export const GRID_UNIT = 36;
+export const PX_PER_CM = 2;   // 1 cm = 2px on canvas  (36cm = 72px, 72cm = 144px)
+export const SNAP_X_CM = 36;  // horizontal snap unit
+export const SNAP_Y_CM = 18;  // vertical snap unit (GCD of 18,24,36,72)
 
 export function getStartingPrice(p: NodoProduct): number { return Math.min(...p.variants.map(v => v.price)); }
 
