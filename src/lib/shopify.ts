@@ -157,7 +157,7 @@ export const PRODUCT_BY_HANDLE_QUERY = `
           }
         }
       }
-      variants(first: 20) {
+      variants(first: 250) {
         edges {
           node {
             id
