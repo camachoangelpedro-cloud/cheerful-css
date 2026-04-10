@@ -511,8 +511,8 @@ export default function ProductoPage() {
           {/* ── LEFT COLUMN ─────────────────────────────── */}
           <div className="lg:sticky lg:top-24 lg:self-start space-y-3">
 
-            {/* Photo carousel */}
-            {images.length > 0 ? (
+            {/* Photo carousel — only shown when product has images */}
+            {images.length > 0 && (
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/20">
                 <img
                   src={images[carouselIdx]?.node.url}
@@ -544,10 +544,6 @@ export default function ProductoPage() {
                     </div>
                   </>
                 )}
-              </div>
-            ) : (
-              <div className="aspect-[4/3] w-full bg-muted/15 flex items-center justify-center">
-                <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground/40">Render próximamente</span>
               </div>
             )}
 
