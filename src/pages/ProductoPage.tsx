@@ -318,6 +318,8 @@ export default function ProductoPage() {
     const found = product.variants.edges.find(v =>
       built.every(b => v.node.selectedOptions.find(o => o.name === b.name && o.value === b.value))
     );
+    console.log('Built options:', JSON.stringify(built));
+    console.log('Found variant:', found?.node?.title, found?.node?.price);
     setSelectedVariant(found?.node ?? null);
   }, [product, selectedColor, selectedPanel, selectedInterior, selectedAcabado]);
 
