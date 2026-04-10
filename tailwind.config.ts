@@ -18,8 +18,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Syne", "sans-serif"],
-        body: ["Space Grotesk", "system-ui", "sans-serif"],
+        display: ["PP Neue Montreal", "sans-serif"],
+        body: ["PP Neue Montreal", "system-ui", "sans-serif"],
+        logo: ["Syne", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

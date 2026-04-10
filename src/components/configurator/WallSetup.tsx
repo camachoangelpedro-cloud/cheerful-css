@@ -106,13 +106,13 @@ export default function WallSetup() {
 
             {/* Dimension labels */}
             <text x={pW / 2} y={pH + 13} textAnchor="middle" fontSize={9}
-              fill="rgba(0,0,0,0.45)" fontFamily="'Space Grotesk',sans-serif">
+              fill="rgba(0,0,0,0.45)" fontFamily="'PP Neue Montreal',sans-serif">
               {widthCm} cm
             </text>
             <text
               x={-6} y={pH / 2}
               textAnchor="middle" fontSize={9}
-              fill="rgba(0,0,0,0.45)" fontFamily="'Space Grotesk',sans-serif"
+              fill="rgba(0,0,0,0.45)" fontFamily="'PP Neue Montreal',sans-serif"
               transform={`rotate(-90,-6,${pH / 2})`}
             >
               {heightCm} cm

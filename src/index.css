@@ -2,6 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── PP Neue Montreal ────────────────────────────────────── */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Book.woff2') format('woff2');
+  font-weight: 350;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -102,15 +160,18 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased leading-relaxed;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-background text-foreground antialiased;
+    font-family: 'PP Neue Montreal', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-    @apply tracking-tight;
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
 
   /* Hide scrollbar for carousels */
@@ -142,23 +203,30 @@
   }
 
   .nodo-heading-xl {
-    font-family: 'Syne', sans-serif;
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    @apply text-4xl md:text-5xl lg:text-6xl;
   }
 
   .nodo-heading-lg {
-    font-family: 'Syne', sans-serif;
-    @apply text-3xl md:text-4xl font-semibold tracking-tight;
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    @apply text-3xl md:text-4xl;
   }
 
   .nodo-body {
-    font-family: 'Space Grotesk', sans-serif;
-    @apply text-sm md:text-base font-light leading-relaxed;
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+    @apply text-sm md:text-base leading-relaxed;
   }
 
   .nodo-caption {
-    font-family: 'Space Grotesk', sans-serif;
-    @apply text-xs tracking-wider uppercase;
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 400;
+    @apply text-xs tracking-wide uppercase;
   }
 
   .nodo-button {

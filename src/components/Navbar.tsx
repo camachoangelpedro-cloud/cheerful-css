@@ -26,13 +26,13 @@ export function Navbar() {
         <div className="animate-marquee whitespace-nowrap flex">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="flex shrink-0">
-              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+              <span className="mx-10 text-xs tracking-wide font-light">
                 Envío gratis en pedidos superiores a $500.000 COP
               </span>
-              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+              <span className="mx-10 text-xs tracking-wide font-light">
                 Diseño modular, fabricación Colombiana
               </span>
-              <span className="mx-10 text-xs tracking-wide font-mono font-thin">
+              <span className="mx-10 text-xs tracking-wide font-light">
                 Ensamblaje sin herramientas
               </span>
             </div>
