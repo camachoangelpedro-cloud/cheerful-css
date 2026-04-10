@@ -136,19 +136,19 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     const canvas = canvasRef.current;
 
     const init = async () => {
+      const loadScript = (src: string) => new Promise<void>((res) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = () => res();
+        document.head.appendChild(s);
+      });
+
       if (!(window as any).BABYLON) {
-        await new Promise<void>((res) => {
-          const s = document.createElement('script');
-          s.src = 'https://cdn.babylonjs.com/babylon.js';
-          s.onload = () => res();
-          document.head.appendChild(s);
-        });
-        await new Promise<void>((res) => {
-          const s = document.createElement('script');
-          s.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
-          s.onload = () => res();
-          document.head.appendChild(s);
-        });
+        await loadScript('https://cdn.babylonjs.com/babylon.js');
+        await loadScript('https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js');
+        await loadScript('https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js');
+      } else if (!(window as any).BABYLON.ShadowOnlyMaterial) {
+        await loadScript('https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js');
       }
 
       const B = (window as any).BABYLON;
@@ -169,46 +169,57 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       scene.clearColor = new B.Color4(r, g, b2, 1);
       scene.ambientColor = new B.Color3(1, 1, 1);
 
-      const camera = new B.ArcRotateCamera('cam', -Math.PI/4, Math.PI/3, 10, B.Vector3.Zero(), scene);
+      // Camera: desde arriba (beta ~49° desde el cénit), radio ajustado a ~2m tras carga
+      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 0.85, 10, B.Vector3.Zero(), scene);
       camera.lowerRadiusLimit = camera.radius;
       camera.upperRadiusLimit = camera.radius;
       camera.inputs.clear();
 
+      // Luz hemisférica ambiental suave
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.7;
+      hemi.intensity = 0.45;
       hemi.diffuse = new B.Color3(1, 0.98, 0.95);
-      hemi.groundColor = new B.Color3(0.5, 0.45, 0.4);
-      hemi.specular = new B.Color3(0.1, 0.1, 0.1);
+      hemi.groundColor = new B.Color3(0.5, 0.47, 0.43);
+      hemi.specular = new B.Color3(0.25, 0.25, 0.25);
 
+      // Luz principal (key) — genera sombras
       const key = new B.DirectionalLight('key', new B.Vector3(-1, -2, 1), scene);
-      key.intensity = 2.5;
-      key.diffuse = new B.Color3(1, 0.98, 0.95);
-      key.specular = new B.Color3(0.3, 0.3, 0.3);
+      key.position = new B.Vector3(10, 15, -10);
+      key.intensity = 1.8;
+      key.diffuse = new B.Color3(1, 0.97, 0.93);
+      key.specular = new B.Color3(0.7, 0.7, 0.7);
 
+      // Luz de relleno — suaviza sombras duras
       const fill = new B.DirectionalLight('fill', new B.Vector3(2, -1, 0.5), scene);
-      fill.intensity = 0.8;
+      fill.intensity = 0.5;
       fill.diffuse = new B.Color3(1, 0.95, 0.85);
-      fill.specular = new B.Color3(0, 0, 0);
+      fill.specular = new B.Color3(0.15, 0.15, 0.15);
 
+      // Luz de contorno (rim) — separa el objeto del fondo
       const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -1, -2), scene);
-      rim.intensity = 0.5;
+      rim.intensity = 0.4;
       rim.diffuse = new B.Color3(0.85, 0.9, 1);
-      rim.specular = new B.Color3(0, 0, 0);
+      rim.specular = new B.Color3(0.2, 0.2, 0.2);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
+        // Shadow generator de alta calidad
         const shadows = new B.ShadowGenerator(2048, key);
         shadows.useBlurExponentialShadowMap = true;
-        shadows.blurKernel = 32;
+        shadows.blurKernel = 48;
+        shadows.bias = 0.001;
+        shadows.normalBias = 0.02;
+        shadows.depthScale = 100;
 
         result.meshes.forEach((mesh: any) => {
           if (mesh.getTotalVertices() > 0) {
-            shadows.addShadowCaster(mesh);
+            shadows.addShadowCaster(mesh, true);
             mesh.receiveShadows = true;
             if (mesh.material) {
-              mesh.material.roughness = 0.5;
-              mesh.material.metallic = 0.0;
+              if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.65;
+              if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
+              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0.6;
             }
           }
         });
@@ -218,8 +229,28 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
 
+        // Plano de suelo invisible que recibe las sombras proyectadas
+        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 12, height: maxDim * 12 }, scene);
+        ground.position.set(center.x, bounds.min.y, center.z);
+        ground.receiveShadows = true;
+        const shadowMat = new B.ShadowOnlyMaterial
+          ? new B.ShadowOnlyMaterial('shadowOnly', scene)
+          : (() => {
+              const m = new B.StandardMaterial('groundFallback', scene);
+              m.diffuseColor = new B.Color3(r, g, b2);
+              m.specularColor = B.Color3.Black();
+              return m;
+            })();
+        if (shadowMat.shadowColor) {
+          shadowMat.shadowColor = new B.Color3(0.18, 0.15, 0.12);
+          shadowMat.alpha = 0.55;
+        }
+        ground.material = shadowMat;
+
+        // Posición final de cámara: ~2m del objeto desde arriba a ~1.7m de altura
         camera.target = center;
-        camera.radius = maxDim * 2.8;
+        camera.radius = maxDim * 3.8;
+        camera.beta = 0.85;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
       } catch(e) { console.error('Babylon load error', e); }
