@@ -167,44 +167,39 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       const g = parseInt(hex.slice(3,5),16)/255;
       const b2 = parseInt(hex.slice(5,7),16)/255;
       scene.clearColor = new B.Color4(r, g, b2, 1);
-      scene.ambientColor = new B.Color3(1, 1, 1);
+      // Sin ambientColor global — evita que todas las caras reciban luz uniforme
+      scene.ambientColor = new B.Color3(0, 0, 0);
 
-      // Cámara lateral-baja: beta 1.25 rad ≈ 28° sobre el horizonte
+      // Cámara lateral: beta 1.25 rad ≈ 28° sobre el horizonte
       const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 1.25, 10, B.Vector3.Zero(), scene);
       camera.lowerRadiusLimit = camera.radius;
       camera.upperRadiusLimit = camera.radius;
       camera.inputs.clear();
 
-      // Luz ambiental suave — rellena sombras sin aplanar la forma
+      // Relleno mínimo — sólo para que las caras en sombra no sean negro puro
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.35;
-      hemi.diffuse = new B.Color3(1, 0.98, 0.95);
-      hemi.groundColor = new B.Color3(0.45, 0.42, 0.38);
-      hemi.specular = new B.Color3(0.1, 0.1, 0.1);
+      hemi.intensity = 0.18;
+      hemi.diffuse = new B.Color3(0.9, 0.92, 1);
+      hemi.groundColor = new B.Color3(0.25, 0.22, 0.18);
+      hemi.specular = new B.Color3(0, 0, 0);
 
-      // Luz principal — ángulo 45° lateral-alto para sombras en aristas del cubo
-      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1.5, 0.8), scene);
+      // Key light fija en world space — su dirección NO cambia al girar la cámara
+      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1.4, 0.7), scene);
       key.position = new B.Vector3(5, 8, -5);
-      key.intensity = 2.2;
+      key.intensity = 3.2;
       key.diffuse = new B.Color3(1, 0.97, 0.93);
-      key.specular = new B.Color3(0.5, 0.5, 0.5);
+      key.specular = new B.Color3(0.6, 0.6, 0.6);
 
-      // Luz de relleno — lado opuesto, sin sombras
-      const fill = new B.DirectionalLight('fill', new B.Vector3(1.5, -0.5, 0.5), scene);
-      fill.intensity = 0.45;
-      fill.diffuse = new B.Color3(0.95, 0.95, 1);
-      fill.specular = new B.Color3(0.05, 0.05, 0.05);
-
-      // Luz de contorno — separa el objeto del fondo
-      const rim = new B.DirectionalLight('rim', new B.Vector3(0.3, -0.8, -2), scene);
-      rim.intensity = 0.35;
-      rim.diffuse = new B.Color3(0.85, 0.9, 1);
-      rim.specular = new B.Color3(0.1, 0.1, 0.1);
+      // Fill leve desde el lado opuesto — no proyecta sombras
+      const fill = new B.DirectionalLight('fill', new B.Vector3(1.2, -0.4, 0.6), scene);
+      fill.intensity = 0.35;
+      fill.diffuse = new B.Color3(0.88, 0.92, 1);
+      fill.specular = new B.Color3(0, 0, 0);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
-        // PCF: sombras precisas que respetan la geometría del cubo (aristas duras)
+        // PCF — sombras que respetan aristas duras de la geometría cúbica
         const shadows = new B.ShadowGenerator(2048, key);
         shadows.usePercentageCloserFiltering = true;
         shadows.filteringQuality = B.ShadowGenerator.QUALITY_HIGH;
@@ -217,7 +212,9 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
             if (mesh.material) {
               if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.65;
               if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
-              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0.5;
+              // Cero environment map: elimina el reflejo de entorno relativo a cámara
+              // que hacía parecer que la luz giraba con el objeto
+              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
             }
           }
         });
@@ -227,17 +224,21 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
 
-        // Reposicionar key light relativa a la escena cargada
-        key.position = new B.Vector3(center.x + maxDim * 3, center.y + maxDim * 4, center.z - maxDim * 3);
+        // Key light posicionada relativa al bounding box real del modelo
+        key.position = new B.Vector3(
+          center.x + maxDim * 3,
+          center.y + maxDim * 4,
+          center.z - maxDim * 3
+        );
 
-        // Plano de suelo invisible que recibe las sombras proyectadas
+        // Plano de suelo que recibe la sombra proyectada
         const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 14, height: maxDim * 14 }, scene);
         ground.position.set(center.x, bounds.min.y - 0.001, center.z);
         ground.receiveShadows = true;
         if (B.ShadowOnlyMaterial) {
           const shadowMat = new B.ShadowOnlyMaterial('shadowOnly', scene);
-          shadowMat.shadowColor = new B.Color3(0.15, 0.12, 0.10);
-          shadowMat.alpha = 0.45;
+          shadowMat.shadowColor = new B.Color3(0.12, 0.10, 0.08);
+          shadowMat.alpha = 0.4;
           ground.material = shadowMat;
         } else {
           const groundMat = new B.StandardMaterial('groundFallback', scene);
