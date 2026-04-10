@@ -23,6 +23,12 @@ export interface ModuleSummaryItem {
   unitPrice: number;
 }
 
+/* PLT plates are visually tall (36cm) but physically only 18mm thick for stacking */
+const PLT_STACK_HEIGHT = 1.8;
+function stackHeight(mp: { family: string; heightCm: number }): number {
+  return mp.family === 'PLT' ? PLT_STACK_HEIGHT : mp.heightCm;
+}
+
 /* ── Support check (exported for use in canvas) ─────────── */
 
 export function isModuleSupported(
@@ -37,7 +43,7 @@ export function isModuleSupported(
     const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
     if (!mp) return false;
     return (
-      m.yCm + mp.heightCm === yCm &&
+      m.yCm + stackHeight(mp) === yCm &&
       xCm < m.xCm + mp.widthCm &&
       xCm + widthCm > m.xCm
     );
@@ -57,7 +63,7 @@ export function getSupportY(
     const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
     if (!mp) return;
     if (xCm < m.xCm + mp.widthCm && xCm + widthCm > m.xCm) {
-      highest = Math.max(highest, m.yCm + mp.heightCm);
+      highest = Math.max(highest, m.yCm + stackHeight(mp));
     }
   });
   return highest;
@@ -112,13 +118,13 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
 
     if (xCm < 0 || yCm < 0) return;
 
-    // Overlap check
+    // Overlap check (uses stackHeight so PLT's visual height doesn't block stacking)
     const overlaps = state.placedModules.some(m => {
       const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!mp) return false;
       return (
         xCm < m.xCm + mp.widthCm && xCm + product.widthCm > m.xCm &&
-        yCm < m.yCm + mp.heightCm && yCm + product.heightCm > m.yCm
+        yCm < m.yCm + stackHeight(mp) && yCm + stackHeight(product) > m.yCm
       );
     });
     if (overlaps) return;
