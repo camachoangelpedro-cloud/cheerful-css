@@ -20,7 +20,6 @@ import {
 const NODO_COLORS = [
   { code: 'BH', name: 'Blanco Hueso', hex: '#F2EDE4' },
   { code: 'RO', name: 'Roble Natural', hex: '#D4B896' },
-  { code: 'AR', name: 'Arena', hex: '#D6C9B5' },
   { code: 'SA', name: 'Salvia', hex: '#8FAF8C' },
   { code: 'AC', name: 'Acero', hex: '#6B8E9F' },
 ];
@@ -28,7 +27,6 @@ const NODO_COLORS = [
 const COLOR_NAME_MAP: Record<string, string> = {
   BH: 'Blanco Hueso',
   RO: 'Roble Natural',
-  AR: 'Arena',
   SA: 'Salvia',
   AC: 'Acero',
 };
