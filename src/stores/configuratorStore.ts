@@ -11,7 +11,8 @@ export interface PlacedModule {
   colorCode: string;
   interior: string;
   panel: string;
-  apertura: string;   // 'IZQ' | 'DER' | '' (for non-door modules)
+  apertura: string;    // 'IZQ' | 'DER' | '' (for non-door modules)
+  pasacables: boolean; // cable grommet cut-out (AP variants)
 }
 
 export interface ModuleSummaryItem {
@@ -25,7 +26,7 @@ export interface ModuleSummaryItem {
 
 /* PLT plates are visually tall (36cm) but physically only 18mm thick for stacking */
 const PLT_STACK_HEIGHT = 1.8;
-function stackHeight(mp: { family: string; heightCm: number }): number {
+export function stackHeight(mp: { family: string; heightCm: number }): number {
   return mp.family === 'PLT' ? PLT_STACK_HEIGHT : mp.heightCm;
 }
 
@@ -149,7 +150,8 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       colorCode: variant.color,
       interior: variant.interior,
       panel: variant.panel,
-      apertura: hasTirador ? 'DER' : '',
+      apertura:    hasTirador ? 'DER' : '',
+      pasacables:  false,
     };
 
     set({

@@ -5,6 +5,8 @@ import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 
 /* Single-door handles — the ones that have a tirador (handle) direction */
 const SINGLE_DOOR_HANDLES = ['modulo-36-36', 'modulo-36-72'];
+/* Handles that have AP (pasacables) GLB variants */
+const PASACABLES_HANDLES  = ['modulo-36-36', 'modulo-36-72', 'modulo-72-36', 'modulo-72-72'];
 
 /* SVG icons matching product page */
 const PanelConSvg = () => (
@@ -65,6 +67,21 @@ const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; 
     </svg>
   );
 
+const PasacablesOnSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+    <circle cx="20" cy="28" r="4" strokeWidth="1.5" />
+    <line x1="20" y1="24" x2="20" y2="16" strokeWidth="1.5" />
+    <line x1="17" y1="16" x2="23" y2="16" strokeWidth="1.5" />
+  </svg>
+);
+const PasacablesOffSvg = () => (
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <rect x="3" y="3" width="34" height="34" rx="1" />
+    <line x1="14" y1="26" x2="26" y2="26" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
+  </svg>
+);
+
 interface OptionBtnProps {
   active: boolean;
   locked?: boolean;
@@ -97,13 +114,14 @@ export default function ModuleEditPanel() {
   if (!product) return null;
 
   /* Derived state */
-  const hasPanelOption   = product.variants.some(v => v.panel === 'Sin panel');
-  const doorLocked       = mod.panel === 'Sin panel';
-  const uniqueInteriors  = [...new Set(product.variants.map(v => v.interior).filter(Boolean))];
-  const isSingleDoor     = SINGLE_DOOR_HANDLES.includes(mod.handle);
-  const hasDoor          = mod.interior === 'Con puerta' || mod.interior === 'Con puerta y repisa';
-  const showTirador      = isSingleDoor && hasDoor && !doorLocked;
-  const handleLeft       = mod.apertura === 'IZQ';
+  const hasPanelOption    = product.variants.some(v => v.panel === 'Sin panel');
+  const doorLocked        = mod.panel === 'Sin panel';
+  const uniqueInteriors   = [...new Set(product.variants.map(v => v.interior).filter(Boolean))];
+  const isSingleDoor      = SINGLE_DOOR_HANDLES.includes(mod.handle);
+  const hasDoor           = mod.interior === 'Con puerta' || mod.interior === 'Con puerta y repisa';
+  const showTirador       = isSingleDoor && hasDoor && !doorLocked;
+  const handleLeft        = mod.apertura === 'IZQ';
+  const showPasacables    = PASACABLES_HANDLES.includes(mod.handle) && mod.panel === 'Con panel';
 
   /* Handlers */
   const handlePanel = (panel: string) => {
@@ -126,8 +144,9 @@ export default function ModuleEditPanel() {
     updateModule(selectedId, { interior, panel, apertura });
   };
 
-  const handleApertura = (apertura: string) => updateModule(selectedId, { apertura });
-  const handleColor    = (colorCode: string)  => updateModule(selectedId, { colorCode });
+  const handleApertura   = (apertura: string)   => updateModule(selectedId, { apertura });
+  const handleColor      = (colorCode: string)  => updateModule(selectedId, { colorCode });
+  const handlePasacables = (val: boolean)       => updateModule(selectedId, { pasacables: val });
 
   return (
     <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm w-52 pointer-events-auto">
@@ -251,6 +270,29 @@ export default function ModuleEditPanel() {
                   {ap === 'DER' ? 'Derecha' : 'Izquierda'}
                 </button>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pasacables */}
+        {showPasacables && (
+          <div>
+            <p className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground mb-1.5">
+              Pasacables
+            </p>
+            <div className="flex gap-1.5">
+              <OptionBtn
+                active={!mod.pasacables}
+                icon={<PasacablesOffSvg />}
+                label="Sin orificio"
+                onClick={() => handlePasacables(false)}
+              />
+              <OptionBtn
+                active={mod.pasacables}
+                icon={<PasacablesOnSvg />}
+                label="Con orificio"
+                onClick={() => handlePasacables(true)}
+              />
             </div>
           </div>
         )}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { useConfiguratorStore, getSupportY, isModuleSupported } from '@/stores/configuratorStore';
+import { useConfiguratorStore, getSupportY, isModuleSupported, stackHeight } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS, SNAP_X_CM } from '@/data/modulesCatalog';
 
 /* ── GLB URL resolver — mirrors ProductoPage.resolveGlbUrl exactly ── */
@@ -8,13 +8,15 @@ const GITHUB_BASE =
 
 function resolveModuleGlb(
   handle: string, colorCode: string, interior: string, panel: string, apertura: string,
+  pasacables: boolean,
 ): string {
   let intCode = 'A';
-  if (interior === 'Con repisa')          intCode = 'S';
-  else if (interior === 'Con puerta')     intCode = 'D';
+  if (interior === 'Con repisa')               intCode = 'S';
+  else if (interior === 'Con puerta')          intCode = 'D';
   else if (interior === 'Con puerta y repisa') intCode = 'DS';
 
   const panelCode = panel === 'Sin panel' ? 'O' : 'B';
+  const ap        = pasacables && panelCode === 'B';
 
   const SIZE_MAP: Record<string, string> = {
     'modulo-36-18': '1X05', 'modulo-36-24': '1X07', 'modulo-36-36': '1X1',
@@ -25,22 +27,29 @@ function resolveModuleGlb(
   const sizeCode = SIZE_MAP[handle];
   if (!sizeCode) return '';
   if (handle.startsWith('base-')) return `${GITHUB_BASE}/${sizeCode}-${colorCode}.glb`;
-  if (handle === 'modulo-72-72') return `${GITHUB_BASE}/MOD-2X2-DD-B-${colorCode}.glb`;
+
+  /* 72×72 uses dot notation for AP: MOD-2X2-DD-B.AP-{color}.glb */
+  if (handle === 'modulo-72-72') {
+    return ap
+      ? `${GITHUB_BASE}/MOD-2X2-DD-B.AP-${colorCode}.glb`
+      : `${GITHUB_BASE}/MOD-2X2-DD-B-${colorCode}.glb`;
+  }
 
   const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72'];
-  const hasDoor = interior === 'Con puerta' || interior === 'Con puerta y repisa';
+  const hasDoor      = interior === 'Con puerta' || interior === 'Con puerta y repisa';
   const tiradorSuffix = (SINGLE_DOOR.includes(handle) && hasDoor && apertura)
     ? `-${apertura}` : '';
+  const apSuffix      = ap ? '-AP' : '';
 
   /* ProductoPage maps DS → D in filename */
   const fileIntCode = intCode === 'DS' ? 'D' : intCode;
 
-  return `${GITHUB_BASE}/MOD-${sizeCode}-${fileIntCode}-${panelCode}${tiradorSuffix}-${colorCode}.glb`;
+  return `${GITHUB_BASE}/MOD-${sizeCode}-${fileIntCode}-${panelCode}${tiradorSuffix}${apSuffix}-${colorCode}.glb`;
 }
 
 /* Visual hash to detect property changes that require GLB reload */
-const visualHash = (mod: { handle: string; colorCode: string; interior: string; panel: string; apertura: string }) =>
-  `${mod.handle}|${mod.colorCode}|${mod.interior}|${mod.panel}|${mod.apertura}`;
+const visualHash = (mod: { handle: string; colorCode: string; interior: string; panel: string; apertura: string; pasacables: boolean }) =>
+  `${mod.handle}|${mod.colorCode}|${mod.interior}|${mod.panel}|${mod.apertura}|${mod.pasacables}`;
 
 /* ── Component ── */
 export default function IsometricCanvas() {
@@ -198,7 +207,7 @@ export default function IsometricCanvas() {
         const overlaps = st.placedModules.some(m => {
           const mp = NODO_PRODUCTS.find(p => p.handle === m.handle); if (!mp) return false;
           return xCm < m.xCm + mp.widthCm && xCm + product.widthCm > m.xCm &&
-                 yCm < m.yCm + mp.heightCm && yCm + product.heightCm > m.yCm;
+                 yCm < m.yCm + stackHeight(mp) && yCm + stackHeight(product) > m.yCm;
         });
         ghostMat.diffuseColor = overlaps
           ? new B.Color3(0.86, 0.15, 0.15)
@@ -314,7 +323,7 @@ export default function IsometricCanvas() {
               const overlaps = others.some(m => {
                 const mp = NODO_PRODUCTS.find(p => p.handle === m.handle); if (!mp) return false;
                 return pos.xCm < m.xCm + mp.widthCm && pos.xCm + product.widthCm > m.xCm &&
-                       pos.yCm < m.yCm + mp.heightCm && pos.yCm + product.heightCm > m.yCm;
+                       pos.yCm < m.yCm + stackHeight(mp) && pos.yCm + stackHeight(product) > m.yCm;
               });
               const supported = isModuleSupported(pos.xCm, pos.yCm, product.widthCm, mod.handle, others);
               if (!overlaps && supported) {
@@ -498,7 +507,7 @@ export default function IsometricCanvas() {
       meshMap.set(mod.instanceId, ph);
 
       /* Load GLB (no rotation — GLBs are already front-facing, same as ProductoPage) */
-      const glbUrl = resolveModuleGlb(mod.handle, mod.colorCode, mod.interior, mod.panel, mod.apertura);
+      const glbUrl = resolveModuleGlb(mod.handle, mod.colorCode, mod.interior, mod.panel, mod.apertura, mod.pasacables);
       if (!glbUrl) return;
 
       try {
