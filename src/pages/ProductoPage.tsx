@@ -174,31 +174,19 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
       cameraRef.current = camera;
 
-      // ── Fixed home lighting rig ───────────────────────────────
-      // Ceiling ambient — warm LED white, like a well-lit living room
+      // ── Fixed lighting: single key + minimal ambient ──────────
+      // Tiny ambient so shadowed faces don't go pitch black
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity   = 0.30;
-      hemi.diffuse     = new B.Color3(1.0, 0.96, 0.90);
-      hemi.groundColor = new B.Color3(0.32, 0.26, 0.20);
+      hemi.intensity   = 0.10;
+      hemi.diffuse     = new B.Color3(0.9, 0.88, 0.85);
+      hemi.groundColor = new B.Color3(0.15, 0.12, 0.10);
       hemi.specular    = new B.Color3(0, 0, 0);
 
-      // Key — main window from upper-right, warm afternoon light (fixed)
+      // Key — warm afternoon window, upper-right, fully fixed in world space
       const key = new B.DirectionalLight('key', new B.Vector3(-0.55, -0.75, -0.36), scene);
-      key.intensity = 1.9;
+      key.intensity = 2.4;
       key.diffuse   = new B.Color3(1.0, 0.94, 0.84);
       key.specular  = new B.Color3(0.10, 0.09, 0.07);
-
-      // Fill — soft bounce from the opposite wall (fixed)
-      const fill = new B.DirectionalLight('fill', new B.Vector3(0.7, -0.25, 0.65), scene);
-      fill.intensity = 0.42;
-      fill.diffuse   = new B.Color3(0.92, 0.88, 0.82);
-      fill.specular  = new B.Color3(0, 0, 0);
-
-      // Rim — back-top, slightly cool to separate silhouette (fixed)
-      const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -0.6, 0.78), scene);
-      rim.intensity = 0.28;
-      rim.diffuse   = new B.Color3(0.82, 0.87, 1.0);
-      rim.specular  = new B.Color3(0, 0, 0);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
