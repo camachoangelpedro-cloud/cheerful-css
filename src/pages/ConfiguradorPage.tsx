@@ -12,10 +12,10 @@ export default function ConfiguradorPage() {
       <header className="h-12 border-b border-border flex items-center px-4 gap-4 shrink-0">
         <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-mono uppercase tracking-widest">Volver</span>
+          <span className="font-body text-xs uppercase tracking-[.12em]">Volver</span>
         </Link>
         <div className="flex-1 text-center">
-          <h1 className="text-sm font-mono uppercase tracking-[0.3em]">Configurador</h1>
+          <h1 className="font-body text-xs uppercase tracking-[.12em] font-medium">Configurador</h1>
         </div>
         <div className="w-20" /> {/* spacer */}
       </header>
