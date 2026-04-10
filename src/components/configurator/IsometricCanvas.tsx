@@ -111,17 +111,15 @@ export default function IsometricCanvas() {
       scene.clearColor = new B.Color4(0.965, 0.961, 0.957, 1); // background between wall & floor
 
       /* ── Camera
-         Simulates a 183 cm person standing 5 m from the wall.
-         Eye height ≈ 165 cm → target y = 72 → beta ≈ acos((165-72)/500) ≈ 1.38 rad
-         alpha = π/2: camera sits at +Z looking straight at the wall.  */
-      /* alpha = π/3 matches ProductoPage's proven angle that shows module fronts correctly.
-         The GLBs are front-facing at this azimuth; a purely frontal α=π/2 shows only the back panel. */
+         GLB fronts face -Z. Camera must be on the -Z side to see module fronts.
+         alpha = -π/3 places camera at (+X, -Z) relative to target — front-left view.
+         Wall is at z=0 (module backs). Camera is at z ≈ -425 (module fronts face it). */
       const camera = new B.ArcRotateCamera(
-        'cam', Math.PI / 3, 1.38, 500,
+        'cam', -Math.PI / 3, 1.38, 500,
         new B.Vector3(180, 72, 0), scene,
       );
-      camera.lowerAlphaLimit  = Math.PI / 4;       // can rotate left to see full front
-      camera.upperAlphaLimit  = Math.PI / 2 + 0.1; // can swing slightly right
+      camera.lowerAlphaLimit  = -Math.PI / 2 - 0.1; // can swing slightly left
+      camera.upperAlphaLimit  = -Math.PI / 4;        // can rotate right to see full front
       camera.lowerBetaLimit   = 1.1;
       camera.upperBetaLimit   = 1.52;
       camera.lowerRadiusLimit = 300;
@@ -137,12 +135,12 @@ export default function IsometricCanvas() {
       hemi.groundColor = new B.Color3(0.30, 0.26, 0.22);
       hemi.specular    = new B.Color3(0, 0, 0);
 
-      const key = new B.DirectionalLight('key', new B.Vector3(-0.4, -0.8, -0.45), scene);
+      const key = new B.DirectionalLight('key', new B.Vector3(-0.4, -0.8, 0.45), scene);
       key.intensity = 1.6;
       key.diffuse   = new B.Color3(1, 0.95, 0.86);
-      key.position  = new B.Vector3(500, 800, 300);
+      key.position  = new B.Vector3(500, 800, -300);
 
-      const fill = new B.DirectionalLight('fill', new B.Vector3(0.6, -0.2, 0.7), scene);
+      const fill = new B.DirectionalLight('fill', new B.Vector3(0.6, -0.2, -0.7), scene);
       fill.intensity = 0.35;
       fill.diffuse   = new B.Color3(0.88, 0.88, 0.92);
       fill.specular  = new B.Color3(0, 0, 0);
@@ -172,7 +170,7 @@ export default function IsometricCanvas() {
       floorMat.metallic    = 0;
       floorMat.roughness   = 0.92;
       const floorMesh = B.MeshBuilder.CreateGround('floor', { width: 6000, height: 6000 }, scene);
-      floorMesh.position       = new B.Vector3(500, 0, 3000);
+      floorMesh.position       = new B.Vector3(500, 0, -3000);
       floorMesh.material       = floorMat;
       floorMesh.isPickable     = false;
       floorMesh.receiveShadows = true;
@@ -207,7 +205,7 @@ export default function IsometricCanvas() {
           : new B.Color3(0.10, 0.17, 0.24);
         const d = product.depthCm || 36;
         ghostBox.scaling  = new B.Vector3(product.widthCm, product.heightCm, d);
-        ghostBox.position = new B.Vector3(xCm + product.widthCm / 2, yCm + product.heightCm / 2, d / 2);
+        ghostBox.position = new B.Vector3(xCm + product.widthCm / 2, yCm + product.heightCm / 2, -d / 2);
         ghostBox.isVisible = true;
       };
       updateGhostRef.current = updateGhost;
@@ -258,7 +256,7 @@ export default function IsometricCanvas() {
             const d = product.depthCm || 36;
             ov.position.x = xCm + product.widthCm / 2;
             ov.position.y = yCm + product.heightCm / 2;
-            ov.position.z = d / 2;
+            ov.position.z = -d / 2;
           }
         }
       };
@@ -433,7 +431,7 @@ export default function IsometricCanvas() {
         return;
       }
       const d   = product.depthCm || 36;
-      const pos = new B.Vector3(mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, d / 2);
+      const pos = new B.Vector3(mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, -d / 2);
       const col = isFloating ? new B.Color3(0.86, 0.15, 0.15) : new B.Color3(0.17, 0.37, 0.65);
 
       if (existing) { existing.position = pos; existing.material.diffuseColor = col; return; }
@@ -481,7 +479,7 @@ export default function IsometricCanvas() {
         width: product.widthCm, height: product.heightCm, depth,
       }, scene);
       ph.position = new B.Vector3(
-        mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, depth / 2,
+        mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, -depth / 2,
       );
       ph.metadata   = { instanceId: mod.instanceId };
       const phMat   = new B.PBRMaterial(`phm-${mod.instanceId}`, scene);
@@ -520,7 +518,6 @@ export default function IsometricCanvas() {
         try { ph.dispose(); } catch (_) {}
 
         const root = result.meshes[0];
-        root.rotation.y = Math.PI;
         result.meshes.forEach((m: any) => {
           m.isPickable = true;
           m.metadata   = { ...(m.metadata ?? {}), instanceId: mod.instanceId };
@@ -553,16 +550,18 @@ export default function IsometricCanvas() {
           root.computeWorldMatrix(true);
           result.meshes.forEach((m: any) => m.computeWorldMatrix(true));
 
-          let mx2 = Infinity, my2 = Infinity, mz2 = Infinity;
+          let mx2 = Infinity, my2 = Infinity, mzMax = -Infinity;
           result.meshes.slice(1).forEach((mesh: any) => {
             try {
               const mn = mesh.getBoundingInfo().boundingBox.minimumWorld;
-              mx2 = Math.min(mx2, mn.x);
-              my2 = Math.min(my2, mn.y);
-              mz2 = Math.min(mz2, mn.z);
+              const mx = mesh.getBoundingInfo().boundingBox.maximumWorld;
+              mx2   = Math.min(mx2, mn.x);
+              my2   = Math.min(my2, mn.y);
+              mzMax = Math.max(mzMax, mx.z);
             } catch (_) {}
           });
-          root.position = new B.Vector3(mod.xCm - mx2, mod.yCm - my2, -mz2);
+          /* Place module so back panel (maxZ) sits at z=0 (wall), front faces camera at -z */
+          root.position = new B.Vector3(mod.xCm - mx2, mod.yCm - my2, -mzMax);
 
           /* Store offset for drag repositioning */
           meshOffsetMap.set(mod.instanceId, {
@@ -571,7 +570,7 @@ export default function IsometricCanvas() {
           });
         } else {
           root.position = new B.Vector3(
-            mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, depth / 2,
+            mod.xCm + product.widthCm / 2, mod.yCm + product.heightCm / 2, -depth / 2,
           );
           meshOffsetMap.set(mod.instanceId, {
             dx: product.widthCm / 2,
