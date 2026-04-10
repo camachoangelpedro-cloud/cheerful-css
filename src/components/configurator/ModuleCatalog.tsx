@@ -1,138 +1,129 @@
-import { MODULE_CATALOG, MODULE_COLORS, VISUAL_SCALE } from '@/data/modulesCatalog';
+import { useState } from 'react';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
-import { cn } from '@/lib/utils';
+import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice, PX_PER_CM } from '@/data/modulesCatalog';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+
+const COP = (n: number) =>
+  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n);
+
+const PREVIEW_SCALE = 0.5; // px per cm for card previews
 
 export default function ModuleCatalog() {
-  const { selectedModuleType, selectedColorId, selectModuleType, setColor, clipCount, addClip, removeClip } = useConfiguratorStore();
+  const { selectedColorCode, setDragHandle, setColorCode } = useConfiguratorStore();
+  const [modOpen, setModOpen] = useState(true);
+  const [pltOpen, setPltOpen] = useState(true);
 
-  const modulos = MODULE_CATALOG.filter(m => m.category === 'modulo');
-  const placas = MODULE_CATALOG.filter(m => m.category === 'placa');
-  const clip = MODULE_CATALOG.find(m => m.category === 'conector');
+  const modulos = NODO_PRODUCTS.filter(p => p.family === 'MOD');
+  const placas  = NODO_PRODUCTS.filter(p => p.family === 'PLT');
 
-  const currentColor = MODULE_COLORS.find(c => c.id === selectedColorId);
+  const currentColor = NODO_COLORS.find(c => c.id === selectedColorCode) ?? NODO_COLORS[0];
+
+  const ProductCard = ({ product }: { product: typeof NODO_PRODUCTS[number] }) => {
+    const previewW = Math.max(product.widthCm  * PREVIEW_SCALE, 32);
+    const previewH = Math.max(product.heightCm * PREVIEW_SCALE, 8);
+    return (
+      <div
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.setData('text/plain', product.handle);
+          e.dataTransfer.effectAllowed = 'copy';
+          setDragHandle(product.handle);
+        }}
+        onDragEnd={() => setDragHandle(null)}
+        className="flex flex-col items-center gap-1.5 p-2.5 border border-border hover:border-foreground/40 cursor-grab active:cursor-grabbing select-none transition-colors"
+      >
+        {/* Color swatch preview */}
+        <div
+          style={{
+            width:  `${previewW}px`,
+            height: `${previewH}px`,
+            background: currentColor.hex,
+            border: '1px solid rgba(0,0,0,0.10)',
+          }}
+        />
+        <span className="font-body text-[9px] uppercase tracking-[.08em] text-foreground/80 text-center leading-tight">
+          {product.title}
+        </span>
+        <span className="font-body text-[9px] text-muted-foreground">
+          {product.widthCm}×{product.heightCm} cm
+        </span>
+        <span className="font-body text-[9px] font-medium text-foreground">
+          desde {COP(getStartingPrice(product))}
+        </span>
+      </div>
+    );
+  };
+
+  const SectionHeader = ({
+    label, open, toggle
+  }: { label: string; open: boolean; toggle: () => void }) => (
+    <button
+      onClick={toggle}
+      className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-muted/30 transition-colors"
+    >
+      <span className="font-body text-[10px] uppercase tracking-[.12em] font-medium text-foreground">
+        {label}
+      </span>
+      {open
+        ? <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+        : <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+      }
+    </button>
+  );
 
   return (
-    <div className="w-72 lg:w-80 border-l border-border bg-background flex flex-col h-full overflow-y-auto">
+    <div className="w-64 border-l border-border bg-background flex flex-col h-full overflow-y-auto shrink-0">
+
       {/* Color selector */}
-      <div className="p-4 border-b border-border">
-        <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Color</h3>
-        <div className="flex gap-2">
-          {MODULE_COLORS.map(color => (
+      <div className="p-4 border-b border-border shrink-0">
+        <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground mb-2.5">Color</p>
+        <div className="flex gap-2 mb-1.5">
+          {NODO_COLORS.map(color => (
             <button
               key={color.id}
-              onClick={() => setColor(color.id)}
-              className={cn(
-                'w-8 h-8 rounded-full border-2 transition-all hover:scale-110',
-                selectedColorId === color.id ? 'border-foreground scale-110' : 'border-transparent'
-              )}
-              style={{ background: color.hex }}
+              onClick={() => setColorCode(color.id)}
+              className="w-7 h-7 transition-transform hover:scale-110"
+              style={{
+                background: color.hex,
+                border: selectedColorCode === color.id
+                  ? '2px solid #1A2B3C'
+                  : '1.5px solid rgba(0,0,0,0.15)',
+                outline: selectedColorCode === color.id ? '2px solid rgba(26,43,60,0.18)' : 'none',
+                outlineOffset: '1px',
+              }}
               title={color.name}
             />
           ))}
         </div>
-        {currentColor && (
-          <p className="text-xs text-muted-foreground mt-2 font-mono">{currentColor.name}</p>
+        <p className="font-body text-[9px] text-muted-foreground">{currentColor.name}</p>
+      </div>
+
+      {/* Drag hint */}
+      <div className="px-4 py-2 border-b border-border shrink-0">
+        <p className="font-body text-[9px] text-muted-foreground/60 leading-tight">
+          Arrastra un módulo al canvas para colocarlo
+        </p>
+      </div>
+
+      {/* Módulos section */}
+      <div className="border-b border-border">
+        <SectionHeader label="Módulos" open={modOpen} toggle={() => setModOpen(v => !v)} />
+        {modOpen && (
+          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
+            {modulos.map(p => <ProductCard key={p.handle} product={p} />)}
+          </div>
         )}
       </div>
 
-      {/* Modules */}
-      <div className="p-4 border-b border-border">
-        <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Módulos</h3>
-        <div className="grid grid-cols-2 gap-2">
-          {modulos.map(mod => {
-            const isSelected = selectedModuleType?.id === mod.id;
-            const previewW = mod.gridW * 28;
-            const previewH = mod.gridH * 28;
-            return (
-              <button
-                key={mod.id}
-                onClick={() => selectModuleType(isSelected ? null : mod)}
-                className={cn(
-                  'flex flex-col items-center gap-1 p-2 rounded border transition-all',
-                  isSelected
-                    ? 'border-foreground bg-accent'
-                    : 'border-border hover:border-muted-foreground'
-                )}
-              >
-                {/* Mini preview */}
-                <div
-                  className="rounded-[1px] flex items-center justify-center"
-                  style={{
-                    width: `${previewW}px`,
-                    height: `${previewH}px`,
-                    background: currentColor?.hex || '#888',
-                    minHeight: '16px',
-                  }}
-                >
-                  {mod.hasDoor && <div className="w-[60%] h-[80%] border border-white/30 rounded-[1px]" />}
-                </div>
-                <span className="text-[10px] font-mono text-foreground">{mod.sku}</span>
-                <span className="text-[10px] text-muted-foreground">{mod.widthCm}×{mod.heightCm}cm</span>
-                <span className="text-[10px] font-medium">{mod.price}€</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Placas */}
-      <div className="p-4 border-b border-border">
-        <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Placas Base</h3>
-        <div className="grid grid-cols-2 gap-2">
-          {placas.map(mod => {
-            const isSelected = selectedModuleType?.id === mod.id;
-            const previewW = mod.gridW * 28;
-            return (
-              <button
-                key={mod.id}
-                onClick={() => selectModuleType(isSelected ? null : mod)}
-                className={cn(
-                  'flex flex-col items-center gap-1 p-2 rounded border transition-all',
-                  isSelected
-                    ? 'border-foreground bg-accent'
-                    : 'border-border hover:border-muted-foreground'
-                )}
-              >
-                <div
-                  className="rounded-[1px]"
-                  style={{
-                    width: `${previewW}px`,
-                    height: '6px',
-                    background: currentColor?.hex || '#888',
-                  }}
-                />
-                <span className="text-[10px] font-mono text-foreground">{mod.sku}</span>
-                <span className="text-[10px] text-muted-foreground">{mod.widthCm}×{mod.heightCm}cm</span>
-                <span className="text-[10px] font-medium">{mod.price}€</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Clips */}
-      {clip && (
-        <div className="p-4">
-          <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Conectores</h3>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={removeClip}
-              className="w-7 h-7 rounded border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors"
-              disabled={clipCount === 0}
-            >
-              −
-            </button>
-            <span className="font-mono text-sm min-w-[3ch] text-center">{clipCount}</span>
-            <button
-              onClick={addClip}
-              className="w-7 h-7 rounded border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors"
-            >
-              +
-            </button>
-            <span className="text-xs text-muted-foreground ml-auto">{clip.price}€/u</span>
+      {/* Placas section */}
+      <div>
+        <SectionHeader label="Placas" open={pltOpen} toggle={() => setPltOpen(v => !v)} />
+        {pltOpen && (
+          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
+            {placas.map(p => <ProductCard key={p.handle} product={p} />)}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
