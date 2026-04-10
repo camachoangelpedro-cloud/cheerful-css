@@ -1,13 +1,14 @@
 import { useConfiguratorStore } from '@/stores/configuratorStore';
-import { MODULE_COLORS } from '@/data/modulesCatalog';
-import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
+import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 import { toast } from 'sonner';
 
+const COP = (n: number) =>
+  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n);
+
 export default function ConfigSummary() {
-  const { getTotalPrice, getModuleSummary, clipCount, placedModules } = useConfiguratorStore();
+  const { getTotalPrice, getModuleSummary, placedModules } = useConfiguratorStore();
   const summary = getModuleSummary();
-  const total = getTotalPrice();
+  const total   = getTotalPrice();
 
   const handleAddToCart = () => {
     if (placedModules.length === 0) {
@@ -18,52 +19,50 @@ export default function ConfigSummary() {
   };
 
   return (
-    <div className="border-t border-border bg-background p-4 space-y-3">
-      <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Resumen</h3>
+    <div className="border-t border-border bg-background p-4 space-y-3 shrink-0">
+      <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground">Resumen</p>
 
-      {summary.length === 0 && clipCount === 0 ? (
-        <p className="text-xs text-muted-foreground">Ningún módulo seleccionado</p>
+      {summary.length === 0 ? (
+        <p className="font-body text-[10px] text-muted-foreground/60">Sin módulos colocados</p>
       ) : (
-        <div className="space-y-1 max-h-32 overflow-y-auto">
+        <div className="space-y-1 max-h-36 overflow-y-auto">
           {summary.map((item, i) => {
-            const color = MODULE_COLORS.find(c => c.id === item.colorId);
+            const product = NODO_PRODUCTS.find(p => p.handle === item.handle);
+            const color   = NODO_COLORS.find(c => c.id === item.colorCode);
             return (
-              <div key={i} className="flex items-center justify-between text-xs">
+              <div key={i} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ background: color?.hex }} />
-                  <span className="font-mono">{item.module.sku}</span>
-                  <span className="text-muted-foreground">×{item.count}</span>
+                  <div
+                    className="w-3 h-3 shrink-0"
+                    style={{ background: color?.hex ?? '#ccc', border: '1px solid rgba(0,0,0,0.10)' }}
+                  />
+                  <span className="font-body text-[9px] text-foreground/80 leading-tight">
+                    {product?.title ?? item.handle}
+                    {item.interior ? ` · ${item.interior}` : ''}
+                  </span>
+                  <span className="font-body text-[9px] text-muted-foreground">×{item.count}</span>
                 </div>
-                <span className="font-medium">{item.module.price * item.count}€</span>
+                <span className="font-body text-[9px] font-medium shrink-0 ml-2">
+                  {COP(item.unitPrice * item.count)}
+                </span>
               </div>
             );
           })}
-          {clipCount > 0 && (
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-muted-foreground/30" />
-                <span className="font-mono">CLIP</span>
-                <span className="text-muted-foreground">×{clipCount}</span>
-              </div>
-              <span className="font-medium">{clipCount * 5}€</span>
-            </div>
-          )}
         </div>
       )}
 
       <div className="flex items-center justify-between pt-2 border-t border-border">
-        <span className="text-sm font-medium">Total</span>
-        <span className="text-lg font-mono font-bold">{total}€</span>
+        <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground">Total</span>
+        <span className="font-body text-sm font-semibold">{COP(total)}</span>
       </div>
 
-      <Button
-        className="w-full"
+      <button
         onClick={handleAddToCart}
-        disabled={placedModules.length === 0 && clipCount === 0}
+        disabled={placedModules.length === 0}
+        className="w-full py-3 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
       >
-        <ShoppingCart className="w-4 h-4 mr-2" />
         Añadir al carrito
-      </Button>
+      </button>
     </div>
   );
 }
