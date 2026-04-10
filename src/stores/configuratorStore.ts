@@ -1,174 +1,227 @@
 import { create } from 'zustand';
-import { MODULE_COLORS, type ModuleType } from '@/data/modulesCatalog';
+import { NODO_PRODUCTS } from '@/data/modulesCatalog';
+
+/* ── Types ────────────────────────────────────────────────── */
+
+export interface Wall {
+  widthCm: number;
+  heightCm: number;
+  hasWindow: boolean;
+  windowXCm: number;
+  windowYCm: number;       // from floor
+  windowWidthCm: number;
+  windowHeightCm: number;
+}
 
 export interface PlacedModule {
   instanceId: string;
-  moduleType: ModuleType;
-  colorId: string;
-  gridX: number; // column position
-  gridY: number; // vertical stack position (0 = ground)
+  handle: string;          // NodoProduct.handle
+  xCm: number;             // from wall left edge
+  yCm: number;             // from floor (y=0 = floor)
+  colorCode: string;       // BH | RO | SA | AC
+  interior: string;
+  panel: string;
 }
 
-interface HistoryEntry {
-  modules: PlacedModule[];
+export interface ModuleSummaryItem {
+  handle: string;
+  colorCode: string;
+  interior: string;
+  panel: string;
+  count: number;
+  unitPrice: number;
 }
 
-interface ConfiguratorStore {
+interface ConfigStore {
+  wall: Wall | null;
+  step: 1 | 2;
   placedModules: PlacedModule[];
-  selectedColorId: string;
-  selectedModuleType: ModuleType | null;
-  selectedInstanceId: string | null;
-  undoStack: HistoryEntry[];
-  redoStack: HistoryEntry[];
-  clipCount: number;
+  selectedId: string | null;
+  dragHandle: string | null;
+  selectedColorCode: string;
+  undoStack: PlacedModule[][];
+  redoStack: PlacedModule[][];
 
-  // Actions
-  selectModuleType: (module: ModuleType | null) => void;
-  selectInstance: (instanceId: string | null) => void;
-  setColor: (colorId: string) => void;
-  changeInstanceColor: (instanceId: string, colorId: string) => void;
-  placeModule: (gridX: number, gridY: number) => void;
-  removeModule: (instanceId: string) => void;
-  moveModule: (instanceId: string, gridX: number, gridY: number) => void;
-  addClip: () => void;
-  removeClip: () => void;
+  setWall: (w: Wall) => void;
+  setStep: (s: 1 | 2) => void;
+  setDragHandle: (h: string | null) => void;
+  setColorCode: (code: string) => void;
+  dropModule: (handle: string, xCm: number, yCm: number) => void;
+  removeModule: (id: string) => void;
+  selectInstance: (id: string | null) => void;
+  updateModule: (id: string, patch: Partial<Omit<PlacedModule, 'instanceId' | 'handle'>>) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
   getTotalPrice: () => number;
-  getModuleSummary: () => { module: ModuleType; colorId: string; count: number }[];
+  getModuleSummary: () => ModuleSummaryItem[];
 }
+
+/* ── Helpers ──────────────────────────────────────────────── */
 
 let nextId = 1;
-function genId() { return `mod-${nextId++}`; }
+const genId = () => `m-${nextId++}`;
 
-function pushHistory(state: { placedModules: PlacedModule[]; undoStack: HistoryEntry[] }) {
-  return {
-    undoStack: [...state.undoStack, { modules: [...state.placedModules] }].slice(-50),
-    redoStack: [] as HistoryEntry[],
-  };
-}
+const pushHistory = (mods: PlacedModule[], stack: PlacedModule[][]): PlacedModule[][] =>
+  [...stack, [...mods]].slice(-50);
 
-export const useConfiguratorStore = create<ConfiguratorStore>()((set, get) => ({
+/* ── Store ────────────────────────────────────────────────── */
+
+export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
+  wall: null,
+  step: 1,
   placedModules: [],
-  selectedColorId: MODULE_COLORS[0].id,
-  selectedModuleType: null,
-  selectedInstanceId: null,
+  selectedId: null,
+  dragHandle: null,
+  selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
-  clipCount: 0,
 
-  selectModuleType: (module) => set({ selectedModuleType: module, selectedInstanceId: null }),
-  selectInstance: (instanceId) => set({ selectedInstanceId: instanceId, selectedModuleType: null }),
-  setColor: (colorId) => set({ selectedColorId: colorId }),
+  setWall: (wall) => set({ wall, step: 2 }),
+  setStep: (step) => set({ step }),
+  setDragHandle: (h) => set({ dragHandle: h }),
+  setColorCode: (code) => set({ selectedColorCode: code }),
 
-  changeInstanceColor: (instanceId, colorId) => {
+  dropModule: (handle, xCm, yCm) => {
     const state = get();
-    set({
-      ...pushHistory(state),
-      placedModules: state.placedModules.map(m =>
-        m.instanceId === instanceId ? { ...m, colorId } : m
-      ),
+    const product = NODO_PRODUCTS.find(p => p.handle === handle);
+    if (!product || !state.wall) return;
+
+    // Bounds check
+    if (xCm + product.widthCm > state.wall.widthCm) return;
+    if (yCm + product.heightCm > state.wall.heightCm) return;
+    if (xCm < 0 || yCm < 0) return;
+
+    // Module overlap check
+    const overlaps = state.placedModules.some(m => {
+      const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
+      if (!mp) return false;
+      return (
+        xCm < m.xCm + mp.widthCm &&
+        xCm + product.widthCm > m.xCm &&
+        yCm < m.yCm + mp.heightCm &&
+        yCm + product.heightCm > m.yCm
+      );
     });
-  },
+    if (overlaps) return;
 
-  placeModule: (gridX, gridY) => {
-    const state = get();
-    if (!state.selectedModuleType || state.selectedModuleType.category === 'conector') return;
+    // Window overlap check
+    if (state.wall.hasWindow) {
+      const w = state.wall;
+      if (
+        xCm < w.windowXCm + w.windowWidthCm &&
+        xCm + product.widthCm > w.windowXCm &&
+        yCm < w.windowYCm + w.windowHeightCm &&
+        yCm + product.heightCm > w.windowYCm
+      ) return;
+    }
 
-    const newModule: PlacedModule = {
+    // Pick best variant for selected color
+    const colorCode = state.selectedColorCode;
+    const colorVariant = product.variants.find(v => v.color === colorCode);
+    const variant = colorVariant ?? product.variants[0];
+    if (!variant) return;
+
+    const newMod: PlacedModule = {
       instanceId: genId(),
-      moduleType: state.selectedModuleType,
-      colorId: state.selectedColorId,
-      gridX,
-      gridY,
+      handle,
+      xCm,
+      yCm,
+      colorCode: variant.color,
+      interior: variant.interior,
+      panel: variant.panel,
     };
 
     set({
-      ...pushHistory(state),
-      placedModules: [...state.placedModules, newModule],
+      undoStack: pushHistory(state.placedModules, state.undoStack),
+      redoStack: [],
+      placedModules: [...state.placedModules, newMod],
     });
   },
 
-  removeModule: (instanceId) => {
+  removeModule: (id) => {
     const state = get();
     set({
-      ...pushHistory(state),
-      placedModules: state.placedModules.filter(m => m.instanceId !== instanceId),
-      selectedInstanceId: state.selectedInstanceId === instanceId ? null : state.selectedInstanceId,
+      undoStack: pushHistory(state.placedModules, state.undoStack),
+      redoStack: [],
+      placedModules: state.placedModules.filter(m => m.instanceId !== id),
+      selectedId: state.selectedId === id ? null : state.selectedId,
     });
   },
 
-  moveModule: (instanceId, gridX, gridY) => {
+  selectInstance: (id) => set({ selectedId: id }),
+
+  updateModule: (id, patch) => {
     const state = get();
     set({
-      ...pushHistory(state),
+      undoStack: pushHistory(state.placedModules, state.undoStack),
+      redoStack: [],
       placedModules: state.placedModules.map(m =>
-        m.instanceId === instanceId ? { ...m, gridX, gridY } : m
+        m.instanceId === id ? { ...m, ...patch } : m
       ),
     });
-  },
-
-  addClip: () => {
-    const state = get();
-    set({ clipCount: state.clipCount + 1 });
-  },
-
-  removeClip: () => {
-    const state = get();
-    if (state.clipCount > 0) set({ clipCount: state.clipCount - 1 });
   },
 
   undo: () => {
     const state = get();
-    if (state.undoStack.length === 0) return;
+    if (!state.undoStack.length) return;
     const prev = state.undoStack[state.undoStack.length - 1];
     set({
-      placedModules: prev.modules,
+      placedModules: prev,
       undoStack: state.undoStack.slice(0, -1),
-      redoStack: [...state.redoStack, { modules: state.placedModules }],
+      redoStack: [...state.redoStack, [...state.placedModules]],
     });
   },
 
   redo: () => {
     const state = get();
-    if (state.redoStack.length === 0) return;
+    if (!state.redoStack.length) return;
     const next = state.redoStack[state.redoStack.length - 1];
     set({
-      placedModules: next.modules,
+      placedModules: next,
       redoStack: state.redoStack.slice(0, -1),
-      undoStack: [...state.undoStack, { modules: state.placedModules }],
+      undoStack: [...state.undoStack, [...state.placedModules]],
     });
   },
 
   reset: () => {
     const state = get();
     set({
-      ...pushHistory(state),
+      undoStack: pushHistory(state.placedModules, state.undoStack),
+      redoStack: [],
       placedModules: [],
-      clipCount: 0,
-      selectedInstanceId: null,
-      selectedModuleType: null,
+      selectedId: null,
     });
   },
 
   getTotalPrice: () => {
-    const state = get();
-    const modulesTotal = state.placedModules.reduce((sum, m) => sum + m.moduleType.price, 0);
-    const clipsTotal = state.clipCount * 5;
-    return modulesTotal + clipsTotal;
+    const { placedModules } = get();
+    return placedModules.reduce((sum, m) => {
+      const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
+      if (!product) return sum;
+      const variant = product.variants.find(v =>
+        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode
+      );
+      return sum + (variant?.price ?? product.variants[0]?.price ?? 0);
+    }, 0);
   },
 
   getModuleSummary: () => {
-    const state = get();
-    const map = new Map<string, { module: ModuleType; colorId: string; count: number }>();
-    state.placedModules.forEach(m => {
-      const key = `${m.moduleType.id}-${m.colorId}`;
+    const { placedModules } = get();
+    const map = new Map<string, ModuleSummaryItem>();
+    placedModules.forEach(m => {
+      const key = `${m.handle}|${m.colorCode}|${m.interior}|${m.panel}`;
+      const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
+      if (!product) return;
+      const variant = product.variants.find(v =>
+        v.interior === m.interior && v.panel === m.panel && v.color === m.colorCode
+      );
+      const unitPrice = variant?.price ?? product.variants[0]?.price ?? 0;
       const existing = map.get(key);
       if (existing) {
         existing.count++;
       } else {
-        map.set(key, { module: m.moduleType, colorId: m.colorId, count: 1 });
+        map.set(key, { handle: m.handle, colorCode: m.colorCode, interior: m.interior, panel: m.panel, count: 1, unitPrice });
       }
     });
     return Array.from(map.values());
