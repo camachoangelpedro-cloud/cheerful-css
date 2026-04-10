@@ -520,6 +520,7 @@ export default function IsometricCanvas() {
         try { ph.dispose(); } catch (_) {}
 
         const root = result.meshes[0];
+        root.rotation.y = Math.PI;
         result.meshes.forEach((m: any) => {
           m.isPickable = true;
           m.metadata   = { ...(m.metadata ?? {}), instanceId: mod.instanceId };
