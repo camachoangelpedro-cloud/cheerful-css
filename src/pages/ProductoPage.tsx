@@ -1,8 +1,9 @@
 
 import { useEffect, useState, useRef } from 'react';
 import * as React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
+import { ChevronLeft, Loader2 } from 'lucide-react';
+import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -281,9 +282,23 @@ export default function ProductoPage() {
   const [selectedApertura, setSelectedApertura] = useState('Derecha');
   const [selectedVariant, setSelectedVariant] = useState<VariantNode | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [carouselIdx, setCarouselIdx] = useState(0);
+
+  const [stickyBarVisible, setStickyBarVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   const { addItem, isLoading: cartLoading } = useCartStore();
+
+  /* Sticky bar observer */
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setStickyBarVisible(!entry.isIntersecting),
+      { threshold: 0 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   /* Fetch product */
   useEffect(() => {
@@ -491,86 +506,107 @@ export default function ProductoPage() {
     </svg>
   );
 
+  const relatedProducts = NODO_PRODUCTS.filter(p => p.handle !== handle).slice(0, 6);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <CartDrawer />
 
-      {/* Back link */}
-      <div className="nodo-container py-6">
-        <Link to="/catalogo" className="inline-flex items-center gap-2 font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ChevronLeft className="w-4 h-4" />
-          ← Volver al catálogo
+      {/* ── Sticky product bar (appears on scroll) ── */}
+      <div
+        className={`fixed inset-x-0 top-0 z-50 bg-background/96 backdrop-blur-sm border-b border-border transition-transform duration-300 ${
+          stickyBarVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
+        <div className="nodo-container h-14 flex items-center justify-between gap-6">
+          <span className="font-body text-sm font-medium truncate">{product.title}</span>
+          <div className="flex items-center gap-5 shrink-0">
+            <span className="font-body text-sm font-medium hidden sm:block">{priceDisplay}</span>
+            <button
+              onClick={handleAddToCart}
+              disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
+              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 bg-[#1A2B3C] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
+            >
+              {addedToCart ? 'Añadido ✓' : 'Añadir'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Breadcrumb ── */}
+      <div ref={heroRef} className="nodo-container pt-6 pb-0">
+        <Link
+          to="/catalogo"
+          className="inline-flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ChevronLeft className="w-3 h-3" />
+          Catálogo
         </Link>
       </div>
 
-      {/* Product grid */}
+      {/* ── Main product grid ── */}
       <div className="nodo-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-6 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-8 pb-20 items-start">
 
-          {/* ── LEFT COLUMN ─────────────────────────────── */}
-          <div className="lg:sticky lg:top-24 lg:self-start space-y-3">
+          {/* ── LEFT: scrollable image gallery ── */}
+          <div className="space-y-1">
 
-            {/* Photo carousel — only shown when product has images */}
-            {images.length > 0 && (
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/20">
-                <img
-                  src={images[carouselIdx]?.node.url}
-                  alt={images[carouselIdx]?.node.altText ?? product.title}
-                  className="w-full h-full object-cover"
-                />
-                {images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => setCarouselIdx(i => (i - 1 + images.length) % images.length)}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setCarouselIdx(i => (i + 1) % images.length)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                    <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                      {images.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setCarouselIdx(i)}
-                          className={`w-1.5 h-1.5 rounded-full transition-colors ${i === carouselIdx ? 'bg-foreground' : 'bg-foreground/30'}`}
-                        />
-                      ))}
-                    </div>
-                  </>
+            {/* Row 1: placeholder left · 3D viewer right */}
+            <div className="grid grid-cols-2 gap-1">
+              <div className="aspect-square bg-muted/10 flex items-center justify-center">
+                <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
+              </div>
+              <div className="aspect-square overflow-hidden relative" style={{ backgroundColor: '#EDE9E1' }}>
+                {glbUrl ? (
+                  <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+                    <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
+                  </div>
                 )}
               </div>
-            )}
-
-            {/* 3D viewer — fixed height, never resizes */}
-            <div
-              className="h-[400px] w-full overflow-hidden relative"
-              style={{ backgroundColor: '#EDE9E1' }}
-            >
-              {glbUrl ? (
-                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                  <span className="font-display font-semibold text-2xl text-foreground/25">
-                    {product.title}
-                  </span>
-                </div>
-              )}
             </div>
 
+            {/* Row 2: two placeholders */}
+            <div className="grid grid-cols-2 gap-1">
+              {[0, 1].map(i => (
+                <div key={i} className="aspect-square bg-muted/10 flex items-center justify-center">
+                  <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Row 3: wide placeholder */}
+            <div className="aspect-[16/9] bg-muted/10 flex items-center justify-center">
+              <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
+            </div>
+
+            {/* Real product images appended below placeholders */}
+            {images.length > 0 && (
+              <div className="grid grid-cols-2 gap-1 pt-1">
+                {images.map((img, i) => (
+                  <div
+                    key={i}
+                    className={i === 0 ? 'col-span-2 aspect-[16/9] overflow-hidden' : 'aspect-square overflow-hidden'}
+                  >
+                    <img
+                      src={img.node.url}
+                      alt={img.node.altText ?? product.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* ── RIGHT COLUMN ────────────────────────────── */}
-          <div>
-            <h1 className="font-display font-semibold text-3xl leading-tight mb-1">{product.title}</h1>
-            {dims && <p className="font-body text-sm text-muted-foreground mb-6">{dims}</p>}
-            <p className="font-body text-2xl font-medium mb-6">{priceDisplay}</p>
-            <div className="border-t border-border mb-6" />
+          {/* ── RIGHT: sticky product info ── */}
+          <div className="lg:sticky lg:top-8 space-y-0">
+            <h1 className="font-display font-semibold text-2xl leading-snug mb-1">{product.title}</h1>
+            {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mb-4">{dims}</p>}
+            <p className="font-body text-xl font-medium mb-6">{priceDisplay}</p>
+            <div className="h-px bg-border mb-6" />
 
             {/* ── CONFIGURATOR STEPS ────────────────────── */}
 
@@ -798,8 +834,41 @@ export default function ProductoPage() {
               </Accordion>
             </div>
           </div>
+
         </div>
       </div>
+
+      {/* ── Bought Together ── */}
+      <section className="border-t border-border">
+        <div className="nodo-container py-16">
+          <p className="font-body text-[9px] uppercase tracking-[.16em] text-muted-foreground mb-8">
+            Completa tu configuración
+          </p>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x">
+            {relatedProducts.map(p => {
+              const minPrice = Math.min(...p.variants.map(v => v.price));
+              return (
+                <Link
+                  key={p.handle}
+                  to={`/productos/${p.handle}`}
+                  className="flex-shrink-0 w-48 snap-start group"
+                >
+                  <div
+                    className="aspect-square mb-3 overflow-hidden flex items-center justify-center"
+                    style={{ backgroundColor: '#EDE9E1' }}
+                  >
+                    <span className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground/40">{p.title}</span>
+                  </div>
+                  <p className="font-body text-xs font-medium group-hover:underline leading-snug">{p.title}</p>
+                  <p className="font-body text-[10px] text-muted-foreground mt-0.5">
+                    Desde COP ${minPrice.toLocaleString('es-CO')}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
