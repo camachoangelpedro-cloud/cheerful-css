@@ -310,6 +310,7 @@ export default function ProductoPage() {
 
     const built: { name: string; value: string }[] = [];
     if (names.includes('Interior')) built.push({ name: 'Interior', value: selectedInterior });
+    if (names.includes('Tirador')) built.push({ name: 'Tirador', value: selectedApertura });
     if (names.includes('Panel trasero')) built.push({ name: 'Panel trasero', value: selectedPanel });
     if (names.includes('Color')) built.push({ name: 'Color', value: COLOR_NAME_MAP[selectedColor.code] });
     if (names.includes('Acabado')) built.push({ name: 'Acabado', value: selectedAcabado });
@@ -319,7 +320,7 @@ export default function ProductoPage() {
       built.every(b => v.node.selectedOptions.find(o => o.name === b.name && o.value === b.value))
     );
     setSelectedVariant(found?.node ?? null);
-  }, [product, selectedColor, selectedPanel, selectedInterior, selectedAcabado]);
+  }, [product, selectedColor, selectedPanel, selectedInterior, selectedAcabado, selectedApertura]);
 
   /* Panel logic */
   useEffect(() => {
