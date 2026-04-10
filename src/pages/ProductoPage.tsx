@@ -169,48 +169,46 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       scene.clearColor = new B.Color4(r, g, b2, 1);
       scene.ambientColor = new B.Color3(1, 1, 1);
 
-      // Camera: desde arriba (beta ~49° desde el cénit), radio ajustado a ~2m tras carga
-      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 0.85, 10, B.Vector3.Zero(), scene);
+      // Cámara lateral-baja: beta 1.25 rad ≈ 28° sobre el horizonte
+      const camera = new B.ArcRotateCamera('cam', -Math.PI / 4, 1.25, 10, B.Vector3.Zero(), scene);
       camera.lowerRadiusLimit = camera.radius;
       camera.upperRadiusLimit = camera.radius;
       camera.inputs.clear();
 
-      // Luz hemisférica ambiental suave
+      // Luz ambiental suave — rellena sombras sin aplanar la forma
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.45;
+      hemi.intensity = 0.35;
       hemi.diffuse = new B.Color3(1, 0.98, 0.95);
-      hemi.groundColor = new B.Color3(0.5, 0.47, 0.43);
-      hemi.specular = new B.Color3(0.25, 0.25, 0.25);
+      hemi.groundColor = new B.Color3(0.45, 0.42, 0.38);
+      hemi.specular = new B.Color3(0.1, 0.1, 0.1);
 
-      // Luz principal (key) — genera sombras
-      const key = new B.DirectionalLight('key', new B.Vector3(-1, -2, 1), scene);
-      key.position = new B.Vector3(10, 15, -10);
-      key.intensity = 1.8;
+      // Luz principal — ángulo 45° lateral-alto para sombras en aristas del cubo
+      const key = new B.DirectionalLight('key', new B.Vector3(-1, -1.5, 0.8), scene);
+      key.position = new B.Vector3(5, 8, -5);
+      key.intensity = 2.2;
       key.diffuse = new B.Color3(1, 0.97, 0.93);
-      key.specular = new B.Color3(0.7, 0.7, 0.7);
+      key.specular = new B.Color3(0.5, 0.5, 0.5);
 
-      // Luz de relleno — suaviza sombras duras
-      const fill = new B.DirectionalLight('fill', new B.Vector3(2, -1, 0.5), scene);
-      fill.intensity = 0.5;
-      fill.diffuse = new B.Color3(1, 0.95, 0.85);
-      fill.specular = new B.Color3(0.15, 0.15, 0.15);
+      // Luz de relleno — lado opuesto, sin sombras
+      const fill = new B.DirectionalLight('fill', new B.Vector3(1.5, -0.5, 0.5), scene);
+      fill.intensity = 0.45;
+      fill.diffuse = new B.Color3(0.95, 0.95, 1);
+      fill.specular = new B.Color3(0.05, 0.05, 0.05);
 
-      // Luz de contorno (rim) — separa el objeto del fondo
-      const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -1, -2), scene);
-      rim.intensity = 0.4;
+      // Luz de contorno — separa el objeto del fondo
+      const rim = new B.DirectionalLight('rim', new B.Vector3(0.3, -0.8, -2), scene);
+      rim.intensity = 0.35;
       rim.diffuse = new B.Color3(0.85, 0.9, 1);
-      rim.specular = new B.Color3(0.2, 0.2, 0.2);
+      rim.specular = new B.Color3(0.1, 0.1, 0.1);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
 
-        // Shadow generator de alta calidad
+        // PCF: sombras precisas que respetan la geometría del cubo (aristas duras)
         const shadows = new B.ShadowGenerator(2048, key);
-        shadows.useBlurExponentialShadowMap = true;
-        shadows.blurKernel = 48;
-        shadows.bias = 0.001;
-        shadows.normalBias = 0.02;
-        shadows.depthScale = 100;
+        shadows.usePercentageCloserFiltering = true;
+        shadows.filteringQuality = B.ShadowGenerator.QUALITY_HIGH;
+        shadows.bias = 0.0005;
 
         result.meshes.forEach((mesh: any) => {
           if (mesh.getTotalVertices() > 0) {
@@ -219,7 +217,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
             if (mesh.material) {
               if (mesh.material.roughness !== undefined) mesh.material.roughness = 0.65;
               if (mesh.material.metallic !== undefined) mesh.material.metallic = 0.0;
-              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0.6;
+              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0.5;
             }
           }
         });
@@ -229,28 +227,28 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
 
-        // Plano de suelo invisible que recibe las sombras proyectadas
-        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 12, height: maxDim * 12 }, scene);
-        ground.position.set(center.x, bounds.min.y, center.z);
-        ground.receiveShadows = true;
-        const shadowMat = new B.ShadowOnlyMaterial
-          ? new B.ShadowOnlyMaterial('shadowOnly', scene)
-          : (() => {
-              const m = new B.StandardMaterial('groundFallback', scene);
-              m.diffuseColor = new B.Color3(r, g, b2);
-              m.specularColor = B.Color3.Black();
-              return m;
-            })();
-        if (shadowMat.shadowColor) {
-          shadowMat.shadowColor = new B.Color3(0.18, 0.15, 0.12);
-          shadowMat.alpha = 0.55;
-        }
-        ground.material = shadowMat;
+        // Reposicionar key light relativa a la escena cargada
+        key.position = new B.Vector3(center.x + maxDim * 3, center.y + maxDim * 4, center.z - maxDim * 3);
 
-        // Posición final de cámara: ~2m del objeto desde arriba a ~1.7m de altura
+        // Plano de suelo invisible que recibe las sombras proyectadas
+        const ground = B.MeshBuilder.CreateGround('ground', { width: maxDim * 14, height: maxDim * 14 }, scene);
+        ground.position.set(center.x, bounds.min.y - 0.001, center.z);
+        ground.receiveShadows = true;
+        if (B.ShadowOnlyMaterial) {
+          const shadowMat = new B.ShadowOnlyMaterial('shadowOnly', scene);
+          shadowMat.shadowColor = new B.Color3(0.15, 0.12, 0.10);
+          shadowMat.alpha = 0.45;
+          ground.material = shadowMat;
+        } else {
+          const groundMat = new B.StandardMaterial('groundFallback', scene);
+          groundMat.diffuseColor = new B.Color3(r, g, b2);
+          groundMat.specularColor = B.Color3.Black();
+          ground.material = groundMat;
+        }
+
         camera.target = center;
         camera.radius = maxDim * 3.8;
-        camera.beta = 0.85;
+        camera.beta = 1.25;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
       } catch(e) { console.error('Babylon load error', e); }
