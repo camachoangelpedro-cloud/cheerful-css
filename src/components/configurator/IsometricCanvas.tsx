@@ -114,12 +114,14 @@ export default function IsometricCanvas() {
          Simulates a 183 cm person standing 5 m from the wall.
          Eye height ≈ 165 cm → target y = 72 → beta ≈ acos((165-72)/500) ≈ 1.38 rad
          alpha = π/2: camera sits at +Z looking straight at the wall.  */
+      /* alpha = π/3 matches ProductoPage's proven angle that shows module fronts correctly.
+         The GLBs are front-facing at this azimuth; a purely frontal α=π/2 shows only the back panel. */
       const camera = new B.ArcRotateCamera(
-        'cam', Math.PI / 2, 1.38, 500,
+        'cam', Math.PI / 3, 1.38, 500,
         new B.Vector3(180, 72, 0), scene,
       );
-      camera.lowerAlphaLimit  = Math.PI / 2 - 0.35;
-      camera.upperAlphaLimit  = Math.PI / 2 + 0.35;
+      camera.lowerAlphaLimit  = Math.PI / 4;       // can rotate left to see full front
+      camera.upperAlphaLimit  = Math.PI / 2 + 0.1; // can swing slightly right
       camera.lowerBetaLimit   = 1.1;
       camera.upperBetaLimit   = 1.52;
       camera.lowerRadiusLimit = 300;
