@@ -645,7 +645,7 @@ export default function ProductoPage() {
               </div>
 
               {/* Main display */}
-              <div className="flex-1 aspect-square overflow-hidden relative" style={{ backgroundColor: '#EDE9E1' }}>
+              <div className="flex-1 overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
                 {selectedMedia === '3d' ? (
                   glbUrl ? (
                     <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
@@ -667,7 +667,7 @@ export default function ProductoPage() {
             {/* Bottom row: two placeholders */}
             <div className="grid grid-cols-2 gap-1">
               {[0, 1].map(i => (
-                <div key={i} className="aspect-square bg-muted/10 flex items-center justify-center">
+                <div key={i} className="aspect-square bg-muted/10 flex items-center justify-center max-h-[35vh]">
                   <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Próximamente</span>
                 </div>
               ))}
