@@ -236,8 +236,18 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
   useEffect(() => {
     if (!glbUrl) return;
     glbUrlRef.current = glbUrl;
+    let cancelled = false;
 
     const swap = async () => {
+      /* Wait for scene/camera to be ready (init runs async, may still be loading CDN) */
+      let attempts = 0;
+      while ((!sceneRef.current || !cameraRef.current || !(window as any).BABYLON) && attempts < 50) {
+        if (cancelled) return;
+        await new Promise(r => setTimeout(r, 200));
+        attempts++;
+      }
+      if (cancelled) return;
+
       const B = (window as any).BABYLON;
       const scene = sceneRef.current;
       const camera = cameraRef.current;
@@ -305,6 +315,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     };
 
     swap();
+    return () => { cancelled = true; };
   }, [glbUrl, backgroundColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />;
