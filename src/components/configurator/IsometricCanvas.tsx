@@ -80,8 +80,6 @@ export default function IsometricCanvas() {
   const escCleanupRef      = useRef<(() => void) | null>(null);
   const resizeCleanupRef   = useRef<(() => void) | null>(null);
   const dragCleanupRef     = useRef<(() => void) | null>(null);
-  const idleTimerRef       = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const renderActiveRef    = useRef(false);
 
   const { placedModules, dragHandle, selectedId } = useConfiguratorStore();
 
@@ -160,11 +158,10 @@ export default function IsometricCanvas() {
       fill.diffuse   = new B.Color3(0.88, 0.88, 0.92);
       fill.specular  = new B.Color3(0, 0, 0);
 
-      /* ── Shadow generator — PCF 1024 (good quality, much cheaper than blur) ── */
-      const shadowGen = new B.ShadowGenerator(1024, key);
-      shadowGen.usePercentageCloserFiltering = true;
-      shadowGen.filteringQuality = B.ShadowGenerator.QUALITY_MEDIUM;
-      shadowGen.bias = 0.001;
+      /* ── Shadow generator ── */
+      const shadowGen = new B.ShadowGenerator(2048, key);
+      shadowGen.useBlurExponentialShadowMap = true;
+      shadowGen.blurKernel = 32;
       shadowGenRef.current = shadowGen;
 
       /* ── Back wall — near-pure-white PBR (very light, distinct from Blanco Hueso) ── */
@@ -386,32 +383,16 @@ export default function IsometricCanvas() {
       window.addEventListener('keydown', onEsc);
       escCleanupRef.current = () => window.removeEventListener('keydown', onEsc);
 
-      /* ── Render on demand — stop after 3 s idle, restart on interaction ── */
-      const startRendering = () => {
-        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-        if (!renderActiveRef.current) {
-          renderActiveRef.current = true;
-          engine.runRenderLoop(() => scene.render());
-        }
-        idleTimerRef.current = setTimeout(() => {
-          engine.stopRenderLoop();
-          renderActiveRef.current = false;
-        }, 3000);
-      };
-      canvas.addEventListener('pointermove', startRendering, { passive: true });
-      canvas.addEventListener('pointerdown', startRendering, { passive: true });
-      /* Start immediately so the scene renders on load */
-      startRendering();
-
-      const onResize = () => { engine.resize(); startRendering(); };
+      const onResize = () => engine.resize();
       window.addEventListener('resize', onResize);
       resizeCleanupRef.current = () => window.removeEventListener('resize', onResize);
+
+      engine.runRenderLoop(() => scene.render());
     };
 
     init();
 
     return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       escCleanupRef.current?.();
       resizeCleanupRef.current?.();
       dragCleanupRef.current?.();
@@ -641,18 +622,6 @@ export default function IsometricCanvas() {
         console.warn('GLB load failed:', mod.handle, err);
       }
     });
-    /* Wake the render loop whenever modules change */
-    if (engineRef.current && sceneRef.current) {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      if (!renderActiveRef.current) {
-        renderActiveRef.current = true;
-        engineRef.current.runRenderLoop(() => sceneRef.current?.render());
-      }
-      idleTimerRef.current = setTimeout(() => {
-        engineRef.current?.stopRenderLoop();
-        renderActiveRef.current = false;
-      }, 3000);
-    }
   }, [placedModules, selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Detach camera during catalog drag ── */
