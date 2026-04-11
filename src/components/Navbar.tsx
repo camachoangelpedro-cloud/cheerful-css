@@ -4,10 +4,8 @@ import { useCartStore } from '@/stores/cartStore';
 import { useEffect, useState } from 'react';
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen]               = useState(false);
-  const [dropOpen, setDropOpen]                   = useState(false);
-  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
-  const [scrolled, setScrolled]                   = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
   const { items, setIsOpen } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -21,8 +19,6 @@ export function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const close = () => setDropOpen(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -62,13 +58,13 @@ export function Navbar() {
             >
               Configurador
             </Link>
-            <button
-              onClick={() => setDropOpen(v => !v)}
+            <Link
+              to="/catalogo"
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
               style={{ letterSpacing: 0 }}
             >
-              Productos
-            </button>
+              Módulos
+            </Link>
             <Link
               to="/nosotros"
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
@@ -107,58 +103,6 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* ── Full-width products dropdown ── */}
-      {dropOpen && (
-        <>
-          <div className="fixed inset-0 z-30" onClick={close} />
-          <div
-            className="relative z-40 border-b px-8 lg:px-16 py-10 transition-colors duration-200"
-            style={{
-              backgroundColor: scrolled ? '#FFFFFF' : '#FAFAF8',
-              borderColor: 'rgba(0,0,0,0.08)',
-            }}
-          >
-            <div className="flex">
-              <div className="shrink-0" style={{ width: '76px' }} />
-              <div className="border-l pl-10 flex flex-col gap-0" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-                <Link
-                  to="/catalogo"
-                  onClick={close}
-                  className="py-2.5 text-sm font-medium text-foreground hover:opacity-60 transition-opacity"
-                  style={{ letterSpacing: 0 }}
-                >
-                  Todos los productos
-                </Link>
-                <Link
-                  to="/catalogo?familia=MOD"
-                  onClick={close}
-                  className="py-2 text-sm text-[#5F5E5A] hover:text-foreground transition-colors pl-5"
-                  style={{ letterSpacing: 0 }}
-                >
-                  Módulos individuales
-                </Link>
-                <Link
-                  to="/catalogo?familia=CLIP"
-                  onClick={close}
-                  className="py-2 text-sm text-[#5F5E5A] hover:text-foreground transition-colors pl-5"
-                  style={{ letterSpacing: 0 }}
-                >
-                  Clips
-                </Link>
-                <Link
-                  to="/catalogo?familia=PLT"
-                  onClick={close}
-                  className="py-2 text-sm text-[#5F5E5A] hover:text-foreground transition-colors pl-5"
-                  style={{ letterSpacing: 0 }}
-                >
-                  Bases
-                </Link>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
       {/* ── Mobile overlay ── */}
       <div
         className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
@@ -189,29 +133,14 @@ export function Navbar() {
           >
             Configurador
           </Link>
-          <button
-            className="text-lg font-medium text-foreground text-left hover:opacity-60 transition-opacity"
+          <Link
+            to="/catalogo"
+            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
             style={{ letterSpacing: 0 }}
-            onClick={() => setMobileProductsOpen(v => !v)}
+            onClick={() => setMobileOpen(false)}
           >
-            Productos
-          </button>
-          {mobileProductsOpen && (
-            <div className="flex flex-col gap-2 -mt-2 border-l pl-5" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-              <Link to="/catalogo" className="text-base text-foreground py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
-                Todos los productos
-              </Link>
-              <Link to="/catalogo?familia=MOD" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
-                Módulos individuales
-              </Link>
-              <Link to="/catalogo?familia=CLIP" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
-                Clips
-              </Link>
-              <Link to="/catalogo?familia=PLT" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
-                Bases
-              </Link>
-            </div>
-          )}
+            Módulos
+          </Link>
           <Link
             to="/nosotros"
             className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
