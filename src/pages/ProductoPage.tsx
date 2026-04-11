@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, Suspense, useMemo } from 'react';
 import * as React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, Loader2 } from 'lucide-react';
@@ -8,6 +8,9 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { fetchProductByHandle, ShopifyProduct } from '@/lib/shopify';
+import { Canvas } from '@react-three/fiber';
+import { useGLTF, Bounds, OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import { useCartStore } from '@/stores/cartStore';
 import {
   Accordion,
@@ -121,204 +124,63 @@ function resolveGlbUrl(
 
 type VariantNode = ShopifyProduct['node']['variants']['edges'][0]['node'];
 
-/* ── NodoViewer ──────────────────────────────────────────── */
+/* ── NodoViewer — Three.js / R3F ─────────────────────────── */
+
+function NodoModel({ url }: { url: string }) {
+  const { scene } = useGLTF(url);
+  const clone = useMemo(() => {
+    const c = scene.clone(true);
+    c.traverse(obj => {
+      const mesh = obj as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      mats.forEach((m: any) => {
+        if (m.roughness !== undefined)       m.roughness = 0.78;
+        if (m.metalness !== undefined)       m.metalness = 0;
+        if (m.envMapIntensity !== undefined) m.envMapIntensity = 0;
+        m.needsUpdate = true;
+      });
+    });
+    return c;
+  }, [scene]);
+
+  return (
+    <Bounds fit clip observe margin={1.1}>
+      <primitive object={clone} />
+    </Bounds>
+  );
+}
 
 function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
-  const canvasRef       = useRef<HTMLCanvasElement>(null);
-  const engineRef       = useRef<any>(null);
-  const sceneRef        = useRef<any>(null);
-  const cameraRef       = useRef<any>(null);
-  const keyLightRef     = useRef<any>(null);
-  const shadowGenRef    = useRef<any>(null);
-  const loadedMeshes    = useRef<any[]>([]);
-  const camState        = useRef<{ alpha: number; beta: number } | null>(null);
-  const idleTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const renderActiveRef = useRef(false);
-  const glbUrlRef       = useRef('');
+  const bg = backgroundColor || '#EDE9E1';
 
-  /* Start/restart the render loop; auto-stops after 2 s of no interaction */
-  const startRendering = () => {
-    const engine = engineRef.current; const scene = sceneRef.current;
-    if (!engine || !scene) return;
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    if (!renderActiveRef.current) {
-      renderActiveRef.current = true;
-      engine.runRenderLoop(() => scene.render());
-    }
-    idleTimerRef.current = setTimeout(() => {
-      engine.stopRenderLoop();
-      renderActiveRef.current = false;
-    }, 2000);
-  };
+  return (
+    <Canvas
+      frameloop="demand"
+      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      camera={{ position: [-5, 4, 5], fov: 38, up: [0, 1, 0] }}
+      style={{ width: '100%', height: '100%', background: bg }}
+    >
+      {/* Warm three-point light rig matching original */}
+      <ambientLight intensity={0.30} color="#F5EEE6" />
+      <directionalLight position={[-5.5, 7.5,  3.6]} intensity={1.9} color="#FFF0D6" />
+      <directionalLight position={[ 7.0, -2.5,  6.5]} intensity={0.42} color="#EBEAE2" />
+      <directionalLight position={[ 2.0, -6.0,  7.8]} intensity={0.28} color="#D1DCFF" />
 
-  /* ── Scene init — runs once ── */
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+      <Suspense fallback={null}>
+        {glbUrl && <NodoModel key={glbUrl} url={glbUrl} />}
+      </Suspense>
 
-    const loadScript = (src: string) => new Promise<void>((res) => {
-      if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
-      const s = document.createElement('script'); s.src = src; s.onload = () => res();
-      document.head.appendChild(s);
-    });
-
-    const init = async () => {
-      if (!(window as any).BABYLON) {
-        await loadScript('https://cdn.babylonjs.com/babylon.js');
-        await loadScript('https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js');
-      }
-
-      const B = (window as any).BABYLON;
-      const engine = new B.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-      engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
-      engineRef.current = engine;
-
-      const scene = new B.Scene(engine);
-      scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
-      scene.ambientColor = new B.Color3(0, 0, 0);
-      sceneRef.current = scene;
-
-      const camera = new B.ArcRotateCamera('cam', Math.PI / 3, 1.35, 10, B.Vector3.Zero(), scene);
-      camera.attachControl(canvas, true);
-      camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
-      cameraRef.current = camera;
-
-      const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.30; hemi.diffuse = new B.Color3(1.0, 0.96, 0.90);
-      hemi.groundColor = new B.Color3(0.32, 0.26, 0.20); hemi.specular = new B.Color3(0, 0, 0);
-
-      const key = new B.DirectionalLight('key', new B.Vector3(-0.55, -0.75, -0.36), scene);
-      key.intensity = 1.9; key.diffuse = new B.Color3(1.0, 0.94, 0.84);
-      key.specular = new B.Color3(0.10, 0.09, 0.07);
-      keyLightRef.current = key;
-
-      const fill = new B.DirectionalLight('fill', new B.Vector3(0.7, -0.25, 0.65), scene);
-      fill.intensity = 0.42; fill.diffuse = new B.Color3(0.92, 0.88, 0.82);
-      fill.specular = new B.Color3(0, 0, 0);
-
-      const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -0.6, 0.78), scene);
-      rim.intensity = 0.28; rim.diffuse = new B.Color3(0.82, 0.87, 1.0);
-      rim.specular = new B.Color3(0, 0, 0);
-
-      /* PCF shadows — 1024 is plenty for a single product viewer */
-      const shadows = new B.ShadowGenerator(1024, key);
-      shadows.usePercentageCloserFiltering = true;
-      shadows.filteringQuality = B.ShadowGenerator.QUALITY_MEDIUM;
-      shadows.bias = 0.0005;
-      shadowGenRef.current = shadows;
-
-      /* Resume rendering on any user interaction */
-      canvas.addEventListener('pointermove', startRendering, { passive: true });
-      canvas.addEventListener('pointerdown', startRendering, { passive: true });
-      const onResize = () => { engine.resize(); startRendering(); };
-      window.addEventListener('resize', onResize);
-
-      // Cleanup stored for unmount
-      (engine as any)._nodoCleanup = () => window.removeEventListener('resize', onResize);
-    };
-
-    init();
-
-    return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      if (cameraRef.current) {
-        camState.current = { alpha: cameraRef.current.alpha, beta: cameraRef.current.beta };
-        cameraRef.current = null;
-      }
-      (engineRef.current as any)?._nodoCleanup?.();
-      engineRef.current?.dispose();
-      engineRef.current = null;
-      sceneRef.current = null;
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  /* ── GLB swap — runs on every URL change ── */
-  useEffect(() => {
-    if (!glbUrl) return;
-    glbUrlRef.current = glbUrl;
-    let cancelled = false;
-
-    const swap = async () => {
-      /* Wait for scene/camera to be ready (init runs async, may still be loading CDN) */
-      let attempts = 0;
-      while ((!sceneRef.current || !cameraRef.current || !(window as any).BABYLON) && attempts < 50) {
-        if (cancelled) return;
-        await new Promise(r => setTimeout(r, 200));
-        attempts++;
-      }
-      if (cancelled) return;
-
-      const B = (window as any).BABYLON;
-      const scene = sceneRef.current;
-      const camera = cameraRef.current;
-      const key = keyLightRef.current;
-      const shadows = shadowGenRef.current;
-      if (!B || !scene || !camera) return;
-
-      /* Dispose previous meshes */
-      loadedMeshes.current.forEach(m => { try { m.dispose(); } catch (_) {} });
-      loadedMeshes.current = [];
-
-      /* Update background */
-      const hex = backgroundColor || '#EDE9E1';
-      scene.clearColor = new B.Color4(
-        parseInt(hex.slice(1,3), 16) / 255,
-        parseInt(hex.slice(3,5), 16) / 255,
-        parseInt(hex.slice(5,7), 16) / 255, 1,
-      );
-
-      try {
-        const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
-        /* Stale check — another swap started before this one finished */
-        if (glbUrlRef.current !== glbUrl) {
-          result.meshes.forEach((m: any) => { try { m.dispose(); } catch (_) {} });
-          return;
-        }
-
-        loadedMeshes.current = result.meshes;
-
-        result.meshes.forEach((mesh: any) => {
-          if (mesh.getTotalVertices() > 0) {
-            shadows?.addShadowCaster(mesh, true);
-            mesh.receiveShadows = true;
-            if (mesh.material) {
-              if (mesh.material.roughness !== undefined)            mesh.material.roughness = 0.78;
-              if (mesh.material.metallic  !== undefined)            mesh.material.metallic  = 0.0;
-              if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
-            }
-          }
-        });
-
-        const bounds = scene.getWorldExtends();
-        const size   = bounds.max.subtract(bounds.min);
-        const center = bounds.min.add(size.scale(0.5));
-        const maxDim = Math.max(size.x, size.y, size.z);
-
-        const lightDist = maxDim * 7;
-        if (key) key.position = new B.Vector3(
-          center.x + 0.55 * lightDist,
-          center.y + 0.75 * lightDist,
-          center.z + 0.36 * lightDist,
-        );
-
-        camera.target = center;
-        camera.radius = maxDim * 3.8;
-        camera.alpha  = camState.current ? camState.current.alpha : Math.PI / 3;
-        camera.beta   = camState.current ? camState.current.beta  : 1.35;
-        camera.lowerRadiusLimit = camera.radius;
-        camera.upperRadiusLimit = camera.radius;
-        camera.lowerBetaLimit   = 0.35;
-        camera.upperBetaLimit   = 1.48;
-      } catch (e) { console.error('Babylon load error', e); }
-
-      startRendering();
-    };
-
-    swap();
-    return () => { cancelled = true; };
-  }, [glbUrl, backgroundColor]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />;
+      <OrbitControls
+        makeDefault
+        enablePan={false}
+        enableZoom={false}
+        minPolarAngle={0.35}
+        maxPolarAngle={1.48}
+        rotateSpeed={0.7}
+      />
+    </Canvas>
+  );
 }
 
 /* ── Component ───────────────────────────────────────────── */
