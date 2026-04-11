@@ -321,7 +321,7 @@ export default function ProductoPage() {
 
     const built: { name: string; value: string }[] = [];
     if (names.includes('Interior')) built.push({ name: 'Interior', value: selectedInterior });
-    if (names.includes('Tirador')) built.push({ name: 'Tirador', value: selectedApertura });
+    /* Tirador is NOT a Shopify variant — it's a cart line-item property */
     if (names.includes('Panel trasero')) built.push({ name: 'Panel trasero', value: selectedPanel });
     if (names.includes('Color')) built.push({ name: 'Color', value: COLOR_NAME_MAP[selectedColor.code] });
     if (names.includes('Acabado')) built.push({ name: 'Acabado', value: selectedAcabado });
@@ -345,13 +345,18 @@ export default function ProductoPage() {
   /* Add to cart */
   const handleAddToCart = async () => {
     if (!product || !selectedVariant) return;
+    const hasDoor = selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa';
+    const isSingleDoor = hasSingleDoor && hasDoor;
+    const extraOptions = isSingleDoor
+      ? [...(selectedVariant.selectedOptions || []), { name: 'Tirador', value: selectedApertura }]
+      : selectedVariant.selectedOptions || [];
     await addItem({
       product: { node: product },
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
       quantity: 1,
-      selectedOptions: selectedVariant.selectedOptions || [],
+      selectedOptions: extraOptions,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 1500);
