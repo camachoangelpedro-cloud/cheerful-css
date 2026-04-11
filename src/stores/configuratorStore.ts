@@ -77,6 +77,7 @@ interface ConfigStore {
   selectedColorCode: string;
   undoStack: PlacedModule[][];
   redoStack: PlacedModule[][];
+  clfQuantities: Record<string, number>;
 
   setDragHandle: (h: string | null) => void;
   setColorCode: (code: string) => void;
@@ -88,6 +89,7 @@ interface ConfigStore {
   undo: () => void;
   redo: () => void;
   reset: () => void;
+  setClfQuantity: (handle: string, qty: number) => void;
   getTotalPrice: () => number;
   getModuleSummary: () => ModuleSummaryItem[];
 }
@@ -105,6 +107,7 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   placedModules: [],
   selectedId: null,
   dragHandle: null,
+  clfQuantities: {},
   selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
@@ -230,12 +233,24 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       redoStack: [],
       placedModules: [],
       selectedId: null,
+      clfQuantities: {},
     });
   },
 
+  setClfQuantity: (handle, qty) => {
+    const updated = { ...get().clfQuantities };
+    if (qty <= 0) delete updated[handle];
+    else updated[handle] = qty;
+    set({ clfQuantities: updated });
+  },
+
   getTotalPrice: () => {
-    const { placedModules } = get();
-    return placedModules.reduce((sum, m) => {
+    const { placedModules, clfQuantities } = get();
+    const clfTotal = Object.entries(clfQuantities).reduce((sum, [handle, qty]) => {
+      const product = NODO_PRODUCTS.find(p => p.handle === handle);
+      return sum + (product?.variants[0]?.price ?? 0) * qty;
+    }, 0);
+    return clfTotal + placedModules.reduce((sum, m) => {
       const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!product) return sum;
       const variant = product.variants.find(v =>

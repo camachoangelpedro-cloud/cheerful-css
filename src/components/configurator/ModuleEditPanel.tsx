@@ -4,9 +4,9 @@ import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 
 /* Single-door handles — the ones that have a tirador (handle) direction */
-const SINGLE_DOOR_HANDLES = ['modulo-36-36', 'modulo-36-72'];
+const SINGLE_DOOR_HANDLES = ['modulo-36-36', 'modulo-36-72', 'modh-36-36'];
 /* Handles that have AP (pasacables) GLB variants */
-const PASACABLES_HANDLES  = ['modulo-36-36', 'modulo-36-72', 'modulo-72-36', 'modulo-72-72'];
+const PASACABLES_HANDLES  = ['modulo-36-36', 'modulo-36-72', 'modulo-72-36', 'modulo-72-72', 'modh-36-36', 'modh-72-24'];
 
 /* SVG icons matching product page */
 const PanelConSvg = () => (

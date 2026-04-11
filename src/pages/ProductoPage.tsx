@@ -19,30 +19,34 @@ import {
 /* ── Constants ───────────────────────────────────────────── */
 
 const NODO_COLORS = [
-  { code: 'BH', name: 'Blanco Hueso', hex: '#F2EDE4' },
+  { code: 'BH', name: 'Blanco Hueso',  hex: '#F2EDE4' },
   { code: 'RO', name: 'Roble Natural', hex: '#D4B896' },
-  { code: 'SA', name: 'Salvia', hex: '#8FAF8C' },
-  { code: 'AC', name: 'Acero', hex: '#6B8E9F' },
+  { code: 'VA', name: 'Verde Agua',    hex: '#87B5A2' },
+  { code: 'AF', name: 'Antracita',     hex: '#4D5866' },
 ];
 
 const COLOR_NAME_MAP: Record<string, string> = {
   BH: 'Blanco Hueso',
   RO: 'Roble Natural',
-  SA: 'Salvia',
-  AC: 'Acero',
+  VA: 'Verde Agua',
+  AF: 'Antracita',
 };
 
 const DIMENSION_MAP: Record<string, string> = {
-  'Módulo 36×18': '36 × 18 × 36 cm',
-  'Módulo 36×24': '36 × 24 × 36 cm',
-  'Módulo 36×36': '36 × 36 × 36 cm',
-  'Módulo 36×72': '36 × 72 × 36 cm',
-  'Módulo 72×18': '72 × 18 × 36 cm',
-  'Módulo 72×24': '72 × 24 × 36 cm',
-  'Módulo 72×36': '72 × 36 × 36 cm',
-  'Módulo 72×72': '72 × 72 × 36 cm',
-  'Base 36×36': '36 × 36 cm',
-  'Base 72×36': '72 × 36 cm',
+  'Módulo 36×18':   '36 × 18 × 36 cm',
+  'Módulo 36×24':   '36 × 24 × 36 cm',
+  'Módulo 36×36':   '36 × 36 × 36 cm',
+  'Módulo 36×72':   '36 × 72 × 36 cm',
+  'Módulo 72×18':   '72 × 18 × 36 cm',
+  'Módulo 72×24':   '72 × 24 × 36 cm',
+  'Módulo 72×36':   '72 × 36 × 36 cm',
+  'Módulo 72×72':   '72 × 72 × 36 cm',
+  'Módulo H 36×18': '36 × 18 × 18 cm',
+  'Módulo H 36×24': '36 × 24 × 18 cm',
+  'Módulo H 36×36': '36 × 36 × 18 cm',
+  'Módulo H 72×24': '72 × 24 × 18 cm',
+  'Base 36×36':     '36 × 36 cm',
+  'Base 72×36':     '72 × 36 cm',
 };
 
 type ProductType = 'TYPE_FULL' | 'TYPE_PANEL' | 'TYPE_COLOR' | 'TYPE_ACABADO' | 'TYPE_SINGLE';
@@ -73,51 +77,45 @@ function resolveGlbUrl(
   cableHole: boolean,
   colorCode: string
 ): string {
-  const sinPanel = panel === 'Sin panel';
+  const panelCode = panel === 'Sin panel' ? 'O' : 'B';
+  const ap        = cableHole && panelCode === 'B';
+  const apSuffix  = ap ? '_AP' : '';
 
-  let intCode = 'A';
-  if (interior === 'Con repisa')          intCode = 'S';
-  if (interior === 'Con puerta')          intCode = 'D';
-  if (interior === 'Con puerta y repisa') intCode = 'DS';
+  /* PLT bases */
+  const PLT_MAP: Record<string, string> = {
+    'base-36-36': 'PLT_1X1',
+    'base-72-36': 'PLT_2X1',
+  };
+  if (PLT_MAP[handle]) return `${GITHUB_BASE}/${PLT_MAP[handle]}_${colorCode}.glb`;
 
-  const panelCode = sinPanel ? 'O' : 'B';
-
-  const singleDoorHandles = ['modulo-36-36', 'modulo-36-72'];
-  const hasSingleDoor = singleDoorHandles.includes(handle);
-
-  const tiradorSuffix = (hasSingleDoor && (interior === 'Con puerta' || interior === 'Con puerta y repisa'))
-    ? (apertura === 'Izquierda' ? '-IZQ' : '-DER')
-    : '';
-
-  const apSuffix = (!sinPanel && cableHole) ? '-AP' : '';
+  /* 72×72 special case — double door */
+  if (handle === 'modulo-72-72') {
+    return `${GITHUB_BASE}/MOD_2X2_DD_B${apSuffix}_${colorCode}.glb`;
+  }
 
   const SIZE_MAP: Record<string, string> = {
-    'modulo-36-18': '1X05',
-    'modulo-36-24': '1X07',
-    'modulo-36-36': '1X1',
-    'modulo-36-72': '1X2',
-    'modulo-72-18': '2X05',
-    'modulo-72-24': '2X07',
+    'modulo-36-18': '1X05', 'modulo-36-24': '1X07', 'modulo-36-36': '1X1',
+    'modulo-36-72': '1X2',  'modulo-72-18': '2X05', 'modulo-72-24': '2X07',
     'modulo-72-36': '2X1',
-    'modulo-72-72': '2X2',
-    'base-36-36':   'PLT-1X1',
-    'base-72-36':   'PLT-2X1',
+    'modulo-h-36-18': '1X05', 'modulo-h-36-24': '1X07', 'modulo-h-36-36': '1X1',
+    'modulo-h-72-24': '2X07',
   };
-
   const sizeCode = SIZE_MAP[handle];
   if (!sizeCode) return '';
 
-  if (handle.startsWith('base-')) {
-    return `${GITHUB_BASE}/${sizeCode}-${colorCode}.glb`;
-  }
+  const prefix = handle.startsWith('modulo-h-') ? 'MODH' : 'MOD';
 
-  if (handle === 'modulo-72-72') {
-    const ap = cableHole ? '.AP' : '';
-    return `${GITHUB_BASE}/MOD-2X2-DD-B${ap}-${colorCode}.glb`;
-  }
+  let intCode = 'A';
+  if (interior === 'Con repisa')                                          intCode = 'S';
+  else if (interior === 'Con puerta' || interior === 'Con puerta y repisa') intCode = 'D';
 
-  const skuBase = `MOD-${sizeCode}-${intCode === 'DS' ? 'D' : intCode}-${panelCode}${tiradorSuffix}${apSuffix}`;
-  return `${GITHUB_BASE}/${skuBase}-${colorCode}.glb`;
+  const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72', 'modulo-h-36-36'];
+  const hasDoor = intCode === 'D';
+  const tiradorSuffix = (SINGLE_DOOR.includes(handle) && hasDoor)
+    ? (apertura === 'Izquierda' ? '_IZQ' : '_DER')
+    : '';
+
+  return `${GITHUB_BASE}/${prefix}_${sizeCode}_${intCode}_${panelCode}${tiradorSuffix}${apSuffix}_${colorCode}.glb`;
 }
 
 

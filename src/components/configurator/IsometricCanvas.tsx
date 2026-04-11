@@ -10,41 +10,44 @@ function resolveModuleGlb(
   handle: string, colorCode: string, interior: string, panel: string, apertura: string,
   pasacables: boolean,
 ): string {
-  let intCode = 'A';
-  if (interior === 'Con repisa')               intCode = 'S';
-  else if (interior === 'Con puerta')          intCode = 'D';
-  else if (interior === 'Con puerta y repisa') intCode = 'DS';
-
   const panelCode = panel === 'Sin panel' ? 'O' : 'B';
   const ap        = pasacables && panelCode === 'B';
+  const apSuffix  = ap ? '_AP' : '';
+
+  /* PLT bases */
+  const PLT_MAP: Record<string, string> = {
+    'base-36-36': 'PLT_1X1',
+    'base-72-36': 'PLT_2X1',
+  };
+  if (PLT_MAP[handle]) return `${GITHUB_BASE}/${PLT_MAP[handle]}_${colorCode}.glb`;
+
+  /* 72×72 special case — double door */
+  if (handle === 'modulo-72-72') {
+    return `${GITHUB_BASE}/MOD_2X2_DD_B${apSuffix}_${colorCode}.glb`;
+  }
 
   const SIZE_MAP: Record<string, string> = {
     'modulo-36-18': '1X05', 'modulo-36-24': '1X07', 'modulo-36-36': '1X1',
     'modulo-36-72': '1X2',  'modulo-72-18': '2X05', 'modulo-72-24': '2X07',
-    'modulo-72-36': '2X1',  'modulo-72-72': '2X2',
-    'base-36-36': 'PLT-1X1', 'base-72-36': 'PLT-2X1',
+    'modulo-72-36': '2X1',
+    'modh-36-18':  '1X05',  'modh-36-24':  '1X07',  'modh-36-36':  '1X1',
+    'modh-72-24':  '2X07',
   };
   const sizeCode = SIZE_MAP[handle];
   if (!sizeCode) return '';
-  if (handle.startsWith('base-')) return `${GITHUB_BASE}/${sizeCode}-${colorCode}.glb`;
 
-  /* 72×72 uses dot notation for AP: MOD-2X2-DD-B.AP-{color}.glb */
-  if (handle === 'modulo-72-72') {
-    return ap
-      ? `${GITHUB_BASE}/MOD-2X2-DD-B.AP-${colorCode}.glb`
-      : `${GITHUB_BASE}/MOD-2X2-DD-B-${colorCode}.glb`;
-  }
+  const prefix = handle.startsWith('modh-') ? 'MODH' : 'MOD';
 
-  const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72'];
-  const hasDoor      = interior === 'Con puerta' || interior === 'Con puerta y repisa';
+  let intCode = 'A';
+  if (interior === 'Con repisa')                                        intCode = 'S';
+  else if (interior === 'Con puerta' || interior === 'Con puerta y repisa') intCode = 'D';
+
+  const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72', 'modh-36-36'];
+  const hasDoor = intCode === 'D';
   const tiradorSuffix = (SINGLE_DOOR.includes(handle) && hasDoor && apertura)
-    ? `-${apertura}` : '';
-  const apSuffix      = ap ? '-AP' : '';
+    ? `_${apertura}` : '';
 
-  /* ProductoPage maps DS → D in filename */
-  const fileIntCode = intCode === 'DS' ? 'D' : intCode;
-
-  return `${GITHUB_BASE}/MOD-${sizeCode}-${fileIntCode}-${panelCode}${tiradorSuffix}${apSuffix}-${colorCode}.glb`;
+  return `${GITHUB_BASE}/${prefix}_${sizeCode}_${intCode}_${panelCode}${tiradorSuffix}${apSuffix}_${colorCode}.glb`;
 }
 
 /* Visual hash to detect property changes that require GLB reload */
