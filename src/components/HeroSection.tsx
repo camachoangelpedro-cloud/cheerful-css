@@ -11,20 +11,6 @@ const heroSlides = [
     link: '/configurador',
     cta: 'Configura'
   },
-  {
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&q=80',
-    title: 'Módulos',
-    subtitle: 'Discover all',
-    link: '/configurador',
-    cta: 'Configura'
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80',
-    title: 'Sistema 02',
-    subtitle: 'Discover all',
-    link: '/configurador',
-    cta: 'Configura'
-  },
 ];
 
 export function HeroSection() {
