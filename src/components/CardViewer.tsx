@@ -57,8 +57,8 @@ export function CardViewer({ glbUrl, bg = '#F2EDE4' }: CardViewerProps) {
         <Canvas
           frameloop="demand"
           gl={{ antialias: true, preserveDrawingBuffer: true }}
-          /* Front-left-above axonometric angle */
-          camera={{ position: [-5, 4, 5], fov: 40, up: [0, 1, 0] }}
+          /* From above-left — elevated 50°, left side */
+          camera={{ position: [-5, 8, 5], fov: 40, up: [0, 1, 0] }}
           style={{ width: '100%', height: '100%', background: bg }}
         >
           <ambientLight intensity={0.45} color="#FFF5E8" />
