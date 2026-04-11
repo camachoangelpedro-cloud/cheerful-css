@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const heroSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80',
+    image: '/hero-banner.png',
     title: 'Sistema 01',
     subtitle: 'Discover all',
     link: '/configurador',
