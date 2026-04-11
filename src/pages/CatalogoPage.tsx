@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
+import { CardViewer, defaultGlb } from '@/components/CardViewer';
 
 const COP = (n: number) => 'COP $' + n.toLocaleString('es-CO');
 
@@ -18,12 +19,12 @@ function ProductCard({ product }: { product: typeof NODO_PRODUCTS[number] }) {
   return (
     <Link to={`/producto/${product.handle}`} className="block group">
 
-      {/* Image area */}
-      <div className="aspect-square overflow-hidden relative" style={{ backgroundColor: '#EFEFED' }}>
-        {/* Placeholder content */}
-        <div className="absolute inset-0 flex items-center justify-center p-[8%]">
-          <span className="text-xs" style={{ color: '#9E9E9C' }}>{product.title}</span>
-        </div>
+      {/* Image area — 3D viewer */}
+      <div
+        className="aspect-square overflow-hidden relative"
+        style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+      >
+        <CardViewer glbUrl={defaultGlb(product.handle)} bg="#F2EDE4" />
         {/* Wishlist — hover only */}
         <button
           className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
@@ -127,8 +128,8 @@ export default function CatalogoPage() {
             </button>
           </div>
 
-          {/* Product grid — 4 cols desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-24">
+          {/* Product grid — 3 cols desktop */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 pb-24">
             {CATALOGUE_PRODUCTS.map(product => (
               <ProductCard key={product.handle} product={product} />
             ))}
