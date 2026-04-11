@@ -40,7 +40,7 @@ export function HeroSection() {
         >
           <div 
             className="absolute inset-0 bg-cover"
-            style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')`, backgroundPosition: '60% center' }}
+            style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')`, backgroundPosition: '70% center' }}
           />
           <div className="absolute inset-0 bg-black/20" />
         </motion.div>
