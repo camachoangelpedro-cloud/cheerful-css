@@ -21,15 +21,15 @@ import {
 const NODO_COLORS = [
   { code: 'BH', name: 'Blanco Hueso',  hex: '#F2EDE4' },
   { code: 'RO', name: 'Roble Natural', hex: '#D4B896' },
-  { code: 'VA', name: 'Verde Agua',    hex: '#87B5A2' },
-  { code: 'AF', name: 'Antracita',     hex: '#4D5866' },
+  { code: 'VA', name: 'Verde Agave',   hex: '#7A9080' },
+  { code: 'AF', name: 'Azul Fes',      hex: '#2E3B6E' },
 ];
 
 const COLOR_NAME_MAP: Record<string, string> = {
   BH: 'Blanco Hueso',
   RO: 'Roble Natural',
-  VA: 'Verde Agua',
-  AF: 'Antracita',
+  VA: 'Verde Agave',
+  AF: 'Azul Fes',
 };
 
 const DIMENSION_MAP: Record<string, string> = {

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { NODO_PRODUCTS } from '@/data/modulesCatalog';
+import { NODO_PRODUCTS, STRUCTURAL_CLIP_PRICE } from '@/data/modulesCatalog';
 
 /* ── Types ────────────────────────────────────────────────── */
 
@@ -90,6 +90,7 @@ interface ConfigStore {
   redo: () => void;
   reset: () => void;
   setClfQuantity: (handle: string, qty: number) => void;
+  getStructuralClipCount: () => number;
   getTotalPrice: () => number;
   getModuleSummary: () => ModuleSummaryItem[];
 }
@@ -244,13 +245,27 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
     set({ clfQuantities: updated });
   },
 
+  getStructuralClipCount: () => {
+    const { placedModules } = get();
+    const moduleCount = placedModules.filter(m => {
+      const p = NODO_PRODUCTS.find(pp => pp.handle === m.handle);
+      return p && (p.family === 'MOD' || p.family === 'MODH');
+    }).length;
+    return moduleCount >= 2 ? moduleCount * 2 : 0;
+  },
+
   getTotalPrice: () => {
     const { placedModules, clfQuantities } = get();
     const clfTotal = Object.entries(clfQuantities).reduce((sum, [handle, qty]) => {
       const product = NODO_PRODUCTS.find(p => p.handle === handle);
       return sum + (product?.variants[0]?.price ?? 0) * qty;
     }, 0);
-    return clfTotal + placedModules.reduce((sum, m) => {
+    const moduleCount = placedModules.filter(m => {
+      const p = NODO_PRODUCTS.find(pp => pp.handle === m.handle);
+      return p && (p.family === 'MOD' || p.family === 'MODH');
+    }).length;
+    const clipTotal = moduleCount >= 2 ? moduleCount * 2 * STRUCTURAL_CLIP_PRICE : 0;
+    return clfTotal + clipTotal + placedModules.reduce((sum, m) => {
       const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!product) return sum;
       const variant = product.variants.find(v =>
