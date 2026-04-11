@@ -174,7 +174,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       engineRef.current = engine;
 
       const scene = new B.Scene(engine);
-      scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
+      scene.clearColor = new B.Color4(0.925, 0.918, 0.906, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
       sceneRef.current = scene;
 
@@ -557,11 +557,7 @@ export default function ProductoPage() {
 
   const relatedProducts = NODO_PRODUCTS.filter(p => p.handle !== handle).slice(0, 6);
 
-  /* Colour-tinted viewer background */
-  const VIEWER_BG: Record<string, string> = {
-    BH: '#F2EDE4', RO: '#F5EDE0', VA: '#EFF3F0', AF: '#EDF0F5',
-  };
-  const viewerBg = VIEWER_BG[selectedColor.code] ?? '#F2EDE4';
+  const viewerBg = '#ECEAE7';
 
   return (
     <div className="min-h-screen bg-background">
