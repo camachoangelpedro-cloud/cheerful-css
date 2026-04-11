@@ -6,58 +6,42 @@
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 100; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 300; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Book.woff2') format('woff2');
-  font-weight: 350;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 350; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+  font-weight: 400; font-style: italic; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Semibold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -70,11 +54,11 @@
   --nodo-salvia: 116 16% 62%;         /* #8FAF8C */
   --nodo-acero: 200 20% 52%;          /* #6B8E9F */
 
-  /* Semantic tokens mapped to NODO palette */
-  --background: 60 14% 95%;           /* #FAFAF8 */
+  /* Semantic tokens */
+  --background: 35 33% 92%;           /* #F2EDE4 — Blanco Hueso */
   --foreground: 0 0% 11%;             /* #1C1C1A */
 
-  --card: 35 33% 92%;
+  --card: 60 3% 94%;                  /* #EFEFED */
   --card-foreground: 0 0% 11%;
 
   --popover: 35 33% 92%;
@@ -87,7 +71,7 @@
   --secondary-foreground: 0 0% 11%;
 
   --muted: 32 27% 77%;
-  --muted-foreground: 0 0% 35%;
+  --muted-foreground: 0 0% 37%;       /* #5F5E5A */
 
   --accent: 116 16% 62%;
   --accent-foreground: 0 0% 11%;
@@ -95,8 +79,8 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 32 20% 82%;
-  --input: 32 20% 82%;
+  --border: 35 15% 82%;
+  --input: 35 15% 82%;
   --ring: 0 0% 11%;
 
   --radius: 0;
@@ -142,7 +126,6 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
   --radius-sm: 0;
   --radius-md: 0;
   --radius-lg: 0;
@@ -150,51 +133,97 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
 
-  html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-  }
+  html { scroll-behavior: smooth; font-size: 16px; }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'PP Neue Montreal', system-ui, sans-serif;
     font-weight: 400;
-    line-height: 1.6;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: 0;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'PP Neue Montreal', sans-serif;
     font-weight: 500;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.1;
+    letter-spacing: 0;
   }
 
-  /* Hide scrollbar for carousels */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
+  /* Hide all scrollbars */
+  * {
     scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  *::-webkit-scrollbar { display: none; }
 
-  /* Clean scrollbar for main scroll */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
+  /* Hide scrollbar utility */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
 
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
-  }
+/* ── Colour swatches ─────────────────────────────────────── */
+.color-swatch {
+  border-radius: 50%;
+  border: 1px solid transparent;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: outline-offset 150ms ease, outline 150ms ease;
+  flex-shrink: 0;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--border));
-  }
+/* Light swatch (BH) needs a barely-visible edge */
+.color-swatch--light {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.color-swatch.selected,
+.color-swatch[aria-checked="true"] {
+  outline: 2px solid #1C1C1A;
+  outline-offset: 3px;
+  border: 1px solid transparent;
+}
+
+.color-swatch:not(.selected):not([aria-checked="true"]):hover {
+  outline: 2px solid rgba(28, 28, 26, 0.30);
+  outline-offset: 3px;
+}
+
+/* ── Accordion — border-top only, +/- toggle ─────────────── */
+.nodo-accordion [data-radix-accordion-item] {
+  border-top: 1px solid rgba(0, 0, 0, 0.10);
+  border-bottom: none !important;
+}
+
+.nodo-accordion [data-radix-accordion-trigger] {
+  padding: 16px 0;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Hide the default chevron, replace with +/- */
+.nodo-accordion [data-radix-accordion-trigger] > svg {
+  display: none !important;
+}
+
+.nodo-accordion [data-radix-accordion-trigger]::after {
+  content: '+';
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+  color: #1C1C1A;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+.nodo-accordion [data-radix-accordion-trigger][data-state="open"]::after {
+  content: '−';
 }
 
 @layer components {
@@ -205,36 +234,37 @@
   .nodo-heading-xl {
     font-family: 'PP Neue Montreal', sans-serif;
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     @apply text-4xl md:text-5xl lg:text-6xl;
   }
 
   .nodo-heading-lg {
     font-family: 'PP Neue Montreal', sans-serif;
     font-weight: 500;
-    letter-spacing: -0.025em;
+    letter-spacing: 0;
     @apply text-3xl md:text-4xl;
   }
 
   .nodo-body {
     font-family: 'PP Neue Montreal', sans-serif;
-    font-weight: 300;
-    letter-spacing: -0.005em;
+    font-weight: 400;
+    letter-spacing: 0;
     @apply text-sm md:text-base leading-relaxed;
   }
 
   .nodo-caption {
     font-family: 'PP Neue Montreal', sans-serif;
     font-weight: 400;
-    @apply text-xs tracking-wide uppercase;
+    letter-spacing: 0;
+    @apply text-xs;
   }
 
   .nodo-button {
-    @apply bg-foreground text-background px-8 py-3 text-sm tracking-wide transition-all duration-300 hover:opacity-90;
+    @apply bg-foreground text-background px-8 py-3 text-sm transition-all duration-200 hover:opacity-90;
   }
 
   .nodo-button-outline {
-    @apply border border-foreground/30 px-8 py-3 text-sm tracking-wide transition-all duration-300 hover:bg-foreground hover:text-background;
+    @apply border border-foreground/30 px-8 py-3 text-sm transition-all duration-200 hover:bg-foreground hover:text-background;
   }
 
   @keyframes marquee {
@@ -257,7 +287,5 @@
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 }
