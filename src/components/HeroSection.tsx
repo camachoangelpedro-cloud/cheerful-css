@@ -39,8 +39,8 @@ export function HeroSection() {
           className="absolute inset-0"
         >
           <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')` }}
+            className="absolute inset-0 bg-cover"
+            style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')`, backgroundPosition: '60% center' }}
           />
           <div className="absolute inset-0 bg-black/20" />
         </motion.div>
