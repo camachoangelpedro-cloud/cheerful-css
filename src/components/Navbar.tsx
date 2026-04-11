@@ -28,22 +28,10 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* Announcement Bar */}
-      <div className="overflow-hidden py-2" style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}>
-        <div className="animate-marquee whitespace-nowrap flex">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex shrink-0">
-              <span className="mx-10 text-xs font-light" style={{ letterSpacing: 0 }}>
-                Envío gratis en pedidos superiores a $500.000 COP
-              </span>
-              <span className="mx-10 text-xs font-light" style={{ letterSpacing: 0 }}>
-                Diseño modular, fabricación colombiana
-              </span>
-              <span className="mx-10 text-xs font-light" style={{ letterSpacing: 0 }}>
-                Ensamblaje sin herramientas
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="py-2 flex items-center justify-center" style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}>
+        <span className="text-xs font-light" style={{ letterSpacing: 0 }}>
+          Diseño Modular · Plug &amp; Play · Ensamblaje sin Herramientas · Hecho en Colombia
+        </span>
       </div>
 
       {/* Main Nav */}
@@ -150,21 +138,20 @@ export function Navbar() {
                   Módulos individuales
                 </Link>
                 <Link
+                  to="/catalogo?familia=CLIP"
+                  onClick={close}
+                  className="py-2 text-sm text-[#5F5E5A] hover:text-foreground transition-colors pl-5"
+                  style={{ letterSpacing: 0 }}
+                >
+                  Clips
+                </Link>
+                <Link
                   to="/catalogo?familia=PLT"
                   onClick={close}
                   className="py-2 text-sm text-[#5F5E5A] hover:text-foreground transition-colors pl-5"
                   style={{ letterSpacing: 0 }}
                 >
                   Bases
-                </Link>
-                <div className="h-px my-3 -ml-10 w-48" style={{ backgroundColor: 'rgba(0,0,0,0.08)' }} />
-                <Link
-                  to="/catalogo?familia=CLIP"
-                  onClick={close}
-                  className="py-2.5 text-sm font-medium text-foreground hover:opacity-60 transition-opacity"
-                  style={{ letterSpacing: 0 }}
-                >
-                  Clips
                 </Link>
               </div>
             </div>
@@ -217,12 +204,11 @@ export function Navbar() {
               <Link to="/catalogo?familia=MOD" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
                 Módulos individuales
               </Link>
+              <Link to="/catalogo?familia=CLIP" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
+                Clips
+              </Link>
               <Link to="/catalogo?familia=PLT" className="text-base text-[#5F5E5A] pl-4 py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
                 Bases
-              </Link>
-              <div className="h-px my-1" style={{ backgroundColor: 'rgba(0,0,0,0.08)' }} />
-              <Link to="/catalogo?familia=CLIP" className="text-base text-foreground py-1" style={{ letterSpacing: 0 }} onClick={() => setMobileOpen(false)}>
-                Clips
               </Link>
             </div>
           )}
