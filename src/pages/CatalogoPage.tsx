@@ -13,59 +13,81 @@ const COP = (n: number) => 'COP $' + n.toLocaleString('es-CO');
 const CATALOGUE_PRODUCTS = NODO_PRODUCTS.filter(p => p.family !== 'CLF');
 
 function ProductCard({ product }: { product: typeof NODO_PRODUCTS[number] }) {
-  const [hoveredColor, setHoveredColor] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState('BH');
+  const [hoveredColor, setHoveredColor]   = useState<string | null>(null);
   const startingPrice = getStartingPrice(product);
+  const activeColor   = NODO_COLORS.find(c => c.id === selectedColor);
 
   return (
     <Link to={`/producto/${product.handle}`} className="block group">
 
-      {/* Image area — 3D viewer */}
+      {/* 3D viewer — 4:5 aspect for taller cards */}
       <div
-        className="aspect-square overflow-hidden relative"
-        style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+        className="w-full overflow-hidden relative"
+        style={{ backgroundColor: '#F2EDE4', borderRadius: '8px', aspectRatio: '4/5' }}
       >
-        <CardViewer glbUrl={defaultGlb(product.handle)} bg="#F2EDE4" />
-        {/* Wishlist — hover only */}
-        <button
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          onClick={e => e.preventDefault()}
-          aria-label="Guardar"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1A" strokeWidth="1.5" className="w-[18px] h-[18px]">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-        </button>
+        <CardViewer glbUrl={defaultGlb(product.handle, selectedColor)} bg="#F2EDE4" />
       </div>
 
-      {/* Swatches */}
-      <div className="flex items-center gap-[6px] pt-[10px] px-3">
+      {/* Swatches — click to change color + viewer */}
+      <div
+        className="flex items-center gap-[6px] pt-3 px-1"
+        onClick={e => e.preventDefault()}
+      >
         {NODO_COLORS.map(color => (
           <button
             key={color.id}
             onMouseEnter={() => setHoveredColor(color.name)}
             onMouseLeave={() => setHoveredColor(null)}
-            onClick={e => e.preventDefault()}
+            onClick={e => { e.preventDefault(); setSelectedColor(color.id); }}
             aria-label={color.name}
-            className={`color-swatch w-6 h-6 ${color.id === 'BH' ? 'color-swatch--light' : ''}`}
+            className={`color-swatch w-5 h-5 ${color.id === 'BH' ? 'color-swatch--light' : ''} ${color.id === selectedColor ? 'selected' : ''}`}
             style={{ backgroundColor: color.hex }}
           />
         ))}
+        {hoveredColor && (
+          <span className="ml-1 text-[11px]" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
+            {hoveredColor}
+          </span>
+        )}
       </div>
 
       {/* Text info */}
-      <div className="px-3 pt-1 pb-3">
+      <div className="px-1 pt-2 pb-1">
         <p
-          className="text-sm font-normal leading-snug transition-colors duration-200"
-          style={{ color: '#1C1C1A', letterSpacing: 0 }}
+          className="leading-tight"
+          style={{ fontSize: '13px', fontWeight: 300, color: '#1C1C1A', letterSpacing: 0 }}
         >
-          {hoveredColor ?? product.title}
+          {product.title}
         </p>
         <p
-          className="text-sm font-medium mt-0.5"
-          style={{ color: '#1C1C1A', letterSpacing: 0 }}
+          className="mt-0.5"
+          style={{ fontSize: '12px', fontWeight: 400, color: '#9E9E9C', letterSpacing: 0 }}
         >
           Desde {COP(startingPrice)}
         </p>
+        {hoveredColor && (
+          <p style={{ fontSize: '11px', color: '#9E9E9C', letterSpacing: 0, marginTop: '2px' }}>
+            {hoveredColor}
+          </p>
+        )}
+      </div>
+
+      {/* Personalizar CTA */}
+      <div
+        className="mx-1 mt-2 mb-1 flex items-center justify-center transition-opacity duration-200 group-hover:opacity-90"
+        style={{
+          backgroundColor: '#1C1C1A',
+          color: '#FFFFFF',
+          borderRadius: '999px',
+          padding: '9px 16px',
+          fontSize: '11px',
+          fontWeight: 400,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+        }}
+      >
+        Personalizar
       </div>
 
     </Link>
@@ -83,15 +105,15 @@ export default function CatalogoPage() {
         {/* Breadcrumb */}
         <div className="nodo-container pt-6">
           <p style={{ fontSize: '10px', color: '#9E9E9C', letterSpacing: 0 }}>
-            Todos los productos
+            Todos los módulos
           </p>
         </div>
 
-        {/* Category header — H1 left, description right */}
+        {/* Category header */}
         <div className="nodo-container pt-5 pb-10 flex items-start justify-between gap-12">
           <h1
-            className="text-4xl font-medium shrink-0"
-            style={{ letterSpacing: 0, lineHeight: 1.1 }}
+            className="text-4xl shrink-0"
+            style={{ fontWeight: 300, letterSpacing: 0, lineHeight: 1.1 }}
           >
             Catálogo
           </h1>
@@ -128,7 +150,7 @@ export default function CatalogoPage() {
             </button>
           </div>
 
-          {/* Product grid — 3 cols desktop */}
+          {/* Product grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 pb-24">
             {CATALOGUE_PRODUCTS.map(product => (
               <ProductCard key={product.handle} product={product} />
