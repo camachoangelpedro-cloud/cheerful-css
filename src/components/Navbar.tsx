@@ -38,7 +38,7 @@ export function Navbar() {
       <nav
         className="h-[60px] transition-all duration-200"
         style={{
-          backgroundColor: scrolled ? '#FFFFFF' : '#F2EDE4',
+          backgroundColor: scrolled ? '#FFFFFF' : '#FAFAF8',
           boxShadow: scrolled ? '0 1px 0 rgba(0,0,0,0.08)' : 'none',
         }}
       >
@@ -114,7 +114,7 @@ export function Navbar() {
           <div
             className="relative z-40 border-b px-8 lg:px-16 py-10 transition-colors duration-200"
             style={{
-              backgroundColor: scrolled ? '#FFFFFF' : '#F2EDE4',
+              backgroundColor: scrolled ? '#FFFFFF' : '#FAFAF8',
               borderColor: 'rgba(0,0,0,0.08)',
             }}
           >
@@ -164,7 +164,7 @@ export function Navbar() {
         className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
           mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
-        style={{ backgroundColor: '#F2EDE4' }}
+        style={{ backgroundColor: '#FAFAF8' }}
       >
         <div className="flex items-center justify-between px-8 h-[60px]">
           <Link
