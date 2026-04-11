@@ -77,8 +77,8 @@ export function CardViewer({ glbUrl, bg = '#F2EDE4' }: CardViewerProps) {
       );
       sceneRef.current = scene;
 
-      /* Fixed camera — static product view, no user interaction */
-      const camera = new B.ArcRotateCamera('cam', Math.PI / 3, 1.35, 10, B.Vector3.Zero(), scene);
+      /* Fixed camera — axonometric front-left corner view, consistent across all modules */
+      const camera = new B.ArcRotateCamera('cam', -Math.PI * 0.75, 0.9, 10, B.Vector3.Zero(), scene);
 
       /* Simple two-light rig — no shadow generator */
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
