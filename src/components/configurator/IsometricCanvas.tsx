@@ -436,9 +436,22 @@ export default function IsometricCanvas() {
 
   /* ── Sync placed modules → 3D scene ── */
   useEffect(() => {
-    const scene = sceneRef.current;
-    const B = (window as any).BABYLON;
-    if (!scene || !B) return;
+    if (placedModules.length === 0 && !selectedId) return;
+    let cancelled = false;
+
+    const sync = async () => {
+      /* Wait for scene to be ready if init is still loading CDN scripts */
+      let attempts = 0;
+      while ((!sceneRef.current || !(window as any).BABYLON) && attempts < 50) {
+        if (cancelled) return;
+        await new Promise(r => setTimeout(r, 200));
+        attempts++;
+      }
+      if (cancelled) return;
+
+      const scene = sceneRef.current;
+      const B = (window as any).BABYLON;
+      if (!scene || !B) return;
 
     const meshMap      = meshMapRef.current;
     const overlayMap   = overlayMapRef.current;
@@ -653,6 +666,10 @@ export default function IsometricCanvas() {
         renderActiveRef.current = false;
       }, 3000);
     }
+    };
+
+    sync();
+    return () => { cancelled = true; };
   }, [placedModules, selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Detach camera during catalog drag ── */
