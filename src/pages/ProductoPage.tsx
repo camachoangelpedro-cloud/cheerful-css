@@ -124,156 +124,95 @@ type VariantNode = ShopifyProduct['node']['variants']['edges'][0]['node'];
 /* ── NodoViewer ──────────────────────────────────────────── */
 
 function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
-  const canvasRef       = useRef<HTMLCanvasElement>(null);
-  const engineRef       = useRef<any>(null);
-  const sceneRef        = useRef<any>(null);
-  const cameraRef       = useRef<any>(null);
-  const keyLightRef     = useRef<any>(null);
-  const shadowGenRef    = useRef<any>(null);
-  const loadedMeshes    = useRef<any[]>([]);
-  const camState        = useRef<{ alpha: number; beta: number } | null>(null);
-  const idleTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const renderActiveRef = useRef(false);
-  const glbUrlRef       = useRef('');
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+  const engineRef  = useRef<any>(null);
+  const cameraRef  = useRef<any>(null);
+  const camState   = useRef<{ alpha: number; beta: number } | null>(null);
 
-  /* Start/restart the render loop; auto-stops after 2 s of no interaction */
-  const startRendering = () => {
-    const engine = engineRef.current; const scene = sceneRef.current;
-    if (!engine || !scene) return;
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    if (!renderActiveRef.current) {
-      renderActiveRef.current = true;
-      engine.runRenderLoop(() => scene.render());
-    }
-    idleTimerRef.current = setTimeout(() => {
-      engine.stopRenderLoop();
-      renderActiveRef.current = false;
-    }, 2000);
-  };
-
-  /* ── Scene init — runs once ── */
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvasRef.current || !glbUrl) return;
 
-    const loadScript = (src: string) => new Promise<void>((res) => {
-      if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
-      const s = document.createElement('script'); s.src = src; s.onload = () => res();
-      document.head.appendChild(s);
-    });
+    const canvas = canvasRef.current;
 
     const init = async () => {
+      const loadScript = (src: string) => new Promise<void>((res) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = () => res();
+        document.head.appendChild(s);
+      });
+
       if (!(window as any).BABYLON) {
         await loadScript('https://cdn.babylonjs.com/babylon.js');
         await loadScript('https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js');
+        await loadScript('https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js');
+      } else if (!(window as any).BABYLON.ShadowOnlyMaterial) {
+        await loadScript('https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js');
       }
 
       const B = (window as any).BABYLON;
+
+      if (engineRef.current) {
+        engineRef.current.dispose();
+        engineRef.current = null;
+      }
+
       const engine = new B.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-      engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
       engineRef.current = engine;
 
       const scene = new B.Scene(engine);
+      // Fixed warm interior wall — home environment
       scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
-      sceneRef.current = scene;
 
+      // Camera — front-left, slightly face-on (not full isometric), zoom locked
       const camera = new B.ArcRotateCamera('cam', Math.PI / 3, 1.35, 10, B.Vector3.Zero(), scene);
       camera.attachControl(canvas, true);
       camera.inputs.removeByType('ArcRotateCameraMouseWheelInput');
       cameraRef.current = camera;
 
+      // ── Fixed home lighting rig ───────────────────────────────
+      // Ceiling ambient — warm LED white, like a well-lit living room
       const hemi = new B.HemisphericLight('hemi', new B.Vector3(0, 1, 0), scene);
-      hemi.intensity = 0.30; hemi.diffuse = new B.Color3(1.0, 0.96, 0.90);
-      hemi.groundColor = new B.Color3(0.32, 0.26, 0.20); hemi.specular = new B.Color3(0, 0, 0);
+      hemi.intensity   = 0.30;
+      hemi.diffuse     = new B.Color3(1.0, 0.96, 0.90);
+      hemi.groundColor = new B.Color3(0.32, 0.26, 0.20);
+      hemi.specular    = new B.Color3(0, 0, 0);
 
+      // Key — main window from upper-right, warm afternoon light (fixed)
       const key = new B.DirectionalLight('key', new B.Vector3(-0.55, -0.75, -0.36), scene);
-      key.intensity = 1.9; key.diffuse = new B.Color3(1.0, 0.94, 0.84);
-      key.specular = new B.Color3(0.10, 0.09, 0.07);
-      keyLightRef.current = key;
+      key.intensity = 1.9;
+      key.diffuse   = new B.Color3(1.0, 0.94, 0.84);
+      key.specular  = new B.Color3(0.10, 0.09, 0.07);
 
+      // Fill — soft bounce from the opposite wall (fixed)
       const fill = new B.DirectionalLight('fill', new B.Vector3(0.7, -0.25, 0.65), scene);
-      fill.intensity = 0.42; fill.diffuse = new B.Color3(0.92, 0.88, 0.82);
-      fill.specular = new B.Color3(0, 0, 0);
+      fill.intensity = 0.42;
+      fill.diffuse   = new B.Color3(0.92, 0.88, 0.82);
+      fill.specular  = new B.Color3(0, 0, 0);
 
+      // Rim — back-top, slightly cool to separate silhouette (fixed)
       const rim = new B.DirectionalLight('rim', new B.Vector3(0.2, -0.6, 0.78), scene);
-      rim.intensity = 0.28; rim.diffuse = new B.Color3(0.82, 0.87, 1.0);
-      rim.specular = new B.Color3(0, 0, 0);
-
-      /* PCF shadows — 1024 is plenty for a single product viewer */
-      const shadows = new B.ShadowGenerator(1024, key);
-      shadows.usePercentageCloserFiltering = true;
-      shadows.filteringQuality = B.ShadowGenerator.QUALITY_MEDIUM;
-      shadows.bias = 0.0005;
-      shadowGenRef.current = shadows;
-
-      /* Resume rendering on any user interaction */
-      canvas.addEventListener('pointermove', startRendering, { passive: true });
-      canvas.addEventListener('pointerdown', startRendering, { passive: true });
-      const onResize = () => { engine.resize(); startRendering(); };
-      window.addEventListener('resize', onResize);
-
-      // Cleanup stored for unmount
-      (engine as any)._nodoCleanup = () => window.removeEventListener('resize', onResize);
-    };
-
-    init();
-
-    return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      if (cameraRef.current) {
-        camState.current = { alpha: cameraRef.current.alpha, beta: cameraRef.current.beta };
-        cameraRef.current = null;
-      }
-      (engineRef.current as any)?._nodoCleanup?.();
-      engineRef.current?.dispose();
-      engineRef.current = null;
-      sceneRef.current = null;
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  /* ── GLB swap — runs on every URL change ── */
-  useEffect(() => {
-    if (!glbUrl) return;
-    glbUrlRef.current = glbUrl;
-
-    const swap = async () => {
-      const B = (window as any).BABYLON;
-      const scene = sceneRef.current;
-      const camera = cameraRef.current;
-      const key = keyLightRef.current;
-      const shadows = shadowGenRef.current;
-      if (!B || !scene || !camera) return;
-
-      /* Dispose previous meshes */
-      loadedMeshes.current.forEach(m => { try { m.dispose(); } catch (_) {} });
-      loadedMeshes.current = [];
-
-      /* Update background */
-      const hex = backgroundColor || '#EDE9E1';
-      scene.clearColor = new B.Color4(
-        parseInt(hex.slice(1,3), 16) / 255,
-        parseInt(hex.slice(3,5), 16) / 255,
-        parseInt(hex.slice(5,7), 16) / 255, 1,
-      );
+      rim.intensity = 0.28;
+      rim.diffuse   = new B.Color3(0.82, 0.87, 1.0);
+      rim.specular  = new B.Color3(0, 0, 0);
 
       try {
         const result = await B.SceneLoader.ImportMeshAsync('', glbUrl, '', scene, null, '.glb');
-        /* Stale check — another swap started before this one finished */
-        if (glbUrlRef.current !== glbUrl) {
-          result.meshes.forEach((m: any) => { try { m.dispose(); } catch (_) {} });
-          return;
-        }
 
-        loadedMeshes.current = result.meshes;
+        // PCF shadows from key light
+        const shadows = new B.ShadowGenerator(2048, key);
+        shadows.usePercentageCloserFiltering = true;
+        shadows.filteringQuality = B.ShadowGenerator.QUALITY_HIGH;
+        shadows.bias = 0.0005;
 
         result.meshes.forEach((mesh: any) => {
           if (mesh.getTotalVertices() > 0) {
-            shadows?.addShadowCaster(mesh, true);
+            shadows.addShadowCaster(mesh, true);
             mesh.receiveShadows = true;
             if (mesh.material) {
               if (mesh.material.roughness !== undefined)            mesh.material.roughness = 0.78;
-              if (mesh.material.metallic  !== undefined)            mesh.material.metallic  = 0.0;
+              if (mesh.material.metallic !== undefined)             mesh.material.metallic = 0.0;
               if (mesh.material.environmentIntensity !== undefined) mesh.material.environmentIntensity = 0;
             }
           }
@@ -284,28 +223,43 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         const center = bounds.min.add(size.scale(0.5));
         const maxDim = Math.max(size.x, size.y, size.z);
 
+        // Anchor key light position for correct shadow frustum
         const lightDist = maxDim * 7;
-        if (key) key.position = new B.Vector3(
+        key.position = new B.Vector3(
           center.x + 0.55 * lightDist,
           center.y + 0.75 * lightDist,
-          center.z + 0.36 * lightDist,
+          center.z + 0.36 * lightDist
         );
 
         camera.target = center;
         camera.radius = maxDim * 3.8;
+        // Restore angle from previous color, or use default
         camera.alpha  = camState.current ? camState.current.alpha : Math.PI / 3;
         camera.beta   = camState.current ? camState.current.beta  : 1.35;
         camera.lowerRadiusLimit = camera.radius;
         camera.upperRadiusLimit = camera.radius;
         camera.lowerBetaLimit   = 0.35;
         camera.upperBetaLimit   = 1.48;
-      } catch (e) { console.error('Babylon load error', e); }
 
-      startRendering();
+      } catch(e) { console.error('Babylon load error', e); }
+      engine.runRenderLoop(() => { scene.render(); });
+      window.addEventListener('resize', () => engine.resize());
     };
 
-    swap();
-  }, [glbUrl, backgroundColor]); // eslint-disable-line react-hooks/exhaustive-deps
+    init();
+
+    return () => {
+      // Save camera angle before tearing down so next color restores it
+      if (cameraRef.current) {
+        camState.current = { alpha: cameraRef.current.alpha, beta: cameraRef.current.beta };
+        cameraRef.current = null;
+      }
+      if (engineRef.current) {
+        engineRef.current.dispose();
+        engineRef.current = null;
+      }
+    };
+  }, [glbUrl, backgroundColor]);
 
   return <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />;
 }
@@ -325,7 +279,6 @@ export default function ProductoPage() {
   const [selectedApertura, setSelectedApertura] = useState('Derecha');
   const [selectedVariant, setSelectedVariant] = useState<VariantNode | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState<'3d' | number>('3d');
 
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -598,81 +551,56 @@ export default function ProductoPage() {
       <div className="nodo-container">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-10 pb-20 items-start">
 
-          {/* ── LEFT: gallery ── */}
-          <div className="flex flex-col gap-1">
+          {/* ── LEFT: scrollable image gallery ── */}
+          <div className="space-y-1">
 
-            {/* Main display + thumbnail strip */}
-            <div className="flex gap-1">
-
-              {/* Thumbnail strip */}
-              <div className="flex flex-col gap-1 w-[72px] shrink-0">
-                {/* 3D viewer thumbnail */}
-                <button
-                  onClick={() => setSelectedMedia('3d')}
-                  className={`aspect-square w-full overflow-hidden relative transition-all flex flex-col items-center justify-center gap-1 ${
-                    selectedMedia === '3d'
-                      ? 'ring-2 ring-[#1A2B3C] ring-offset-1 bg-[#EDE9E1]'
-                      : 'ring-1 ring-border hover:ring-foreground/30 bg-muted/10'
-                  }`}
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-foreground/40">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
-                  <span className="font-body text-[7px] uppercase tracking-[.08em] text-foreground/40">3D</span>
-                </button>
-
-                {/* Shopify image thumbnails */}
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedMedia(i)}
-                    className={`aspect-square w-full overflow-hidden transition-all ${
-                      selectedMedia === i
-                        ? 'ring-2 ring-[#1A2B3C] ring-offset-1'
-                        : 'ring-1 ring-border hover:ring-foreground/30'
-                    }`}
-                  >
-                    <img src={img.node.url} alt={img.node.altText ?? ''} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-
-                {/* Placeholder thumbnails */}
-                {[0, 1].map(i => (
-                  <div key={i} className="aspect-square w-full bg-muted/10 ring-1 ring-border flex items-center justify-center">
-                    <span className="font-body text-[6px] uppercase tracking-[.08em] text-muted-foreground/30 text-center leading-tight px-1">próx.</span>
-                  </div>
-                ))}
+            {/* Row 1: placeholder left · 3D viewer right */}
+            <div className="grid grid-cols-2 gap-1">
+              <div className="aspect-square bg-muted/10 flex items-center justify-center">
+                <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
               </div>
-
-              {/* Main display */}
-              <div className="flex-1 overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
-                {selectedMedia === '3d' ? (
-                  glbUrl ? (
-                    <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-                      <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
-                    </div>
-                  )
-                ) : typeof selectedMedia === 'number' && images[selectedMedia] ? (
-                  <img
-                    src={images[selectedMedia].node.url}
-                    alt={images[selectedMedia].node.altText ?? product.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : null}
+              <div className="aspect-square overflow-hidden relative" style={{ backgroundColor: '#EDE9E1' }}>
+                {glbUrl ? (
+                  <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+                    <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Bottom row: two placeholders */}
+            {/* Row 2: two placeholders */}
             <div className="grid grid-cols-2 gap-1">
               {[0, 1].map(i => (
-                <div key={i} className="aspect-square bg-muted/10 flex items-center justify-center max-h-[35vh]">
-                  <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Próximamente</span>
+                <div key={i} className="aspect-square bg-muted/10 flex items-center justify-center">
+                  <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
                 </div>
               ))}
             </div>
 
+            {/* Row 3: wide placeholder */}
+            <div className="aspect-[16/9] bg-muted/10 flex items-center justify-center">
+              <span className="font-body text-[8px] uppercase tracking-[.12em] text-muted-foreground/35">Foto próximamente</span>
+            </div>
+
+            {/* Real product images appended below placeholders */}
+            {images.length > 0 && (
+              <div className="grid grid-cols-2 gap-1 pt-1">
+                {images.map((img, i) => (
+                  <div
+                    key={i}
+                    className={i === 0 ? 'col-span-2 aspect-[16/9] overflow-hidden' : 'aspect-square overflow-hidden'}
+                  >
+                    <img
+                      src={img.node.url}
+                      alt={img.node.altText ?? product.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ── RIGHT: sticky product info ── */}
