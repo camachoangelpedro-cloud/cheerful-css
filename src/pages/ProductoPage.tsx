@@ -174,7 +174,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       engineRef.current = engine;
 
       const scene = new B.Scene(engine);
-      scene.clearColor = new B.Color4(0.925, 0.918, 0.906, 1);
+      scene.clearColor = new B.Color4(0.929, 0.914, 0.886, 1);
       scene.ambientColor = new B.Color3(0, 0, 0);
       sceneRef.current = scene;
 
@@ -557,8 +557,6 @@ export default function ProductoPage() {
 
   const relatedProducts = NODO_PRODUCTS.filter(p => p.handle !== handle).slice(0, 6);
 
-  const viewerBg = '#ECEAE7';
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -598,7 +596,7 @@ export default function ProductoPage() {
 
       {/* ── Main product grid ── */}
       <div className="nodo-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[62fr_38fr] gap-x-16 gap-y-10 pt-10 pb-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-10 pb-20 items-start">
 
           {/* ── LEFT: gallery ── */}
           <div className="flex flex-col gap-1">
@@ -613,10 +611,9 @@ export default function ProductoPage() {
                   onClick={() => setSelectedMedia('3d')}
                   className={`aspect-square w-full overflow-hidden relative transition-all flex flex-col items-center justify-center gap-1 ${
                     selectedMedia === '3d'
-                      ? 'ring-2 ring-[#1C1C1A] ring-offset-1'
-                      : 'ring-1 ring-border hover:ring-foreground/30'
+                      ? 'ring-2 ring-[#1A2B3C] ring-offset-1 bg-[#EDE9E1]'
+                      : 'ring-1 ring-border hover:ring-foreground/30 bg-muted/10'
                   }`}
-                  style={{ backgroundColor: viewerBg, transition: 'background-color 300ms ease' }}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-foreground/40">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
@@ -648,10 +645,10 @@ export default function ProductoPage() {
               </div>
 
               {/* Main display */}
-              <div className="flex-1 overflow-hidden relative" style={{ backgroundColor: viewerBg, aspectRatio: '1/1', maxHeight: '70vh', transition: 'background-color 300ms ease' }}>
+              <div className="flex-1 overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
                 {selectedMedia === '3d' ? (
                   glbUrl ? (
-                    <NodoViewer glbUrl={glbUrl} backgroundColor={viewerBg} />
+                    <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                       <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
@@ -681,31 +678,13 @@ export default function ProductoPage() {
           {/* ── RIGHT: sticky product info ── */}
           <div className="lg:sticky lg:top-8">
 
-            {/* Breadcrumb */}
-            <p className="mb-4" style={{ fontSize: '10px', color: '#9E9E9C', letterSpacing: 0 }}>
-              Catálogo / {product.title}
-            </p>
+            {/* Title block — compact, name + dims + price read as one unit */}
+            <h1 className="font-display font-semibold text-2xl leading-snug">{product.title}</h1>
+            {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mt-1.5">{dims}</p>}
+            <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
 
-            {/* Title */}
-            <h1
-              className="font-medium"
-              style={{ fontSize: '28px', letterSpacing: 0, lineHeight: 1.1, color: '#1C1C1A' }}
-            >
-              {product.title}
-            </h1>
-            {dims && (
-              <p className="mt-1.5" style={{ fontSize: '12px', color: '#5F5E5A', letterSpacing: 0 }}>
-                {dims}
-              </p>
-            )}
-
-            {/* Price */}
-            <p className="mt-5 font-medium" style={{ fontSize: '18px', color: '#1C1C1A', letterSpacing: 0 }}>
-              {priceDisplay}
-            </p>
-
-            {/* Divider */}
-            <div className="mt-8 mb-8" style={{ height: '1px', backgroundColor: 'rgba(0,0,0,0.08)' }} />
+            {/* Divider — visual break between identity and configuration */}
+            <div className="h-px bg-border mt-8 mb-8" />
 
             {/* ── CONFIGURATOR STEPS ────────────────────── */}
 
@@ -718,9 +697,9 @@ export default function ProductoPage() {
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
-                      aria-checked={selectedColor.code === c.code}
-                      className={`color-swatch w-7 h-7 ${c.code === 'BH' ? 'color-swatch--light' : ''} ${selectedColor.code === c.code ? 'selected' : ''}`}
-                      style={{ backgroundColor: c.hex }}
+                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                        ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
+                      style={{ backgroundColor: c.hex, border: '1.5px solid rgba(28,28,26,0.18)' }}
                       title={c.name}
                     />
                   ))}
@@ -863,24 +842,12 @@ export default function ProductoPage() {
               </>
             )}
 
-            {/* ── CTA ── */}
+            {/* ── CTA block — generous separation from config ── */}
             <div className="pt-2">
               <button
                 onClick={handleAddToCart}
                 disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                style={{
-                  height: '52px',
-                  borderRadius: '28px',
-                  backgroundColor: addedToCart ? '#3A3A38' : '#1C1C1A',
-                  color: '#FFFFFF',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  letterSpacing: 0,
-                  border: 'none',
-                }}
-                onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#3A3A38'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = addedToCart ? '#3A3A38' : '#1C1C1A'; }}
+                className="w-full rounded-none py-[14px] bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {cartLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -894,61 +861,38 @@ export default function ProductoPage() {
                   'Añadir al carrito'
                 )}
               </button>
-
-              {/* Delivery note */}
-              <div className="flex items-center gap-1.5 mt-3 justify-center">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-3.5 h-3.5 shrink-0" style={{ color: '#3A7D44' }}>
-                  <circle cx="8" cy="8" r="6.5" /><line x1="8" y1="7" x2="8" y2="11" /><circle cx="8" cy="5.5" r="0.5" fill="currentColor" />
-                </svg>
-                <span style={{ fontSize: '12px', color: '#3A7D44', letterSpacing: 0 }}>
-                  En stock — entrega en 8–12 días hábiles
-                </span>
-              </div>
-
-              {/* Trust badges */}
-              <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-5">
-                {[
-                  'Envío gratis',
-                  'Garantía 2 años',
-                  'Producido en Colombia',
-                  'Empaque sin plástico',
-                ].map(badge => (
-                  <div key={badge} className="flex items-center gap-1.5">
-                    <span style={{ fontSize: '12px', color: '#5F5E5A' }}>✓</span>
-                    <span style={{ fontSize: '12px', color: '#5F5E5A', letterSpacing: 0 }}>{badge}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="font-body text-[10px] text-muted-foreground text-center mt-4 leading-relaxed">
+                Entrega en Bogotá · Ensamblado en taller · Plug-and-play
+              </p>
             </div>
 
             {/* ── ACCORDION ── */}
-            <div className="mt-10 nodo-accordion">
+            <div className="mt-12 border-t border-border">
               <Accordion type="single" collapsible>
                 <AccordionItem value="description">
-                  <AccordionTrigger className="text-sm font-normal hover:no-underline [&>svg]:hidden" style={{ letterSpacing: 0 }}>
-                    Descripción del producto
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm pb-5 leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Descripción</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     {product.description || 'Sistema modular NODO. Melamina 18mm Tablemac Duratex. Ensamblado en taller en Bogotá.'}
                   </AccordionContent>
                 </AccordionItem>
 
                 {parsedDims && (
                   <AccordionItem value="dimensions">
-                    <AccordionTrigger className="text-sm font-normal hover:no-underline [&>svg]:hidden" style={{ letterSpacing: 0 }}>
-                      Dimensiones
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm pb-5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
-                      <div className="space-y-2.5">
+                    <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Dimensiones</AccordionTrigger>
+                    <AccordionContent className="font-body text-sm text-muted-foreground pb-6">
+                      <div className="w-full space-y-3">
                         <div className="flex justify-between">
-                          <span>Ancho</span><span className="font-medium text-foreground">{parsedDims.ancho}</span>
+                          <span className="text-muted-foreground">Ancho</span>
+                          <span className="font-medium">{parsedDims.ancho}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Alto</span><span className="font-medium text-foreground">{parsedDims.alto}</span>
+                          <span className="text-muted-foreground">Alto</span>
+                          <span className="font-medium">{parsedDims.alto}</span>
                         </div>
                         {parsedDims.profundidad && (
                           <div className="flex justify-between">
-                            <span>Profundidad</span><span className="font-medium text-foreground">{parsedDims.profundidad}</span>
+                            <span className="text-muted-foreground">Profundidad</span>
+                            <span className="font-medium">{parsedDims.profundidad}</span>
                           </div>
                         )}
                       </div>
@@ -957,20 +901,9 @@ export default function ProductoPage() {
                 )}
 
                 <AccordionItem value="materials">
-                  <AccordionTrigger className="text-sm font-normal hover:no-underline [&>svg]:hidden" style={{ letterSpacing: 0 }}>
-                    Materiales
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm pb-5 leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Materiales</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     Melamina 18mm Tablemac Duratex. Canto ABS 0.5mm. Panel trasero HDF 6mm remetido 25mm desde cara posterior. Acabado HPL matte. Ensamblado en taller en Bogotá.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="shipping">
-                  <AccordionTrigger className="text-sm font-normal hover:no-underline [&>svg]:hidden" style={{ letterSpacing: 0 }}>
-                    Envío y entrega
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm pb-5 leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
-                    Envío gratis en Bogotá en pedidos superiores a $500.000 COP. Entrega en 8–12 días hábiles. Los módulos llegan ensamblados de taller, listos para usar.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
