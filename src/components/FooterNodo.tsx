@@ -167,8 +167,7 @@ export function Footer() {
           <div>
             <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">Ayuda</p>
             <ul className="space-y-3">
-              <li><Link to="/envios" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos</Link></li>
-              <li><Link to="/devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Devoluciones y garantía</Link></li>
+              <li><Link to="/envios-y-devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos y devoluciones</Link></li>
               <li>
                 <a href="https://wa.me/34676822788" target="_blank" rel="noopener noreferrer" className="font-body text-sm hover:opacity-60 transition-opacity">
                   WhatsApp
@@ -188,8 +187,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li><Link to="/politica-privacidad" className="font-body text-sm hover:opacity-60 transition-opacity">Política de privacidad</Link></li>
               <li><Link to="/terminos" className="font-body text-sm hover:opacity-60 transition-opacity">Términos y condiciones</Link></li>
-              <li><Link to="/devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Devoluciones y garantía</Link></li>
-              <li><Link to="/envios" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos</Link></li>
+              <li><Link to="/envios-y-devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos y devoluciones</Link></li>
             </ul>
           </div>
         </div>
@@ -201,8 +199,7 @@ export function Footer() {
             {[
               { to: '/politica-privacidad', label: 'Política de privacidad' },
               { to: '/terminos', label: 'Términos y condiciones' },
-              { to: '/devoluciones', label: 'Devoluciones y garantía' },
-              { to: '/envios', label: 'Envíos' },
+              { to: '/envios-y-devoluciones', label: 'Envíos y devoluciones' },
             ].map((item, i, arr) => (
               <span key={item.to} className="flex items-center gap-3">
                 <Link
