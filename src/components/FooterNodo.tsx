@@ -1,4 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
+
+const SHOPIFY_URL = 'https://1iwfce-de.myshopify.com/api/2025-07/graphql.json';
+const SHOPIFY_TOKEN = '117b4d52a7e987a5c86af4fb06564327';
+const CUSTOMER_CREATE = `mutation customerCreate($input: CustomerCreateInput!) {
+  customerCreate(input: $input) {
+    customer { id email }
+    customerUserErrors { code message }
+  }
+}`;
 
 // ── Payment method badge ─────────────────────────────────────────────────────
 function PaymentBadge({ label }: { label: string }) {
@@ -19,16 +30,9 @@ function PaymentBadge({ label }: { label: string }) {
   );
 }
 
-// ── Mastercard SVG (two overlapping circles, muted) ──────────────────────────
 function MastercardIcon() {
   return (
-    <svg
-      width="38"
-      height="24"
-      viewBox="0 0 38 24"
-      aria-label="Mastercard"
-      style={{ display: 'block' }}
-    >
+    <svg width="38" height="24" viewBox="0 0 38 24" aria-label="Mastercard" style={{ display: 'block' }}>
       <rect width="38" height="24" rx="4" fill="none" stroke="rgba(242,237,228,0.2)" strokeWidth="1" />
       <circle cx="14" cy="12" r="7" fill="rgba(242,237,228,0.22)" />
       <circle cx="24" cy="12" r="7" fill="rgba(242,237,228,0.14)" />
@@ -36,20 +40,12 @@ function MastercardIcon() {
   );
 }
 
-// ── Visa SVG (italic VISA text in a badge) ───────────────────────────────────
 function VisaIcon() {
   return (
-    <svg
-      width="44"
-      height="24"
-      viewBox="0 0 44 24"
-      aria-label="Visa"
-      style={{ display: 'block' }}
-    >
+    <svg width="44" height="24" viewBox="0 0 44 24" aria-label="Visa" style={{ display: 'block' }}>
       <rect width="44" height="24" rx="4" fill="none" stroke="rgba(242,237,228,0.2)" strokeWidth="1" />
       <text
-        x="22"
-        y="16"
+        x="22" y="16"
         textAnchor="middle"
         fontFamily="'PP Neue Montreal', sans-serif"
         fontWeight="700"
@@ -64,6 +60,78 @@ function VisaIcon() {
   );
 }
 
+// ── Footer newsletter — dark-theme variant ───────────────────────────────────
+function FooterNewsletter() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'duplicate' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch(SHOPIFY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': SHOPIFY_TOKEN,
+        },
+        body: JSON.stringify({
+          query: CUSTOMER_CREATE,
+          variables: { input: { email, acceptsMarketing: true } },
+        }),
+      });
+      const data = await res.json();
+      const errors = data?.data?.customerCreate?.customerUserErrors ?? [];
+      if (errors.length > 0) {
+        setStatus(errors.some((e: { code: string }) => e.code === 'TAKEN') ? 'duplicate' : 'error');
+      } else if (data?.data?.customerCreate?.customer?.id) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  const message =
+    status === 'success'   ? '¡Gracias! Te mantendremos informado.' :
+    status === 'duplicate' ? 'Este email ya está registrado.' :
+    status === 'error'     ? 'Hubo un error. Intenta de nuevo.' : null;
+
+  return (
+    <div className="mt-8">
+      <p className="font-body text-sm mb-3">Suscríbete a nuestro newsletter</p>
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="E-mail"
+          required
+          disabled={status === 'loading' || status === 'success'}
+          className="bg-transparent border border-background/30 px-4 py-2.5 text-sm font-body flex-1 focus:outline-none focus:border-background/60 placeholder:text-background/40 disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading' || status === 'success'}
+          className="border border-background/30 px-6 py-2.5 text-sm font-body hover:bg-background hover:text-foreground transition-colors disabled:opacity-40 flex items-center gap-2"
+        >
+          {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Suscribir'}
+        </button>
+      </form>
+      {message && (
+        <p className="font-body text-xs mt-2" style={{ color: status === 'success' ? '#86C8A0' : '#E8A0A0' }}>
+          {message}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
 export function Footer() {
   return (
     <footer className="bg-foreground text-background py-16 lg:py-24">
@@ -72,8 +140,8 @@ export function Footer() {
         {/* ── Main columns ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
 
-          {/* Brand */}
-          <div className="lg:col-span-2">
+          {/* Brand + Newsletter */}
+          <div className="lg:col-span-1">
             <Link to="/" className="text-2xl tracking-[0.2em] font-extrabold" style={{ fontFamily: 'Syne, sans-serif' }}>
               NODO
             </Link>
@@ -81,73 +149,47 @@ export function Footer() {
               Sistemas modulares de precisión. Diseño colombiano que evoluciona contigo.
               Fabricación directa, sin intermediarios.
             </p>
-
-            {/* Newsletter */}
-            <div className="mt-8">
-              <p className="font-body text-sm mb-3">Suscríbete a nuestro newsletter</p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="E-mail"
-                  className="bg-transparent border border-background/30 px-4 py-2.5 text-sm font-body flex-1 focus:outline-none focus:border-background/60 placeholder:text-background/40"
-                />
-                <button className="border border-background/30 px-6 py-2.5 text-sm font-body hover:bg-background hover:text-foreground transition-colors">
-                  Suscribir
-                </button>
-              </div>
-            </div>
+            <FooterNewsletter />
           </div>
 
-          {/* Shop */}
+          {/* Tienda */}
           <div>
-            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">
-              Tienda
-            </p>
+            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">Tienda</p>
             <ul className="space-y-3">
+              <li><Link to="/catalogo" className="font-body text-sm hover:opacity-60 transition-opacity">Catálogo</Link></li>
+              <li><Link to="/configurador" className="font-body text-sm hover:opacity-60 transition-opacity">Configurador</Link></li>
+              <li><Link to="/nosotros" className="font-body text-sm hover:opacity-60 transition-opacity">Nosotros</Link></li>
+              <li><Link to="/contacto" className="font-body text-sm hover:opacity-60 transition-opacity">Contacto</Link></li>
+            </ul>
+          </div>
+
+          {/* Ayuda */}
+          <div>
+            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">Ayuda</p>
+            <ul className="space-y-3">
+              <li><Link to="/envios" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos</Link></li>
+              <li><Link to="/devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Devoluciones y garantía</Link></li>
               <li>
-                <Link to="/catalogo" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Shop all
-                </Link>
+                <a href="https://wa.me/34676822788" target="_blank" rel="noopener noreferrer" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  WhatsApp
+                </a>
               </li>
               <li>
-                <Link to="/catalogo?type=sistemas" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Sistemas
-                </Link>
-              </li>
-              <li>
-                <Link to="/catalogo?type=modulos" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Módulos
-                </Link>
+                <a href="mailto:nodomodulardesign@gmail.com" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  nodomodulardesign@gmail.com
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Info */}
+          {/* Legal */}
           <div>
-            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">
-              Información
-            </p>
+            <p className="font-body text-xs tracking-wider uppercase mb-4 text-background/60">Legal</p>
             <ul className="space-y-3">
-              <li>
-                <Link to="/nosotros" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Nosotros
-                </Link>
-              </li>
-              <li>
-                <a href="mailto:hola@nodo.co" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Contacto
-                </a>
-              </li>
-              <li>
-                <Link to="/envios-devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Envíos
-                </Link>
-              </li>
-              <li>
-                <Link to="/envios-devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">
-                  Devoluciones
-                </Link>
-              </li>
+              <li><Link to="/politica-privacidad" className="font-body text-sm hover:opacity-60 transition-opacity">Política de privacidad</Link></li>
+              <li><Link to="/terminos" className="font-body text-sm hover:opacity-60 transition-opacity">Términos y condiciones</Link></li>
+              <li><Link to="/devoluciones" className="font-body text-sm hover:opacity-60 transition-opacity">Devoluciones y garantía</Link></li>
+              <li><Link to="/envios" className="font-body text-sm hover:opacity-60 transition-opacity">Envíos</Link></li>
             </ul>
           </div>
         </div>
@@ -155,42 +197,33 @@ export function Footer() {
         {/* ── Bottom bar ── */}
         <div className="border-t border-background/20 mt-16 pt-8 flex flex-col gap-5">
 
-          {/* Legal links row */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <Link
-              to="/politica-privacidad"
-              className="font-body hover:text-background/80 transition-colors"
-              style={{ fontSize: '12px', color: 'rgba(242,237,228,0.45)', letterSpacing: 0 }}
-            >
-              Política de privacidad
-            </Link>
-            <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.25)' }}>·</span>
-            <Link
-              to="/terminos"
-              className="font-body hover:text-background/80 transition-colors"
-              style={{ fontSize: '12px', color: 'rgba(242,237,228,0.45)', letterSpacing: 0 }}
-            >
-              Términos y condiciones
-            </Link>
-            <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.25)' }}>·</span>
-            <Link
-              to="/envios-devoluciones"
-              className="font-body hover:text-background/80 transition-colors"
-              style={{ fontSize: '12px', color: 'rgba(242,237,228,0.45)', letterSpacing: 0 }}
-            >
-              Política de envíos y devoluciones
-            </Link>
+            {[
+              { to: '/politica-privacidad', label: 'Política de privacidad' },
+              { to: '/terminos', label: 'Términos y condiciones' },
+              { to: '/devoluciones', label: 'Devoluciones y garantía' },
+              { to: '/envios', label: 'Envíos' },
+            ].map((item, i, arr) => (
+              <span key={item.to} className="flex items-center gap-3">
+                <Link
+                  to={item.to}
+                  className="font-body hover:text-background/80 transition-colors"
+                  style={{ fontSize: '12px', color: 'rgba(242,237,228,0.45)' }}
+                >
+                  {item.label}
+                </Link>
+                {i < arr.length - 1 && (
+                  <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.25)' }}>·</span>
+                )}
+              </span>
+            ))}
           </div>
 
-          {/* Copyright + payment icons + social */}
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
-
-            {/* Left: copyright + payment icons */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <p className="font-body text-xs text-background/40">
-                © {new Date().getFullYear()} NODO. All rights reserved.
+                © {new Date().getFullYear()} NODO. Todos los derechos reservados.
               </p>
-              {/* Payment badges */}
               <div className="flex items-center gap-2">
                 <VisaIcon />
                 <MastercardIcon />
@@ -198,8 +231,6 @@ export function Footer() {
                 <PaymentBadge label="Nequi" />
               </div>
             </div>
-
-            {/* Right: social + location */}
             <div className="flex items-center gap-6">
               <a
                 href="https://instagram.com/nodo.co"
@@ -207,15 +238,13 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="font-body text-xs text-background/60 hover:text-background transition-colors"
               >
-                Instagram
+                @nodo.co
               </a>
-              <span className="font-body text-xs text-background/40">
-                Bogotá, Colombia
-              </span>
+              <span className="font-body text-xs text-background/40">Bogotá, Colombia</span>
             </div>
           </div>
-
         </div>
+
       </div>
     </footer>
   );
