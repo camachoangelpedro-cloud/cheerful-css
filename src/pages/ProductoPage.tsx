@@ -789,7 +789,7 @@ export default function ProductoPage() {
                   <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Garantía y devoluciones</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     <p>Todos los productos NODO cuentan con garantía legal de un (1) año a partir de la fecha de entrega, conforme a la Ley 1480 de 2011 (Estatuto del Consumidor). La garantía cubre defectos de fabricación y materiales. No cubre daños por uso inadecuado, modificaciones realizadas por el cliente, o desgaste natural.</p>
-                    <p className="mt-3">Tienes derecho a ejercer el retracto dentro de los cinco (5) días hábiles siguientes a la entrega del producto. La devolución del dinero se realizará en un plazo máximo de quince (15) días calendario conforme a la Ley 2439 de 2024. Para solicitudes, escríbenos a hola@nodo.co</p>
+                    <p className="mt-3">Tienes derecho a ejercer el retracto dentro de los cinco (5) días hábiles siguientes a la entrega del producto. La devolución del dinero se realizará en un plazo máximo de quince (15) días calendario conforme a la Ley 2439 de 2024. Para solicitudes, escríbenos a nodomodulardesign@gmail.com</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -810,7 +810,7 @@ export default function ProductoPage() {
             </p>
             <p className="font-body text-muted-foreground/60" style={{ fontSize: '14px' }}>
               ¿Ya tienes un producto NODO? Escríbenos a{' '}
-              <a href="mailto:hola@nodo.co" className="underline underline-offset-2 hover:text-foreground transition-colors">hola@nodo.co</a>{' '}
+              <a href="mailto:nodomodulardesign@gmail.com" className="underline underline-offset-2 hover:text-foreground transition-colors">nodomodulardesign@gmail.com</a>{' '}
               para compartir tu experiencia.
             </p>
           </div>
