@@ -30,19 +30,19 @@ function resolveModuleGlb(
     'modulo-36-18': '1X05', 'modulo-36-24': '1X07', 'modulo-36-36': '1X1',
     'modulo-36-72': '1X2',  'modulo-72-18': '2X05', 'modulo-72-24': '2X07',
     'modulo-72-36': '2X1',
-    'modh-36-18':  '1X05',  'modh-36-24':  '1X07',  'modh-36-36':  '1X1',
-    'modh-72-24':  '2X07',
+    'modulo-h-36-18':  '1X05',  'modulo-h-36-24':  '1X07',  'modulo-h-36-36':  '1X1',
+    'modulo-h-72-24':  '2X07',
   };
   const sizeCode = SIZE_MAP[handle];
   if (!sizeCode) return '';
 
-  const prefix = handle.startsWith('modh-') ? 'MODH' : 'MOD';
+  const prefix = handle.startsWith('modulo-h-') ? 'MODH' : 'MOD';
 
   let intCode = 'A';
   if (interior === 'Con repisa')                                        intCode = 'S';
   else if (interior === 'Con puerta' || interior === 'Con puerta y repisa') intCode = 'D';
 
-  const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72', 'modh-36-36'];
+  const SINGLE_DOOR = ['modulo-36-36', 'modulo-36-72', 'modulo-h-36-36'];
   const hasDoor = intCode === 'D';
   const tiradorSuffix = (SINGLE_DOOR.includes(handle) && hasDoor && apertura)
     ? `_${apertura}` : '';
