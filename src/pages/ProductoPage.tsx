@@ -8,8 +8,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { fetchProductByHandle, ShopifyProduct } from '@/lib/shopify';
-import { Canvas } from '@react-three/fiber';
-import { useGLTF, Bounds, OrbitControls } from '@react-three/drei';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { useGLTF, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCartStore } from '@/stores/cartStore';
 import {
@@ -128,7 +128,11 @@ type VariantNode = ShopifyProduct['node']['variants']['edges'][0]['node'];
 
 function NodoModel({ url }: { url: string }) {
   const { scene } = useGLTF(url);
+  const { camera, invalidate } = useThree();
+  const fitted = useRef(false);
+
   const clone = useMemo(() => {
+    fitted.current = false;
     const c = scene.clone(true);
     c.traverse(obj => {
       const mesh = obj as THREE.Mesh;
@@ -144,11 +148,35 @@ function NodoModel({ url }: { url: string }) {
     return c;
   }, [scene]);
 
-  return (
-    <Bounds fit clip observe margin={1.1}>
-      <primitive object={clone} />
-    </Bounds>
-  );
+  useFrame(() => {
+    if (fitted.current) return;
+    fitted.current = true;
+
+    const box = new THREE.Box3().setFromObject(clone);
+    if (box.isEmpty()) return;
+
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fovRad = (22 * Math.PI) / 180;          // low FOV → near-axonometric
+    const dist = (maxDim / 2) / Math.tan(fovRad / 2) * 2.4; // pull back
+
+    const elevRad = (45 * Math.PI) / 180;          // 45° up
+    const aziRad  = (45 * Math.PI) / 180;          // 45° to the left → top-left corner
+    camera.position.set(
+      center.x - dist * Math.cos(elevRad) * Math.sin(aziRad),
+      center.y + dist * Math.sin(elevRad),
+      center.z + dist * Math.cos(elevRad) * Math.cos(aziRad),
+    );
+    camera.lookAt(center);
+    camera.updateProjectionMatrix();
+    invalidate();
+  });
+
+  return <primitive object={clone} />;
 }
 
 function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
@@ -158,7 +186,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     <Canvas
       frameloop="demand"
       gl={{ antialias: true, preserveDrawingBuffer: true }}
-      camera={{ position: [-5, 4, 5], fov: 38, up: [0, 1, 0] }}
+      camera={{ position: [0, 1, 5], fov: 22, up: [0, 1, 0] }}
       style={{ width: '100%', height: '100%', background: bg }}
     >
       {/* Warm three-point light rig matching original */}
@@ -469,7 +497,7 @@ export default function ProductoPage() {
 
       {/* ── Main product grid ── */}
       <div className="nodo-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-x-16 gap-y-10 pt-10 pb-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[460px_400px] gap-x-12 gap-y-10 pt-10 pb-20 items-start justify-center">
 
           {/* ── LEFT: gallery ── */}
           <div className="flex flex-col gap-1">
@@ -478,7 +506,7 @@ export default function ProductoPage() {
             <div className="flex gap-1">
 
               {/* Thumbnail strip */}
-              <div className="flex flex-col gap-1 w-[72px] shrink-0">
+              <div className="flex flex-col gap-1 w-[88px] shrink-0">
                 {/* 3D viewer thumbnail */}
                 <button
                   onClick={() => setSelectedMedia('3d')}
