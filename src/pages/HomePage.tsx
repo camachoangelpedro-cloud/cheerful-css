@@ -123,6 +123,47 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Editorial section — star modules */}
+        <section className="nodo-container py-20 lg:py-28">
+
+          {/* Header */}
+          <div className="mb-10 lg:mb-14 flex items-end justify-between">
+            <div>
+              <p className="text-xs mb-2" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
+                Módulos individuales
+              </p>
+              <h2 className="font-display text-2xl md:text-3xl font-light" style={{ letterSpacing: 0, lineHeight: 1.1, color: '#1C1C1A' }}>
+                Construye tu propio espacio
+              </h2>
+            </div>
+            <Link
+              to="/catalogo"
+              className="hidden lg:block text-sm underline underline-offset-4 hover:opacity-60 transition-opacity"
+              style={{ letterSpacing: 0 }}
+            >
+              Ver catálogo
+            </Link>
+          </div>
+
+          {/* Two star modules side by side */}
+          <div className="flex flex-col sm:flex-row gap-6 lg:gap-8">
+            <StarModule handle="modulo-36-72" label="Módulo 36×72" />
+            <StarModule handle="modulo-72-36" label="Módulo 72×36 · 2 puertas" />
+          </div>
+
+          {/* Mobile CTA */}
+          <div className="mt-8 lg:hidden">
+            <Link
+              to="/catalogo"
+              className="text-sm underline underline-offset-4"
+              style={{ letterSpacing: 0 }}
+            >
+              Ver catálogo completo
+            </Link>
+          </div>
+
+        </section>
+
         {/* Testimonials */}
         <section className="nodo-container py-20 lg:py-28">
           <h2
@@ -198,47 +239,6 @@ export default function HomePage() {
           >
             * Testimonios simulados con fines de demostración del MVP.
           </p>
-        </section>
-
-        {/* Editorial section — star modules */}
-        <section className="nodo-container py-20 lg:py-28">
-
-          {/* Header */}
-          <div className="mb-10 lg:mb-14 flex items-end justify-between">
-            <div>
-              <p className="text-xs mb-2" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
-                Módulos individuales
-              </p>
-              <h2 className="font-display text-2xl md:text-3xl font-light" style={{ letterSpacing: 0, lineHeight: 1.1, color: '#1C1C1A' }}>
-                Construye tu propio espacio
-              </h2>
-            </div>
-            <Link
-              to="/catalogo"
-              className="hidden lg:block text-sm underline underline-offset-4 hover:opacity-60 transition-opacity"
-              style={{ letterSpacing: 0 }}
-            >
-              Ver catálogo
-            </Link>
-          </div>
-
-          {/* Two star modules side by side */}
-          <div className="flex flex-col sm:flex-row gap-6 lg:gap-8">
-            <StarModule handle="modulo-36-72" label="Módulo 36×72" />
-            <StarModule handle="modulo-72-36" label="Módulo 72×36 · 2 puertas" />
-          </div>
-
-          {/* Mobile CTA */}
-          <div className="mt-8 lg:hidden">
-            <Link
-              to="/catalogo"
-              className="text-sm underline underline-offset-4"
-              style={{ letterSpacing: 0 }}
-            >
-              Ver catálogo completo
-            </Link>
-          </div>
-
         </section>
 
         {/* ── Newsletter ── */}
