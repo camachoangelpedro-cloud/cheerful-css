@@ -1,8 +1,15 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ExternalLink, Loader2, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { formatPrice } from "@/lib/shopify";
+
+const CROSS_SELL = [
+  { name: "Clip Latón",  price: "$ 25.000", link: "/producto/clip-decorativo-laton" },
+  { name: "Clip Acero",  price: "$ 25.000", link: "/producto/clip-decorativo-acero" },
+  { name: "Base 36×36", price: "$ 95.000", link: "/producto/base-36-36" },
+];
 
 export function CartDrawer() {
   const { 
@@ -60,6 +67,13 @@ export function CartDrawer() {
             </div>
           ) : (
             <>
+              {/* Promo banner */}
+              <div className="flex-shrink-0 mb-4 rounded-sm px-3 py-2.5 text-center" style={{ backgroundColor: '#F5EDD6' }}>
+                <span className="font-body text-[13px]" style={{ color: '#7A5C1E' }}>
+                  Usa el código <strong>LANZAMIENTO</strong> al pagar para envío gratis 🎉
+                </span>
+              </div>
+
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
                 <div className="space-y-6">
                   {items.map((item) => (
@@ -112,6 +126,28 @@ export function CartDrawer() {
                         </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cross-sell */}
+              <div className="flex-shrink-0 pt-5 pb-1">
+                <p className="font-body text-sm font-medium mb-3">Completa tu sistema</p>
+                <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1 snap-x">
+                  {CROSS_SELL.map(item => (
+                    <Link
+                      key={item.link}
+                      to={item.link}
+                      className="flex-shrink-0 w-[90px] snap-start group"
+                      onClick={() => {}}
+                    >
+                      <div className="w-full aspect-square bg-muted/40 flex items-center justify-center mb-1.5 rounded-sm overflow-hidden">
+                        <span className="font-body text-[8px] uppercase tracking-wide text-muted-foreground/40 text-center px-1 leading-tight">{item.name}</span>
+                      </div>
+                      <p className="font-body text-[11px] font-medium leading-snug group-hover:underline">{item.name}</p>
+                      <p className="font-body text-[11px] text-muted-foreground">{item.price}</p>
+                      <p className="font-body text-[10px] text-foreground/50 underline underline-offset-1 mt-0.5">Ver</p>
+                    </Link>
                   ))}
                 </div>
               </div>
