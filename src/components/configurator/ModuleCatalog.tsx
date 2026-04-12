@@ -36,7 +36,7 @@ export default function ModuleCatalog() {
         }}
         onDragEnd={() => setDragHandle(null)}
         onClick={() => setDragHandle(dragHandle === product.handle ? null : product.handle)}
-        className={`flex flex-col items-center gap-1.5 p-2.5 border cursor-grab active:cursor-grabbing select-none transition-colors
+        className={`flex flex-col items-center gap-1.5 p-2.5 border rounded-lg cursor-grab active:cursor-grabbing select-none transition-colors
           ${dragHandle === product.handle
             ? 'border-[#1C1C1A] bg-[#1C1C1A]/5'
             : 'border-border hover:border-foreground/40'}`}
@@ -65,7 +65,7 @@ export default function ModuleCatalog() {
   const ClipCard = ({ product }: { product: typeof NODO_PRODUCTS[number] }) => {
     const qty = clfQuantities[product.handle] ?? 0;
     return (
-      <div className="flex flex-col gap-1.5 p-2.5 border border-border">
+      <div className="flex flex-col gap-1.5 p-2.5 border border-border rounded-lg">
         <span className="font-body text-[9px] uppercase tracking-[.08em] text-foreground/80 leading-tight">
           {product.title}
         </span>
