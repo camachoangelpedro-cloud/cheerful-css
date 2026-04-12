@@ -6,9 +6,6 @@ import { useCartStore } from '@/stores/cartStore';
 import { fetchProductByHandle } from '@/lib/shopify';
 import { toast } from 'sonner';
 
-// Handles that exist in the catalogue but have no Shopify listing yet
-const NOT_IN_SHOPIFY = new Set(['modh-36-18', 'modh-36-24', 'modh-36-36', 'modh-72-24', 'clf-std']);
-
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n);
 
@@ -25,16 +22,7 @@ export default function ConfigSummary() {
       return;
     }
 
-    const unavailable = summary.filter(item => NOT_IN_SHOPIFY.has(item.handle));
-    if (unavailable.length > 0) {
-      const titles = unavailable.map(item =>
-        NODO_PRODUCTS.find(p => p.handle === item.handle)?.title ?? item.handle
-      );
-      toast.error(`Algunos módulos no están disponibles aún: ${titles.join(', ')}`);
-      return;
-    }
-
-    setIsAdding(true);
+setIsAdding(true);
     let addedCount = 0;
     let failedCount = 0;
 
