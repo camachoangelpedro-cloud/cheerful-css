@@ -4,6 +4,7 @@ import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
+import { NewsletterSignup } from '@/components/NewsletterSignup';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
 
 interface StarModuleProps {
@@ -240,6 +241,14 @@ export default function HomePage() {
           </div>
 
         </section>
+
+        {/* ── Newsletter ── */}
+        <section style={{ backgroundColor: '#F5F2EC' }}>
+          <div className="nodo-container py-16 lg:py-20 max-w-xl">
+            <NewsletterSignup />
+          </div>
+        </section>
+
       </main>
       <Footer />
     </div>
