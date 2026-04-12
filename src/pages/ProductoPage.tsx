@@ -732,7 +732,7 @@ export default function ProductoPage() {
                 </div>
                 <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
                   <Package className="w-3.5 h-3.5 shrink-0" />
-                  <span>Sistema modular — lo armas tú mismo en minutos, sin herramientas</span>
+                  <span>Cada módulo llega armado — solo conéctalos con los clips incluidos</span>
                 </div>
               </div>
             </div>
@@ -781,7 +781,7 @@ export default function ProductoPage() {
                 <AccordionItem value="shipping">
                   <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Envío y entrega</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
-                    Todos los productos NODO se fabrican a pedido en nuestro taller en Bogotá. El tiempo estimado de entrega es de 2 a 3 semanas desde la confirmación del pedido. Actualmente realizamos envíos únicamente dentro de Bogotá D.C. Tu pedido llega empacado en flat-pack y lo armas en minutos sin herramientas.
+                    Todos los productos NODO se fabrican a pedido en nuestro taller en Bogotá. El tiempo estimado de entrega es de 2 a 3 semanas desde la confirmación del pedido. Actualmente realizamos envíos únicamente dentro de Bogotá D.C. Cada módulo llega completamente armado — solo tienes que conectar los módulos entre sí con los clips estructurales incluidos.
                   </AccordionContent>
                 </AccordionItem>
 
