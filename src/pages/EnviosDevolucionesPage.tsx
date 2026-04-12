@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -27,6 +28,10 @@ function SectionHeading({ title }: { title: string }) {
 export default function EnviosDevolucionesPage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Envíos y devoluciones | NODO</title>
+        <meta name="description" content="Información sobre envíos en Bogotá, tiempos de entrega, política de devoluciones y garantía legal de un año. NODO Modular Design." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main className="pt-[96px]">
