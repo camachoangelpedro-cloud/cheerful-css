@@ -194,7 +194,7 @@ export default function WallSetup() {
           <button
             onClick={handleConfirm}
             disabled={widthCm < 72 || heightCm < 100}
-            className="w-full py-4 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
+            className="w-full rounded-full py-4 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
           >
             Empezar a diseñar →
           </button>
