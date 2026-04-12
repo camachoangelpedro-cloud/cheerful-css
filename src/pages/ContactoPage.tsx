@@ -68,7 +68,7 @@ export default function ContactoPage() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    await fetch('https://formspree.io/f/PLACEHOLDER_ID', {
+    await fetch('https://formspree.io/f/mpqkakda', {
       method: 'POST',
       body: data,
       headers: { Accept: 'application/json' },
