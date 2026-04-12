@@ -127,7 +127,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 
   // ── MODH 36×18 ─────────────────────────────────────────────────────────────
   {
-    handle: 'modh-36-18', title: 'Módulo H 36×18', family: 'MODH',
+    handle: 'modulo-h-36-18', title: 'Módulo H 36×18', family: 'MODH',
     widthCm: 36, heightCm: 18, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -138,7 +138,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 
   // ── MODH 36×24 ─────────────────────────────────────────────────────────────
   {
-    handle: 'modh-36-24', title: 'Módulo H 36×24', family: 'MODH',
+    handle: 'modulo-h-36-24', title: 'Módulo H 36×24', family: 'MODH',
     widthCm: 36, heightCm: 24, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -149,7 +149,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 
   // ── MODH 36×36 ─────────────────────────────────────────────────────────────
   {
-    handle: 'modh-36-36', title: 'Módulo H 36×36', family: 'MODH',
+    handle: 'modulo-h-36-36', title: 'Módulo H 36×36', family: 'MODH',
     widthCm: 36, heightCm: 36, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
@@ -161,7 +161,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 
   // ── MODH 72×24 ─────────────────────────────────────────────────────────────
   {
-    handle: 'modh-72-24', title: 'Módulo H 72×24', family: 'MODH',
+    handle: 'modulo-h-72-24', title: 'Módulo H 72×24', family: 'MODH',
     widthCm: 72, heightCm: 24, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
