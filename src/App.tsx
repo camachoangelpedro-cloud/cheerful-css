@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { useCartSync } from '@/hooks/useCartSync';
 import { CookieBanner } from '@/components/CookieBanner';
@@ -8,32 +8,31 @@ const HomePage               = lazy(() => import('@/pages/HomePage'));
 const CatalogoPage           = lazy(() => import('@/pages/CatalogoPage'));
 const ProductoPage           = lazy(() => import('@/pages/ProductoPage'));
 const ConfiguradorPage       = lazy(() => import('@/pages/ConfiguradorPage'));
-const ProductoM1Page         = lazy(() => import('@/pages/ProductoM1Page'));
 const NosotrosPage           = lazy(() => import('@/pages/NosotrosPage'));
 const ContactoPage           = lazy(() => import('@/pages/ContactoPage'));
 const PoliticaPrivacidadPage = lazy(() => import('@/pages/PoliticaPrivacidadPage'));
 const TerminosPage           = lazy(() => import('@/pages/TerminosPage'));
-const DevolucionesPage       = lazy(() => import('@/pages/DevolucionesPage'));
-const EnviosPage             = lazy(() => import('@/pages/EnviosPage'));
 const EnviosDevolucionesPage = lazy(() => import('@/pages/EnviosDevolucionesPage'));
+const NotFoundPage           = lazy(() => import('@/pages/NotFoundPage'));
 
 function AppContent() {
   useCartSync();
   return (
     <Suspense fallback={null}>
       <Routes>
-        <Route path="/"                    element={<HomePage />} />
-        <Route path="/catalogo"            element={<CatalogoPage />} />
-        <Route path="/producto/:handle"    element={<ProductoPage />} />
-        <Route path="/configurador"        element={<ConfiguradorPage />} />
-        <Route path="/producto/m1-1"       element={<ProductoM1Page />} />
-        <Route path="/nosotros"            element={<NosotrosPage />} />
-        <Route path="/contacto"            element={<ContactoPage />} />
-        <Route path="/politica-privacidad" element={<PoliticaPrivacidadPage />} />
-        <Route path="/terminos"            element={<TerminosPage />} />
-        <Route path="/devoluciones"        element={<DevolucionesPage />} />
-        <Route path="/envios"              element={<EnviosPage />} />
-        <Route path="/envios-devoluciones" element={<EnviosDevolucionesPage />} />
+        <Route path="/"                       element={<HomePage />} />
+        <Route path="/catalogo"               element={<CatalogoPage />} />
+        <Route path="/producto/:handle"       element={<ProductoPage />} />
+        <Route path="/configurador"           element={<ConfiguradorPage />} />
+        <Route path="/nosotros"               element={<NosotrosPage />} />
+        <Route path="/contacto"               element={<ContactoPage />} />
+        <Route path="/politica-privacidad"    element={<PoliticaPrivacidadPage />} />
+        <Route path="/terminos"               element={<TerminosPage />} />
+        <Route path="/envios-y-devoluciones"  element={<EnviosDevolucionesPage />} />
+        <Route path="/envios"                 element={<Navigate to="/envios-y-devoluciones" replace />} />
+        <Route path="/devoluciones"           element={<Navigate to="/envios-y-devoluciones" replace />} />
+        <Route path="/envios-devoluciones"    element={<Navigate to="/envios-y-devoluciones" replace />} />
+        <Route path="*"                       element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );
