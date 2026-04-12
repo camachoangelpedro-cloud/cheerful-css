@@ -94,7 +94,7 @@ function OptionBtn({ active, locked, icon, label, onClick }: OptionBtnProps) {
     <button
       onClick={locked ? undefined : onClick}
       className={`flex flex-col items-center gap-1 p-2 border flex-1 transition-colors
-        ${active  ? 'border-[#1A2B3C] bg-[#1A2B3C]/5 text-foreground' : 'border-border text-muted-foreground hover:border-foreground/40'}
+        ${active  ? 'border-[#1C1C1A] bg-[#1C1C1A]/5 text-foreground' : 'border-border text-muted-foreground hover:border-foreground/40'}
         ${locked  ? 'opacity-30 pointer-events-none' : ''}`}
     >
       {icon}
@@ -171,12 +171,13 @@ export default function ModuleEditPanel() {
                 key={c.id}
                 onClick={() => handleColor(c.id)}
                 title={c.name}
-                className="w-5 h-5 transition-transform hover:scale-110"
+                className={`w-5 h-5 rounded-full transition-transform
+                  ${mod.colorCode === c.id
+                    ? 'ring-2 ring-offset-2 ring-foreground scale-110'
+                    : 'hover:scale-105'}`}
                 style={{
                   background: c.hex,
-                  border: mod.colorCode === c.id ? '2px solid #1A2B3C' : '1.5px solid rgba(0,0,0,0.15)',
-                  outline: mod.colorCode === c.id ? '2px solid rgba(26,43,60,0.18)' : 'none',
-                  outlineOffset: '1px',
+                  border: '1.5px solid rgba(28,28,26,0.18)',
                 }}
               />
             ))}
@@ -264,7 +265,7 @@ export default function ModuleEditPanel() {
                   onClick={() => handleApertura(ap)}
                   className={`flex-1 font-body text-[8px] uppercase tracking-[.10em] px-2 py-1.5 border transition-colors
                     ${mod.apertura === ap
-                      ? 'border-[#1A2B3C] bg-[#1A2B3C] text-[#F2EDE4]'
+                      ? 'border-[#1C1C1A] bg-[#1C1C1A] text-[#F2EDE4]'
                       : 'border-border text-foreground hover:border-foreground/60'}`}
                 >
                   {ap === 'DER' ? 'Derecha' : 'Izquierda'}
