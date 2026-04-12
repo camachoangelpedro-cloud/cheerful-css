@@ -131,7 +131,7 @@ setIsAdding(true);
       <button
         onClick={handleAddToCart}
         disabled={placedModules.length === 0 || isAdding}
-        className="w-full py-3 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+        className="w-full rounded-full py-3 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
       >
         {isAdding
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
