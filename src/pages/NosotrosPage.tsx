@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -6,6 +7,10 @@ import { Footer } from '@/components/FooterNodo';
 export default function NosotrosPage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Nosotros — Quiénes somos | NODO</title>
+        <meta name="description" content="NODO nace de la convicción de que el diseño de calidad no debería exigirte elegir entre lo genérico y lo caro. Muebles modulares hechos en Colombia." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
 
