@@ -8,7 +8,10 @@ const CatalogoPage    = lazy(() => import('@/pages/CatalogoPage'));
 const ProductoPage    = lazy(() => import('@/pages/ProductoPage'));
 const ConfiguradorPage = lazy(() => import('@/pages/ConfiguradorPage'));
 const ProductoM1Page  = lazy(() => import('@/pages/ProductoM1Page'));
-const NosotrosPage    = lazy(() => import('@/pages/NosotrosPage'));
+const NosotrosPage              = lazy(() => import('@/pages/NosotrosPage'));
+const PoliticaPrivacidadPage    = lazy(() => import('@/pages/PoliticaPrivacidadPage'));
+const TerminosPage              = lazy(() => import('@/pages/TerminosPage'));
+const EnviosDevolucionesPage    = lazy(() => import('@/pages/EnviosDevolucionesPage'));
 
 function AppContent() {
   useCartSync();
@@ -20,7 +23,10 @@ function AppContent() {
         <Route path="/producto/:handle" element={<ProductoPage />} />
         <Route path="/configurador"  element={<ConfiguradorPage />} />
         <Route path="/producto/m1-1" element={<ProductoM1Page />} />
-        <Route path="/nosotros"      element={<NosotrosPage />} />
+        <Route path="/nosotros"              element={<NosotrosPage />} />
+        <Route path="/politica-privacidad"   element={<PoliticaPrivacidadPage />} />
+        <Route path="/terminos"              element={<TerminosPage />} />
+        <Route path="/envios-devoluciones"   element={<EnviosDevolucionesPage />} />
       </Routes>
     </Suspense>
   );
