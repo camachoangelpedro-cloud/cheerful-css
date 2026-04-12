@@ -100,10 +100,28 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* Announcement Bar */}
-      <div className="py-2 flex items-center justify-center" style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}>
-        <span className="text-xs font-light" style={{ letterSpacing: 0 }}>
-          Diseño Modular · Plug &amp; Play · Ensamblaje sin Herramientas · Hecho en Colombia
+      <div className="py-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}>
+        <style>{`
+          @keyframes nodo-ticker {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .nodo-ticker-inner { display: flex; white-space: nowrap; animation: nodo-ticker 22s linear infinite; }
+          @media (min-width: 640px) { .nodo-ticker-inner { animation: none; } }
+        `}</style>
+        {/* Mobile: scrolling ticker. Desktop: static centered */}
+        <span className="hidden sm:block text-xs font-light" style={{ letterSpacing: 0 }}>
+          Diseño Modular · Ensamblaje sin Herramientas · Hecho en Colombia · Envío Gratis para los 20 Primeros Proyectos
         </span>
+        <div className="sm:hidden w-full overflow-hidden">
+          <div className="nodo-ticker-inner">
+            {[0, 1].map(i => (
+              <span key={i} className="text-xs font-light px-8" style={{ letterSpacing: 0 }}>
+                Diseño Modular · Ensamblaje sin Herramientas · Hecho en Colombia · Envío Gratis para los 20 Primeros Proyectos &nbsp;&nbsp;&nbsp;
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Main Nav */}
