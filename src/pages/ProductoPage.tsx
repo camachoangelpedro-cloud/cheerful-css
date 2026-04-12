@@ -1,4 +1,10 @@
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 import { useEffect, useState, Suspense, useMemo, useRef } from 'react';
 import * as React from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -224,6 +230,18 @@ export default function ProductoPage() {
       try {
         const data = await fetchProductByHandle(handle);
         setProduct(data);
+        if (typeof window.gtag === 'function' && data) {
+          window.gtag('event', 'view_item', {
+            currency: 'COP',
+            value: parseFloat(data.priceRange?.minVariantPrice?.amount || '0'),
+            items: [{
+              item_id: data.handle,
+              item_name: data.title,
+              price: parseFloat(data.priceRange?.minVariantPrice?.amount || '0'),
+              currency: 'COP',
+            }]
+          });
+        }
       } catch (error) {
         console.error('Failed to load product:', error);
       } finally {
