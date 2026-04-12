@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -16,6 +17,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function PoliticaPrivacidadPage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Política de privacidad | NODO</title>
+        <meta name="description" content="Conoce cómo protegemos tus datos personales. Política de privacidad de NODO Modular Design conforme a la Ley 1581 de 2012." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main className="pt-[96px]">
