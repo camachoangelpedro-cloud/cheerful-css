@@ -12,7 +12,7 @@ export default function NosotrosPage() {
       <main className="pt-[96px]">
 
         {/* ── SECTION 1 — Hero ─────────────────────────────────────────────── */}
-        <section style={{ backgroundColor: '#F2EDE4' }} className="py-20 lg:py-28">
+        <section style={{ backgroundColor: '#F5F5F5' }} className="py-20 lg:py-28">
           <div className="nodo-container">
             <h1
               className="text-4xl lg:text-5xl max-w-2xl"
@@ -84,7 +84,7 @@ export default function NosotrosPage() {
               <div
                 key={card.title}
                 className="flex flex-col gap-4 p-8"
-                style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+                style={{ backgroundColor: '#F5F5F5', borderRadius: '8px' }}
               >
                 <span className="text-2xl" style={{ color: '#1C1C1A' }}>{card.icon}</span>
                 <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
