@@ -290,23 +290,6 @@
   .text-balance { text-wrap: balance; }
 }
 
-/* ── CTA pill shape ──────────────────────────────────────── */
-/* Primary CTAs: dark background buttons */
-button.bg-foreground,
-button.bg-\[\#1C1C1A\],
-a.bg-foreground,
-a.bg-\[\#1C1C1A\] {
-  border-radius: 9999px !important;
-}
-
-/* Secondary/ghost CTAs: border-only buttons */
-button.border-foreground,
-button.border-current,
-a.border-foreground,
-a.border-current {
-  border-radius: 9999px !important;
-}
-
 /* Configurator option buttons must NOT become pills */
 .configurator-option-btn {
   border-radius: var(--radius) !important;
