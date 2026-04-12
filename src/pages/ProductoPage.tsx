@@ -2,7 +2,7 @@
 import { useEffect, useState, Suspense, useMemo, useRef } from 'react';
 import * as React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Truck, Clock, ShieldCheck, MessageCircle } from 'lucide-react';
 import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
@@ -198,6 +198,7 @@ export default function ProductoPage() {
   const [selectedApertura, setSelectedApertura] = useState('Derecha');
   const [selectedVariant, setSelectedVariant] = useState<VariantNode | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [qty, setQty] = useState(1);
 
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -274,7 +275,7 @@ export default function ProductoPage() {
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
-      quantity: 1,
+      quantity: qty,
       selectedOptions: extraOptions,
     });
     setAddedToCart(true);
@@ -508,6 +509,15 @@ export default function ProductoPage() {
             {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mt-1.5">{dims}</p>}
             <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
 
+            {/* Stock indicator */}
+            {selectedVariant && (
+              <p className="font-body mt-2.5" style={{ fontSize: '13px', color: selectedVariant.availableForSale ? '#4A7A5B' : '#A04040' }}>
+                {selectedVariant.availableForSale
+                  ? <><span style={{ fontSize: '10px' }}>●</span> Disponible · Hecho a tu medida</>
+                  : 'Sin stock'}
+              </p>
+            )}
+
             {/* Divider — visual break between identity and configuration */}
             <div className="h-px bg-border mt-8 mb-8" />
 
@@ -667,28 +677,64 @@ export default function ProductoPage() {
               </>
             )}
 
-            {/* ── CTA block — generous separation from config ── */}
+            {/* ── CTA block ── */}
             <div className="pt-2">
-              <button
-                onClick={handleAddToCart}
-                disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                className="w-full rounded-none py-[14px] bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {cartLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : addedToCart ? (
-                  'Añadido ✓'
-                ) : !selectedVariant ? (
-                  'Combinación no disponible'
-                ) : !selectedVariant.availableForSale ? (
-                  'Sin stock'
-                ) : (
-                  'Añadir al carrito'
-                )}
-              </button>
-              <p className="font-body text-[10px] text-muted-foreground text-center mt-4 leading-relaxed">
-                Entrega en Bogotá · Ensamblado en taller · Plug-and-play
-              </p>
+              {/* Quantity selector + add-to-cart */}
+              <div className="flex items-center gap-3">
+                {/* Quantity */}
+                <div className="flex items-center border border-border rounded-none h-[46px] shrink-0">
+                  <button
+                    onClick={() => setQty(q => Math.max(1, q - 1))}
+                    className="w-10 h-full flex items-center justify-center text-foreground hover:bg-muted transition-colors font-body text-base"
+                    aria-label="Reducir cantidad"
+                  >
+                    −
+                  </button>
+                  <span className="w-8 text-center font-body text-sm font-medium select-none">{qty}</span>
+                  <button
+                    onClick={() => setQty(q => q + 1)}
+                    className="w-10 h-full flex items-center justify-center text-foreground hover:bg-muted transition-colors font-body text-base"
+                    aria-label="Aumentar cantidad"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Add to cart */}
+                <button
+                  onClick={handleAddToCart}
+                  disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
+                  className="flex-1 rounded-none py-[14px] bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {cartLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : addedToCart ? (
+                    'Añadido ✓'
+                  ) : !selectedVariant ? (
+                    'Combinación no disponible'
+                  ) : !selectedVariant.availableForSale ? (
+                    'Sin stock'
+                  ) : (
+                    'Añadir al carrito'
+                  )}
+                </button>
+              </div>
+
+              {/* Shipping info block */}
+              <div className="mt-4 rounded-none bg-muted/50 px-4 py-3.5 space-y-2">
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                  <Truck className="w-3.5 h-3.5 shrink-0" />
+                  <span>Envío disponible únicamente en Bogotá D.C.</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                  <Clock className="w-3.5 h-3.5 shrink-0" />
+                  <span>Entrega e instalación en 2 a 3 semanas</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                  <span>Envío e instalación incluidos en el precio</span>
+                </div>
+              </div>
             </div>
 
             {/* ── ACCORDION ── */}
@@ -728,7 +774,22 @@ export default function ProductoPage() {
                 <AccordionItem value="materials">
                   <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Materiales</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
-                    Melamina 18mm Tablemac Duratex. Canto ABS 0.5mm. Panel trasero HDF 6mm remetido 25mm desde cara posterior. Acabado HPL matte. Ensamblado en taller en Bogotá.
+                    Melamina de alta calidad de 18 mm con acabado mate. Canto ABS de 0.5 mm. Panel trasero en HDF de 6 mm, remetido 25 mm desde la cara posterior. Ensamblado en taller en Bogotá.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="shipping">
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Envío e instalación</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
+                    Todos los productos NODO se fabrican a pedido en nuestro taller en Bogotá. El tiempo estimado de entrega es de 2 a 3 semanas desde la confirmación del pedido. La entrega incluye transporte e instalación en tu espacio, sin costo adicional. Actualmente realizamos envíos únicamente dentro de Bogotá D.C.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="warranty">
+                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Garantía y devoluciones</AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
+                    <p>Todos los productos NODO cuentan con garantía legal de un (1) año a partir de la fecha de entrega, conforme a la Ley 1480 de 2011 (Estatuto del Consumidor). La garantía cubre defectos de fabricación, materiales e instalación. No cubre daños causados por uso inadecuado, modificaciones realizadas por el cliente, o desgaste natural del producto.</p>
+                    <p className="mt-3">Tienes derecho a ejercer el retracto dentro de los cinco (5) días hábiles siguientes a la entrega del producto. La devolución del dinero se realizará en un plazo máximo de quince (15) días calendario conforme a la Ley 2439 de 2024. Para solicitar garantía o devoluciones, escríbenos a hola@nodo.co</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -737,6 +798,24 @@ export default function ProductoPage() {
 
         </div>
       </div>
+
+      {/* ── Reviews placeholder ── */}
+      <section className="border-t border-border">
+        <div className="nodo-container py-16">
+          <h3 className="font-body text-[9px] uppercase tracking-[.16em] text-muted-foreground mb-6">Reseñas</h3>
+          <div className="bg-muted/40 rounded-none px-6 py-10 flex flex-col items-center text-center gap-3">
+            <MessageCircle className="w-6 h-6 text-muted-foreground/40" />
+            <p className="font-body text-muted-foreground" style={{ fontSize: '14px' }}>
+              Las reseñas de clientes estarán disponibles próximamente.
+            </p>
+            <p className="font-body text-muted-foreground/60" style={{ fontSize: '14px' }}>
+              ¿Ya tienes un producto NODO? Escríbenos a{' '}
+              <a href="mailto:hola@nodo.co" className="underline underline-offset-2 hover:text-foreground transition-colors">hola@nodo.co</a>{' '}
+              para compartir tu experiencia.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ── Bought Together ── */}
       <section className="border-t border-border">
