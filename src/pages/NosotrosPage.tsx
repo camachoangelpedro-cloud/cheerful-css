@@ -130,7 +130,7 @@ export default function NosotrosPage() {
               {
                 num: '04',
                 title: 'Entregamos',
-                body: 'Recibe tu NODO con entrega e instalación incluida en tu espacio.',
+                body: 'Recibe tu NODO con entrega a domicilio incluida en tu espacio.',
               },
             ].map((step, i, arr) => (
               <div
