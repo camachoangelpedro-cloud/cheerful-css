@@ -5,7 +5,6 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
-import { CardViewer, defaultGlb } from '@/components/CardViewer';
 
 const COP = (n: number) => 'COP $' + n.toLocaleString('es-CO');
 
@@ -21,12 +20,14 @@ function ProductCard({ product }: { product: typeof NODO_PRODUCTS[number] }) {
   return (
     <Link to={`/producto/${product.handle}`} className="block group">
 
-      {/* 3D viewer — 4:5 aspect for taller cards */}
+      {/* Image placeholder */}
       <div
-        className="w-full overflow-hidden relative"
-        style={{ backgroundColor: '#F2EDE4', borderRadius: '8px', aspectRatio: '4/5' }}
+        className="w-full overflow-hidden relative flex items-center justify-center"
+        style={{ backgroundColor: activeColor?.hex ?? '#F2EDE4', borderRadius: '8px', aspectRatio: '4/5' }}
       >
-        <CardViewer glbUrl={defaultGlb(product.handle, selectedColor)} bg="#F2EDE4" />
+        <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          {product.title}
+        </span>
       </div>
 
       {/* Swatches — click to change color + viewer */}
