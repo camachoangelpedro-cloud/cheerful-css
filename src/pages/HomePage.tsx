@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { Footer } from '@/components/FooterNodo';
@@ -64,6 +65,10 @@ function StarModule({ handle, label }: StarModuleProps) {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>NODO — Muebles modulares diseñados para ti | Bogotá</title>
+        <meta name="description" content="Sistema de estantería modular personalizable. Diseña tu configuración, elige colores y recibe tus módulos armados en Bogotá. Fabricado a pedido." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main>
