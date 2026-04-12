@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, MessageSquare, Instagram, ChevronDown } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -79,6 +80,10 @@ export default function ContactoPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Contacto — Escríbenos | NODO</title>
+        <meta name="description" content="¿Tienes preguntas sobre tu proyecto NODO? Contáctanos por WhatsApp, email o formulario. Te respondemos en menos de 24 horas." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main className="pt-[96px]">
