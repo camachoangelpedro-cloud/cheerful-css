@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -16,6 +17,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function TerminosPage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Términos y condiciones | NODO</title>
+        <meta name="description" content="Términos y condiciones de uso del sitio web y compras en NODO Modular Design. Bogotá, Colombia." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main className="pt-[96px]">
