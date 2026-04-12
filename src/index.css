@@ -70,7 +70,7 @@
   --secondary: 32 27% 77%;
   --secondary-foreground: 0 0% 11%;
 
-  --muted: 32 27% 77%;
+  --muted: 0 0% 96%;
   --muted-foreground: 0 0% 37%;       /* #5F5E5A */
 
   --accent: 116 16% 62%;
@@ -292,15 +292,22 @@
 
 /* ── CTA pill shape ──────────────────────────────────────── */
 /* Primary CTAs: dark background buttons */
-button[class*="bg-foreground"],
-button[class*="bg-[#1C1C1A"],
-a[class*="bg-foreground"],
-a[class*="bg-[#1C1C1A"] {
+button.bg-foreground,
+button.bg-\[\#1C1C1A\],
+a.bg-foreground,
+a.bg-\[\#1C1C1A\] {
   border-radius: 9999px !important;
 }
 
 /* Secondary/ghost CTAs: border-only buttons */
-button[class*="border-foreground"],
-button[class*="border-current"] {
+button.border-foreground,
+button.border-current,
+a.border-foreground,
+a.border-current {
   border-radius: 9999px !important;
+}
+
+/* Configurator option buttons must NOT become pills */
+.configurator-option-btn {
+  border-radius: var(--radius) !important;
 }
