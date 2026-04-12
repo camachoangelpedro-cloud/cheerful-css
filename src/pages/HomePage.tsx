@@ -68,6 +68,60 @@ export default function HomePage() {
       <main>
         <HeroSection />
 
+        {/* Value proposition — three benefit cards */}
+        <section className="nodo-container py-20 lg:py-28">
+          <h2
+            className="text-3xl lg:text-4xl mb-10 lg:mb-14"
+            style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+          >
+            Muebles que se adaptan a ti.
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+            {/* Card 1 */}
+            <div
+              className="flex flex-col gap-3 p-8"
+              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+            >
+              <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
+                Diseña a tu medida
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+                Elige módulos, colores y configuraciones que se ajusten exactamente a tu espacio.
+                Sin catálogos genéricos — tu estantería, tus reglas.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div
+              className="flex flex-col gap-3 p-8"
+              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+            >
+              <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
+                Precio claro, sin sorpresas
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+                Cada módulo tiene un precio fijo. Configura, suma y compra con total transparencia
+                — sin cotizaciones ocultas ni costos inesperados.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div
+              className="flex flex-col gap-3 p-8"
+              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+            >
+              <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
+                Se mueve contigo
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+                Sistema modular que se desarma y se rearma en minutos. Cambiás de apartamento,
+                tu NODO va con contigo — y crece cuando lo necesitás.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Editorial section — star modules */}
         <section className="nodo-container py-20 lg:py-28">
 
