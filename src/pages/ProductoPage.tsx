@@ -355,11 +355,11 @@ export default function ProductoPage() {
     <div
       onClick={locked ? undefined : onClick}
       className={`flex flex-col items-center gap-2 p-3 min-w-[72px] flex-1 max-w-[90px] border cursor-pointer rounded-none transition-all duration-150
-        ${active ? 'border-[#1A2B3C] bg-[#F2EDE4]' : 'border-border hover:border-foreground/40'}
+        ${active ? 'border-[#1C1C1A] bg-[#F2EDE4]' : 'border-border hover:border-foreground/40'}
         ${locked ? 'opacity-30 pointer-events-none' : ''}`}
     >
       <div className="w-10 h-10 shrink-0 text-foreground">{svg}</div>
-      <span className={`font-body text-[10px] text-center leading-tight mt-1 ${active ? 'text-[#1A2B3C]' : 'text-muted-foreground'}`}>{label}</span>
+      <span className={`font-body text-[10px] text-center leading-tight mt-1 ${active ? 'text-[#1C1C1A]' : 'text-muted-foreground'}`}>{label}</span>
     </div>
   );
 
@@ -448,7 +448,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 bg-[#1A2B3C] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
+              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 bg-[#1C1C1A] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
             >
               {addedToCart ? 'Añadido ✓' : 'Añadir'}
             </button>
@@ -505,7 +505,7 @@ export default function ProductoPage() {
           <div className="lg:sticky lg:top-8">
 
             {/* Title block — compact, name + dims + price read as one unit */}
-            <h1 className="font-display font-semibold text-2xl leading-snug">{product.title}</h1>
+            <h1 className="font-display font-light text-3xl md:text-4xl leading-snug">{product.title}</h1>
             {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mt-1.5">{dims}</p>}
             <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
 
@@ -573,7 +573,7 @@ export default function ProductoPage() {
                         key={a}
                         onClick={() => setSelectedApertura(a)}
                         className={`font-body text-[10px] tracking-[.12em] uppercase px-4 py-2 border rounded-none cursor-pointer transition-colors
-                          ${selectedApertura === a ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]' : 'border-border text-foreground hover:border-foreground/60'}`}
+                          ${selectedApertura === a ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]' : 'border-border text-foreground hover:border-foreground/60'}`}
                       >
                         {a}
                       </button>
@@ -704,7 +704,7 @@ export default function ProductoPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                  className="flex-1 rounded-none py-[14px] bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 rounded-none py-[14px] bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {cartLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
