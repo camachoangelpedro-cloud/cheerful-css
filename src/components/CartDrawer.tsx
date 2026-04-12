@@ -35,6 +35,12 @@ export function CartDrawer() {
   const handleCheckout = () => {
     const checkoutUrl = getCheckoutUrl();
     if (checkoutUrl) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'begin_checkout', {
+          currency: 'COP',
+          value: totalPrice || 0,
+        });
+      }
       window.open(checkoutUrl, '_blank');
       setIsOpen(false);
     }
