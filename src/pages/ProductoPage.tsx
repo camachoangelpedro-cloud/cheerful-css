@@ -8,6 +8,7 @@ declare global {
 import { useEffect, useState, Suspense, useMemo, useRef } from 'react';
 import * as React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Loader2, Truck, Clock, Package, MessageCircle } from 'lucide-react';
 import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 import { Navbar } from '@/components/Navbar';
@@ -450,6 +451,10 @@ export default function ProductoPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{`${product?.title || 'Producto'} | NODO`}</title>
+        <meta name="description" content={product?.description?.slice(0, 155) || 'Módulo de estantería modular NODO. Configura color, interior y panel. Fabricado a pedido en Bogotá.'} />
+      </Helmet>
       <Navbar />
       <CartDrawer />
 
