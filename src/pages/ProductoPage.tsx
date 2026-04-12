@@ -448,7 +448,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 bg-[#1C1C1A] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
+              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 rounded-full bg-[#1C1C1A] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
             >
               {addedToCart ? 'Añadido ✓' : 'Añadir'}
             </button>
@@ -704,7 +704,7 @@ export default function ProductoPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                  className="flex-1 rounded-none py-[14px] bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 rounded-full py-[14px] bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {cartLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
