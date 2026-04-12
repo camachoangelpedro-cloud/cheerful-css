@@ -164,7 +164,7 @@ export function CartDrawer() {
                 </p>
                 <Button 
                   onClick={handleCheckout} 
-                  className="w-full nodo-button" 
+                  className="w-full nodo-button rounded-full"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? (
