@@ -83,7 +83,7 @@
   --input: 35 15% 82%;
   --ring: 0 0% 11%;
 
-  --radius: 0;
+  --radius: 0.5rem;
 }
 
 .dark {
@@ -126,10 +126,10 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
 }
 
 @layer base {
@@ -260,11 +260,11 @@
   }
 
   .nodo-button {
-    @apply bg-foreground text-background px-8 py-3 text-sm transition-all duration-200 hover:opacity-90;
+    @apply bg-foreground text-background px-8 py-3 text-sm transition-all duration-200 hover:opacity-90 rounded-full;
   }
 
   .nodo-button-outline {
-    @apply border border-foreground/30 px-8 py-3 text-sm transition-all duration-200 hover:bg-foreground hover:text-background;
+    @apply border border-foreground/30 px-8 py-3 text-sm transition-all duration-200 hover:bg-foreground hover:text-background rounded-full;
   }
 
   @keyframes marquee {
@@ -288,4 +288,19 @@
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
+}
+
+/* ── CTA pill shape ──────────────────────────────────────── */
+/* Primary CTAs: dark background buttons */
+button[class*="bg-foreground"],
+button[class*="bg-[#1C1C1A"],
+a[class*="bg-foreground"],
+a[class*="bg-[#1C1C1A"] {
+  border-radius: 9999px !important;
+}
+
+/* Secondary/ghost CTAs: border-only buttons */
+button[class*="border-foreground"],
+button[class*="border-current"] {
+  border-radius: 9999px !important;
 }
