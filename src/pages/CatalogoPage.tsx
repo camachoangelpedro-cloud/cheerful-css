@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
@@ -286,6 +287,10 @@ export default function CatalogoPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Catálogo — Módulos y Accesorios | NODO</title>
+        <meta name="description" content="Explora nuestra colección de módulos de estantería modular. Profundidad completa, media profundidad, bases y clips. Filtra por color y tipo." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
 
