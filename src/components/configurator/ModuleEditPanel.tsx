@@ -149,7 +149,7 @@ export default function ModuleEditPanel() {
   const handlePasacables = (val: boolean)       => updateModule(selectedId, { pasacables: val });
 
   return (
-    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm w-52 pointer-events-auto">
+    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm rounded-lg w-52 pointer-events-auto">
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-border">
         <span className="font-body text-[9px] uppercase tracking-[.12em] font-medium">
