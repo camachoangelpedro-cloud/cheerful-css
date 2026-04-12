@@ -4,17 +4,7 @@ import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
-import { CardViewer } from '@/components/CardViewer';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
-
-const GITHUB_BASE =
-  'https://raw.githubusercontent.com/camachoangelpedro-cloud/cheerful-css/main/public/models';
-
-function starGlb(handle: string, colorCode: string): string {
-  if (handle === 'modulo-36-72') return `${GITHUB_BASE}/MOD_1X2_A_B_${colorCode}.glb`;
-  if (handle === 'modulo-72-36') return `${GITHUB_BASE}/MOD_2X1_D_B_${colorCode}.glb`;
-  return '';
-}
 
 interface StarModuleProps {
   handle: string;
@@ -22,20 +12,22 @@ interface StarModuleProps {
 }
 
 function StarModule({ handle, label }: StarModuleProps) {
-  const [colorCode, setColorCode] = useState('BH');
+  const [colorId, setColorId] = useState('BH');
   const product = NODO_PRODUCTS.find(p => p.handle === handle);
   if (!product) return null;
   const price = getStartingPrice(product);
-  const glbUrl = starGlb(handle, colorCode);
+  const activeColor = NODO_COLORS.find(c => c.id === colorId);
 
   return (
     <Link to={`/producto/${handle}`} className="block group flex-1 min-w-0">
-      {/* 3D viewer */}
+      {/* Image placeholder */}
       <div
-        className="w-full overflow-hidden relative"
-        style={{ backgroundColor: '#ECEAE7', borderRadius: '6px', aspectRatio: '4/5' }}
+        className="w-full overflow-hidden relative flex items-center justify-center"
+        style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', borderRadius: '6px', aspectRatio: '4/5' }}
       >
-        <CardViewer glbUrl={glbUrl} bg="#ECEAE7" />
+        <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          {label}
+        </span>
       </div>
 
       {/* Swatches — stop propagation so clicking them doesn't navigate */}
@@ -46,10 +38,10 @@ function StarModule({ handle, label }: StarModuleProps) {
         {NODO_COLORS.map(c => (
           <button
             key={c.id}
-            onClick={e => { e.preventDefault(); setColorCode(c.id); }}
+            onClick={e => { e.preventDefault(); setColorId(c.id); }}
             aria-label={c.name}
-            aria-checked={colorCode === c.id}
-            className={`color-swatch w-[26px] h-[26px] ${c.id === 'BH' ? 'color-swatch--light' : ''} ${colorCode === c.id ? 'selected' : ''}`}
+            aria-checked={colorId === c.id}
+            className={`color-swatch w-[26px] h-[26px] ${c.id === 'BH' ? 'color-swatch--light' : ''} ${colorId === c.id ? 'selected' : ''}`}
             style={{ backgroundColor: c.hex }}
           />
         ))}
