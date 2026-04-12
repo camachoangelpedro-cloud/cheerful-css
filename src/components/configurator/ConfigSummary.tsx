@@ -105,7 +105,7 @@ setIsAdding(true);
               <div key={i} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div
-                    className="w-3 h-3 shrink-0"
+                    className="w-3 h-3 rounded-full shrink-0"
                     style={{ background: color?.hex ?? '#ccc', border: '1px solid rgba(0,0,0,0.10)' }}
                   />
                   <span className="font-body text-[9px] text-foreground/80 leading-tight">
@@ -131,7 +131,7 @@ setIsAdding(true);
       <button
         onClick={handleAddToCart}
         disabled={placedModules.length === 0 || isAdding}
-        className="w-full py-3 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+        className="w-full py-3 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
       >
         {isAdding
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
