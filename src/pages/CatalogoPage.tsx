@@ -4,7 +4,17 @@ import { SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
-import { COLOR_HEX, type ProductCategory } from '@/data/products';
+import type { ProductCategory } from '@/data/products';
+
+const COLOR_HEX: Record<string, string> = {
+  'Blanco Hueso': '#F2EDE4',
+  'Roble Natural': '#D4B896',
+  'Verde Agave': '#7A9080',
+  'Azul Fes': '#2E3B6E',
+  'Negro': '#1C1C1A',
+  'Latón': '#C5A55A',
+  'Acero cepillado': '#9B9B9B',
+};
 import { fetchProducts } from '@/lib/shopify';
 
 // ── Price formatter — COP with dot thousands separator, no decimals ──────────
