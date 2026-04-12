@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { CartDrawer } from '@/components/CartDrawer';
 import { Footer } from '@/components/FooterNodo';
@@ -6,6 +7,10 @@ import { Footer } from '@/components/FooterNodo';
 export default function NotFoundPage() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Página no encontrada | NODO</title>
+        <meta name="description" content="Lo sentimos, la página que buscas no existe." />
+      </Helmet>
       <Navbar />
       <CartDrawer />
       <main className="pt-[96px] flex items-center justify-center min-h-[70vh]">
