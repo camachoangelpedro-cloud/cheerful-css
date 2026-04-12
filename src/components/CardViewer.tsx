@@ -1,6 +1,6 @@
 import { Suspense, useState, useEffect, useRef, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { useGLTF, Bounds } from '@react-three/drei';
+import { useGLTF, Bounds, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ── Model ── */
@@ -57,10 +57,13 @@ export function CardViewer({ glbUrl, bg = '#F2EDE4' }: CardViewerProps) {
         <Canvas
           frameloop="demand"
           gl={{ antialias: true, preserveDrawingBuffer: true }}
-          /* GLB fronts face -Z; camera at -Z = looking at front face, slight left + person-height elevation */
-          camera={{ position: [-3, 3, -12], fov: 40, up: [0, 1, 0] }}
+          /* Camera direction = normalize(position). Bounds uses normalize(cam - controls.target)
+             = normalize(position) when target=[0,0,0]. Gives ~40° elevation, 30° left, front-facing. */
+          camera={{ position: [-4, 6, 7], fov: 40, up: [0, 1, 0] }}
           style={{ width: '100%', height: '100%', background: bg }}
         >
+          {/* makeDefault registers controls so Bounds can use them for correct camera fitting */}
+          <OrbitControls makeDefault enabled={false} />
           <ambientLight intensity={0.45} color="#FFF5E8" />
           <directionalLight position={[-5, 8, 4]}  intensity={1.8} color="#FFF0D6" />
           <directionalLight position={[4, -3, 6]}  intensity={0.35} color="#E8E8F2" />
