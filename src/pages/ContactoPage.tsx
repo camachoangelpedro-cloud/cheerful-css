@@ -184,7 +184,7 @@ export default function ContactoPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 p-6 border border-border/40 hover:border-foreground/20 transition-colors group"
-                  style={{ borderRadius: '4px' }}
+                  style={{ borderRadius: 0 }}
                 >
                   <MessageSquare className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#4A7A5B' }} />
                   <div>
@@ -195,7 +195,7 @@ export default function ContactoPage() {
                 <a
                   href="mailto:nodomodulardesign@gmail.com"
                   className="flex items-start gap-4 p-6 border border-border/40 hover:border-foreground/20 transition-colors group"
-                  style={{ borderRadius: '4px' }}
+                  style={{ borderRadius: 0 }}
                 >
                   <Mail className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#5F5E5A' }} />
                   <div>
@@ -208,7 +208,7 @@ export default function ContactoPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 p-6 border border-border/40 hover:border-foreground/20 transition-colors group"
-                  style={{ borderRadius: '4px' }}
+                  style={{ borderRadius: 0 }}
                 >
                   <Instagram className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#5F5E5A' }} />
                   <div>
