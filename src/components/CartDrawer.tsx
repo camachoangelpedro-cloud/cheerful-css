@@ -139,7 +139,7 @@ export function CartDrawer() {
                       key={item.link}
                       to={item.link}
                       className="flex-shrink-0 w-[90px] snap-start group"
-                      onClick={() => {}}
+                      onClick={() => setIsOpen(false)}
                     >
                       <div className="w-full aspect-square bg-muted/40 flex items-center justify-center mb-1.5 rounded-sm overflow-hidden">
                         <span className="font-body text-[8px] uppercase tracking-wide text-muted-foreground/40 text-center px-1 leading-tight">{item.name}</span>
