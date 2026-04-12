@@ -42,7 +42,7 @@ export default function WallSetup() {
       onClick={() => setter(value)}
       className={`font-body text-[10px] px-2.5 py-1 border rounded-none transition-colors
         ${current === value
-          ? 'bg-[#1A2B3C] text-[#F2EDE4] border-[#1A2B3C]'
+          ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]'
           : 'border-border hover:border-foreground/40'}`}
     >
       {value}
@@ -123,7 +123,7 @@ export default function WallSetup() {
         {/* ── Controls ──────────────────────────────────── */}
         <div className="space-y-7">
           <div>
-            <h1 className="font-display font-semibold text-3xl mb-1">Define tu pared</h1>
+            <h1 className="font-display font-light text-3xl mb-1">Define tu pared</h1>
             <p className="font-body text-sm text-muted-foreground">
               Establece el espacio donde irán tus módulos NODO.
             </p>
@@ -161,7 +161,7 @@ export default function WallSetup() {
               <input
                 type="checkbox" checked={hasWindow}
                 onChange={e => setHasWindow(e.target.checked)}
-                className="w-4 h-4 accent-[#1A2B3C]"
+                className="w-4 h-4 accent-[#1C1C1A]"
               />
               <span className="font-body text-[10px] uppercase tracking-[.12em] font-medium">
                 Añadir ventana
@@ -194,7 +194,7 @@ export default function WallSetup() {
           <button
             onClick={handleConfirm}
             disabled={widthCm < 72 || heightCm < 100}
-            className="w-full py-4 bg-[#1A2B3C] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
+            className="w-full py-4 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
           >
             Empezar a diseñar →
           </button>
