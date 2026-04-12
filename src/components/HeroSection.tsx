@@ -63,7 +63,7 @@ export function HeroSection() {
           </h2>
           <Link 
             to={heroSlides[currentSlide].link}
-            className="inline-block border border-white/60 text-white px-6 py-2.5 text-sm tracking-wide hover:bg-white hover:text-black transition-all duration-300"
+            className="inline-block rounded-full border border-white/60 text-white px-6 py-2.5 text-sm tracking-wide hover:bg-white hover:text-black transition-all duration-300"
           >
             {heroSlides[currentSlide].cta}
           </Link>
