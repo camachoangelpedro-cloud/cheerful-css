@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft } from 'lucide-react';
 import IsometricCanvas from '@/components/configurator/IsometricCanvas';
 import ModuleCatalog from '@/components/configurator/ModuleCatalog';
@@ -9,6 +10,10 @@ import ModuleEditPanel from '@/components/configurator/ModuleEditPanel';
 export default function ConfiguradorPage() {
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
+      <Helmet>
+        <title>Configurador 3D — Diseña tu sistema | NODO</title>
+        <meta name="description" content="Diseña tu sistema de estantería modular en nuestro configurador 3D. Arrastra módulos, elige colores y visualiza tu proyecto en tiempo real." />
+      </Helmet>
       {/* Header */}
       <header className="h-12 border-b border-border flex items-center px-4 gap-4 shrink-0">
         <Link
