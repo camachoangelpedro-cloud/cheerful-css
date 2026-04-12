@@ -111,13 +111,13 @@ export function Navbar() {
         `}</style>
         {/* Mobile: scrolling ticker. Desktop: static centered */}
         <span className="hidden sm:block text-xs font-light" style={{ letterSpacing: 0 }}>
-          Diseño Modular · Ensamblaje sin Herramientas · Hecho en Colombia · Envío Gratis para los 20 Primeros Proyectos
+          Diseño Modular · Módulos Armados · Hecho en Colombia · Primeros Envíos Gratis
         </span>
         <div className="sm:hidden w-full overflow-hidden">
           <div className="nodo-ticker-inner">
             {[0, 1].map(i => (
               <span key={i} className="text-xs font-light px-8" style={{ letterSpacing: 0 }}>
-                Diseño Modular · Ensamblaje sin Herramientas · Hecho en Colombia · Envío Gratis para los 20 Primeros Proyectos &nbsp;&nbsp;&nbsp;
+                Diseño Modular · Módulos Armados · Hecho en Colombia · Primeros Envíos Gratis &nbsp;&nbsp;&nbsp;
               </span>
             ))}
           </div>
