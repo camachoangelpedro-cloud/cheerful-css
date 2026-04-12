@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { 
@@ -152,6 +158,13 @@ export const useCartStore = create<CartStore>()(
                 items: [{ ...item, lineId: result.lineId }],
                 isOpen: true
               });
+              if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+                window.gtag('event', 'add_to_cart', {
+                  currency: 'COP',
+                  value: parseFloat(item.price?.amount || '0'),
+                  items: [{ item_id: item.variantId || '', item_name: item.product?.node?.title || '', price: parseFloat(item.price?.amount || '0'), currency: 'COP', quantity: item.quantity || 1 }]
+                });
+              }
             }
           } else if (existingItem) {
             const newQuantity = existingItem.quantity + item.quantity;
@@ -162,10 +175,17 @@ export const useCartStore = create<CartStore>()(
             const result = await updateShopifyCartLine(cartId, existingItem.lineId, newQuantity);
             if (result.success) {
               const currentItems = get().items;
-              set({ 
+              set({
                 items: currentItems.map(i => i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i),
                 isOpen: true
               });
+              if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+                window.gtag('event', 'add_to_cart', {
+                  currency: 'COP',
+                  value: parseFloat(item.price?.amount || '0'),
+                  items: [{ item_id: item.variantId || '', item_name: item.product?.node?.title || '', price: parseFloat(item.price?.amount || '0'), currency: 'COP', quantity: item.quantity || 1 }]
+                });
+              }
             } else if (result.cartNotFound) {
               clearCart();
             }
@@ -173,10 +193,17 @@ export const useCartStore = create<CartStore>()(
             const result = await addLineToShopifyCart(cartId, { ...item, lineId: null });
             if (result.success) {
               const currentItems = get().items;
-              set({ 
+              set({
                 items: [...currentItems, { ...item, lineId: result.lineId ?? null }],
                 isOpen: true
               });
+              if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+                window.gtag('event', 'add_to_cart', {
+                  currency: 'COP',
+                  value: parseFloat(item.price?.amount || '0'),
+                  items: [{ item_id: item.variantId || '', item_name: item.product?.node?.title || '', price: parseFloat(item.price?.amount || '0'), currency: 'COP', quantity: item.quantity || 1 }]
+                });
+              }
             } else if (result.cartNotFound) {
               clearCart();
             }
