@@ -24,7 +24,7 @@ function StarModule({ handle, label }: StarModuleProps) {
       {/* Image placeholder */}
       <div
         className="w-full overflow-hidden relative flex items-center justify-center"
-        style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', borderRadius: '6px', aspectRatio: '4/5' }}
+        style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
       >
         <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           {label}
@@ -72,8 +72,8 @@ export default function HomePage() {
         {/* Value proposition — three benefit cards */}
         <section className="nodo-container py-20 lg:py-28">
           <h2
-            className="text-3xl lg:text-4xl mb-10 lg:mb-14"
-            style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+            className="font-display text-2xl md:text-3xl mb-10 lg:mb-14"
+            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
           >
             Muebles que se adaptan a ti.
           </h2>
@@ -82,7 +82,7 @@ export default function HomePage() {
             {/* Card 1 */}
             <div
               className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+              style={{ backgroundColor: '#F2EDE4' }}
             >
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Diseña a tu medida
@@ -96,7 +96,7 @@ export default function HomePage() {
             {/* Card 2 */}
             <div
               className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+              style={{ backgroundColor: '#F2EDE4' }}
             >
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Precio claro, sin sorpresas
@@ -110,7 +110,7 @@ export default function HomePage() {
             {/* Card 3 */}
             <div
               className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4', borderRadius: '6px' }}
+              style={{ backgroundColor: '#F2EDE4' }}
             >
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Se mueve contigo
@@ -155,7 +155,6 @@ export default function HomePage() {
                 className="flex flex-col gap-5 p-8"
                 style={{
                   backgroundColor: '#FFFFFF',
-                  borderRadius: '6px',
                   border: '1px solid rgba(0,0,0,0.07)',
                 }}
               >
@@ -210,7 +209,7 @@ export default function HomePage() {
               <p className="text-xs mb-2" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
                 Módulos individuales
               </p>
-              <h2 className="text-3xl lg:text-4xl font-medium" style={{ letterSpacing: 0, lineHeight: 1.1 }}>
+              <h2 className="font-display text-2xl md:text-3xl font-light" style={{ letterSpacing: 0, lineHeight: 1.1, color: '#1C1C1A' }}>
                 Construye tu propio espacio
               </h2>
             </div>
