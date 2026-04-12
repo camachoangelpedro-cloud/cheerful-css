@@ -10,37 +10,37 @@ const PASACABLES_HANDLES  = ['modulo-36-36', 'modulo-36-72', 'modulo-72-36', 'mo
 
 /* SVG icons matching product page */
 const PanelConSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
     <rect x="8" y="8" width="24" height="24" fill="currentColor" fillOpacity=".1" strokeWidth="1.5" />
   </svg>
 );
 const PanelSinSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
     <path d="M10 10L30 30M30 10L10 30" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
   </svg>
 );
 const InteriorAbiertoSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
   </svg>
 );
 const InteriorRepisaSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
     <line x1="7" y1="20" x2="33" y2="20" strokeWidth="3" strokeLinecap="square" />
   </svg>
 );
 const InteriorPuertaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
   isSingle ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <circle cx={handleLeft ? 13 : 27} cy="20" r="2.5" fill="currentColor" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
@@ -50,14 +50,14 @@ const InteriorPuertaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handle
   );
 const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
   isSingle ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
       <circle cx={handleLeft ? 13 : 27} cy="13" r="2.5" fill="currentColor" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
       <rect x="3" y="3" width="34" height="34" rx="1" />
       <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
       <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
@@ -68,7 +68,7 @@ const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; 
   );
 
 const PasacablesOnSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
     <circle cx="20" cy="28" r="4" strokeWidth="1.5" />
     <line x1="20" y1="24" x2="20" y2="16" strokeWidth="1.5" />
@@ -76,7 +76,7 @@ const PasacablesOnSvg = () => (
   </svg>
 );
 const PasacablesOffSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-7 h-7">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
     <rect x="3" y="3" width="34" height="34" rx="1" />
     <line x1="14" y1="26" x2="26" y2="26" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
   </svg>
@@ -93,12 +93,12 @@ function OptionBtn({ active, locked, icon, label, onClick }: OptionBtnProps) {
   return (
     <button
       onClick={locked ? undefined : onClick}
-      className={`flex flex-col items-center gap-1 p-2 border flex-1 transition-colors
-        ${active  ? 'border-[#1C1C1A] bg-[#1C1C1A]/5 text-foreground' : 'border-border text-muted-foreground hover:border-foreground/40'}
+      className={`configurator-option-btn flex flex-col items-center gap-2 p-3 min-w-[72px] flex-1 max-w-[90px] border cursor-pointer transition-all duration-150
+        ${active  ? 'border-[#1C1C1A] bg-[#F2EDE4]' : 'border-border hover:border-foreground/40'}
         ${locked  ? 'opacity-30 pointer-events-none' : ''}`}
     >
-      {icon}
-      <span className="font-body text-[8px] uppercase tracking-[.08em] text-center leading-tight">{label}</span>
+      <div className="w-10 h-10 shrink-0 text-foreground">{icon}</div>
+      <span className={`font-body text-[10px] text-center leading-tight mt-1 ${active ? 'text-[#1C1C1A]' : 'text-muted-foreground'}`}>{label}</span>
     </button>
   );
 }
