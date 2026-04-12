@@ -12,7 +12,7 @@ export default function NotFoundPage() {
         <div className="text-center px-6">
           <p
             className="text-8xl lg:text-9xl font-light mb-4"
-            style={{ color: '#E8E4DC', fontFamily: 'Syne, sans-serif', lineHeight: 1 }}
+            style={{ color: '#E8E4DC', lineHeight: 1 }}
           >
             404
           </p>
@@ -31,7 +31,7 @@ export default function NotFoundPage() {
           <Link
             to="/"
             className="inline-flex items-center px-7 py-3 font-body text-sm font-medium transition-opacity hover:opacity-80"
-            style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4', borderRadius: '2px' }}
+            style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}
           >
             Volver al inicio
           </Link>
