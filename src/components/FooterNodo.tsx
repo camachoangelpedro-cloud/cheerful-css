@@ -2,15 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 
-const SHOPIFY_URL = 'https://1iwfce-de.myshopify.com/api/2025-07/graphql.json';
-const SHOPIFY_TOKEN = '117b4d52a7e987a5c86af4fb06564327';
-const CUSTOMER_CREATE = `mutation customerCreate($input: CustomerCreateInput!) {
-  customerCreate(input: $input) {
-    customer { id email }
-    customerUserErrors { code message }
-  }
-}`;
-
 // ── Payment method badge ─────────────────────────────────────────────────────
 function PaymentBadge({ label }: { label: string }) {
   return (
@@ -70,22 +61,12 @@ function FooterNewsletter() {
     if (!email) return;
     setStatus('loading');
     try {
-      const res = await fetch(SHOPIFY_URL, {
+      const res = await fetch('https://formspree.io/f/xjgjblrv', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Storefront-Access-Token': SHOPIFY_TOKEN,
-        },
-        body: JSON.stringify({
-          query: CUSTOMER_CREATE,
-          variables: { input: { email, acceptsMarketing: true } },
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
-      const data = await res.json();
-      const errors = data?.data?.customerCreate?.customerUserErrors ?? [];
-      if (errors.length > 0) {
-        setStatus(errors.some((e: { code: string }) => e.code === 'TAKEN') ? 'duplicate' : 'error');
-      } else if (data?.data?.customerCreate?.customer?.id) {
+      if (res.ok) {
         setStatus('success');
         setEmail('');
       } else {
