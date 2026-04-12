@@ -38,7 +38,7 @@ export default function ModuleCatalog() {
         onClick={() => setDragHandle(dragHandle === product.handle ? null : product.handle)}
         className={`flex flex-col items-center gap-1.5 p-2.5 border cursor-grab active:cursor-grabbing select-none transition-colors
           ${dragHandle === product.handle
-            ? 'border-[#1A2B3C] bg-[#1A2B3C]/5'
+            ? 'border-[#1C1C1A] bg-[#1C1C1A]/5'
             : 'border-border hover:border-foreground/40'}`}
       >
         <div
@@ -120,14 +120,13 @@ export default function ModuleCatalog() {
             <button
               key={color.id}
               onClick={() => setColorCode(color.id)}
-              className="w-7 h-7 transition-transform hover:scale-110"
+              className={`w-6 h-6 rounded-full transition-transform
+                ${selectedColorCode === color.id
+                  ? 'ring-2 ring-offset-2 ring-foreground scale-110'
+                  : 'hover:scale-105'}`}
               style={{
                 background: color.hex,
-                border: selectedColorCode === color.id
-                  ? '2px solid #1A2B3C'
-                  : '1.5px solid rgba(0,0,0,0.15)',
-                outline: selectedColorCode === color.id ? '2px solid rgba(26,43,60,0.18)' : 'none',
-                outlineOffset: '1px',
+                border: '1.5px solid rgba(28,28,26,0.18)',
               }}
               title={color.name}
             />
@@ -145,7 +144,7 @@ export default function ModuleCatalog() {
 
       {/* Full depth 36cm */}
       <div className="border-b border-border">
-        <SectionHeader label="Full depth 36cm" open={modOpen} toggle={() => setModOpen(v => !v)} />
+        <SectionHeader label="Profundidad completa 36 cm" open={modOpen} toggle={() => setModOpen(v => !v)} />
         {modOpen && (
           <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
             {modulos.map(p => <ProductCard key={p.handle} product={p} />)}
@@ -155,7 +154,7 @@ export default function ModuleCatalog() {
 
       {/* Half depth 18cm */}
       <div className="border-b border-border">
-        <SectionHeader label="Half depth 18cm" open={modhOpen} toggle={() => setModhOpen(v => !v)} />
+        <SectionHeader label="Media profundidad 18 cm" open={modhOpen} toggle={() => setModhOpen(v => !v)} />
         {modhOpen && (
           <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
             {modhs.map(p => <ProductCard key={p.handle} product={p} />)}
