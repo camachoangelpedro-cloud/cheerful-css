@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'sonner';
 import { useCartSync } from '@/hooks/useCartSync';
 import { CookieBanner } from '@/components/CookieBanner';
@@ -40,6 +41,7 @@ function AppContent() {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <BrowserRouter>
       <AppContent />
       <CookieBanner />
@@ -48,5 +50,6 @@ export default function App() {
         toastOptions={{ style: { fontFamily: 'Inter, system-ui, sans-serif' } }}
       />
     </BrowserRouter>
+    </HelmetProvider>
   );
 }
