@@ -85,7 +85,7 @@ export function NewsletterSignup({ compact = false }: NewsletterSignupProps) {
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="border border-foreground/20 bg-foreground text-background px-5 py-2.5 font-body text-sm hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center gap-2 whitespace-nowrap"
+          className="rounded-full border border-foreground/20 bg-foreground text-background px-5 py-2.5 font-body text-sm hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center gap-2 whitespace-nowrap"
         >
           {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Suscribirse'}
         </button>
