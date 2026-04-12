@@ -80,10 +80,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
             {/* Card 1 */}
-            <div
-              className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4' }}
-            >
+            <div className="flex flex-col gap-3 p-8 bg-muted">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Diseña a tu medida
               </p>
@@ -94,10 +91,7 @@ export default function HomePage() {
             </div>
 
             {/* Card 2 */}
-            <div
-              className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4' }}
-            >
+            <div className="flex flex-col gap-3 p-8 bg-muted">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Precio claro, sin sorpresas
               </p>
@@ -108,10 +102,7 @@ export default function HomePage() {
             </div>
 
             {/* Card 3 */}
-            <div
-              className="flex flex-col gap-3 p-8"
-              style={{ backgroundColor: '#F2EDE4' }}
-            >
+            <div className="flex flex-col gap-3 p-8 bg-muted">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Se mueve contigo
               </p>
