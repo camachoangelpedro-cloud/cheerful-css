@@ -8,6 +8,7 @@ const CatalogoPage    = lazy(() => import('@/pages/CatalogoPage'));
 const ProductoPage    = lazy(() => import('@/pages/ProductoPage'));
 const ConfiguradorPage = lazy(() => import('@/pages/ConfiguradorPage'));
 const ProductoM1Page  = lazy(() => import('@/pages/ProductoM1Page'));
+const NosotrosPage    = lazy(() => import('@/pages/NosotrosPage'));
 
 function AppContent() {
   useCartSync();
@@ -19,6 +20,7 @@ function AppContent() {
         <Route path="/producto/:handle" element={<ProductoPage />} />
         <Route path="/configurador"  element={<ConfiguradorPage />} />
         <Route path="/producto/m1-1" element={<ProductoM1Page />} />
+        <Route path="/nosotros"      element={<NosotrosPage />} />
       </Routes>
     </Suspense>
   );
