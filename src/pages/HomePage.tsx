@@ -122,6 +122,84 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Testimonials */}
+        <section className="nodo-container py-20 lg:py-28">
+          <h2
+            className="text-3xl lg:text-4xl mb-10 lg:mb-14"
+            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+          >
+            Lo que dicen nuestros clientes
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              {
+                quote: 'Me mudé dos veces en un año y mi NODO se vino conmigo las dos veces. Lo desarmé un domingo en la tarde y al otro día ya estaba armado en el apartamento nuevo. Ningún carpintero te da eso.',
+                name: 'Valentina R.',
+                location: 'Chapinero, Bogotá',
+              },
+              {
+                quote: 'Siempre quise una estantería que no pareciera sacada de catálogo. Con el configurador armé exactamente lo que necesitaba para mi estudio y el precio nunca cambió de lo que me mostraba la página. Cero sorpresas.',
+                name: 'Andrés M.',
+                location: 'Usaquén, Bogotá',
+              },
+              {
+                quote: 'Tengo tres apartamentos en Airbnb y los tres tienen NODO. Cuando un huésped dañó un módulo, pedí solo esa pieza y me llegó en una semana. Con un mueble normal habría tocado cambiar todo.',
+                name: 'Carolina G.',
+                location: 'Superhost · Bogotá',
+              },
+            ].map(t => (
+              <div
+                key={t.name}
+                className="flex flex-col gap-5 p-8"
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(0,0,0,0.07)',
+                }}
+              >
+                {/* Quote mark */}
+                <span
+                  className="text-4xl leading-none select-none"
+                  style={{ color: '#D4B896', fontFamily: 'Georgia, serif' }}
+                  aria-hidden="true"
+                >
+                  "
+                </span>
+
+                {/* Quote text */}
+                <p
+                  className="text-sm leading-relaxed flex-1 italic"
+                  style={{ color: '#5F5E5A', letterSpacing: 0 }}
+                >
+                  {t.quote}
+                </p>
+
+                {/* Divider */}
+                <div style={{ height: '1px', backgroundColor: 'rgba(0,0,0,0.07)' }} />
+
+                {/* Attribution */}
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
+                    {t.name}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
+                    {t.location}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Disclaimer */}
+          <p
+            className="text-center mt-8"
+            style={{ fontSize: '12px', color: '#9E9E9C', letterSpacing: 0 }}
+          >
+            * Testimonios simulados con fines de demostración del MVP.
+          </p>
+        </section>
+
         {/* Editorial section — star modules */}
         <section className="nodo-container py-20 lg:py-28">
 
