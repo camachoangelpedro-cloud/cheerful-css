@@ -23,7 +23,7 @@ function StarModule({ handle, label }: StarModuleProps) {
     <Link to={`/producto/${handle}`} className="block group flex-1 min-w-0">
       {/* Image placeholder */}
       <div
-        className="w-full overflow-hidden relative flex items-center justify-center"
+        className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
         style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
       >
         <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
@@ -80,7 +80,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
             {/* Card 1 */}
-            <div className="flex flex-col gap-3 p-8 bg-muted">
+            <div className="flex flex-col gap-3 p-8 bg-muted rounded-lg">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Diseña a tu medida
               </p>
@@ -91,7 +91,7 @@ export default function HomePage() {
             </div>
 
             {/* Card 2 */}
-            <div className="flex flex-col gap-3 p-8 bg-muted">
+            <div className="flex flex-col gap-3 p-8 bg-muted rounded-lg">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Precio claro, sin sorpresas
               </p>
@@ -102,7 +102,7 @@ export default function HomePage() {
             </div>
 
             {/* Card 3 */}
-            <div className="flex flex-col gap-3 p-8 bg-muted">
+            <div className="flex flex-col gap-3 p-8 bg-muted rounded-lg">
               <p className="text-base font-semibold" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
                 Se mueve contigo
               </p>
@@ -184,7 +184,7 @@ export default function HomePage() {
             ].map(t => (
               <div
                 key={t.name}
-                className="flex flex-col gap-5 p-8"
+                className="flex flex-col gap-5 p-8 rounded-lg"
                 style={{
                   backgroundColor: '#FFFFFF',
                   border: '1px solid rgba(0,0,0,0.07)',
@@ -233,7 +233,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Newsletter ── */}
-        <section style={{ backgroundColor: '#F5F2EC' }}>
+        <section style={{ backgroundColor: '#F5F5F5' }}>
           <div className="nodo-container py-16 lg:py-20 max-w-xl">
             <NewsletterSignup />
           </div>
