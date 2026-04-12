@@ -2,7 +2,7 @@
 import { useEffect, useState, Suspense, useMemo, useRef } from 'react';
 import * as React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
@@ -457,13 +457,27 @@ export default function ProductoPage() {
 
       {/* ── Breadcrumb ── */}
       <div ref={heroRef} className="nodo-container pt-28 pb-0">
-        <Link
-          to="/catalogo"
-          className="inline-flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ChevronLeft className="w-3 h-3" />
-          Catálogo
-        </Link>
+        <nav className="flex items-center gap-1.5 flex-wrap">
+          <Link
+            to="/"
+            className="hover:underline underline-offset-2 transition-colors"
+            style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}
+          >
+            Inicio
+          </Link>
+          <span style={{ fontSize: '13px', color: '#9E9E9C' }}>›</span>
+          <Link
+            to="/catalogo"
+            className="hover:underline underline-offset-2 transition-colors"
+            style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}
+          >
+            Catálogo
+          </Link>
+          <span style={{ fontSize: '13px', color: '#9E9E9C' }}>›</span>
+          <span style={{ fontSize: '13px', color: '#1C1C1A', letterSpacing: 0 }}>
+            {product.title}
+          </span>
+        </nav>
       </div>
 
       {/* ── Main product grid ── */}
