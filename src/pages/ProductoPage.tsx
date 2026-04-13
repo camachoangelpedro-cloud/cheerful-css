@@ -158,16 +158,14 @@ function NodoModel({ url }: { url: string }) {
   );
 }
 
-function NodoViewer({ glbUrl, backgroundColor, moduleWidth = 36 }: { glbUrl: string; backgroundColor: string; moduleWidth?: number }) {
+function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundColor: string }) {
   const bg = backgroundColor || '#EDE9E1';
-  const scale = moduleWidth >= 72 ? 1.8 : 1.15;
-  const cameraPosition: [number, number, number] = [-8 * scale, 6 * scale, 8 * scale];
 
   return (
     <Canvas
       frameloop="demand"
       gl={{ antialias: true, preserveDrawingBuffer: true }}
-      camera={{ position: cameraPosition, fov: 30, near: 0.1, far: 100, up: [0, 1, 0] }}
+      camera={{ position: [-8, 6, 8], fov: 30, near: 0.1, far: 100, up: [0, 1, 0] }}
       style={{ width: '100%', height: '100%', background: bg }}
     >
       {/* Warm three-point light rig matching original */}
@@ -184,8 +182,8 @@ function NodoViewer({ glbUrl, backgroundColor, moduleWidth = 36 }: { glbUrl: str
         makeDefault
         enablePan={false}
         enableZoom={true}
-        minDistance={6 * scale}
-        maxDistance={15 * scale}
+        minDistance={6}
+        maxDistance={15}
         minPolarAngle={0.3}
         maxPolarAngle={1.5}
         rotateSpeed={0.5}
@@ -519,7 +517,7 @@ export default function ProductoPage() {
             {/* Main display */}
             <div className="w-full overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
               {glbUrl ? (
-                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" moduleWidth={nodoProduct ? nodoProduct.widthCm : 36} />
+                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                   <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
