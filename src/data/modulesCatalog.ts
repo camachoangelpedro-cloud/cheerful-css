@@ -207,7 +207,7 @@ export const STRUCTURAL_CLIP_PRICE = 13000;
 
 export const GRID_UNIT = 36;
 export const PX_PER_CM = 2;
-export const SNAP_X_CM = 36;
+export const SNAP_X_CM = 4;
 export const SNAP_Y_CM = 18;
 
 export function getStartingPrice(p: NodoProduct): number { return Math.min(...p.variants.map(v => v.price)); }
