@@ -6,9 +6,9 @@ import { useCartStore } from "@/stores/cartStore";
 import { formatPrice } from "@/lib/shopify";
 
 const CROSS_SELL = [
-  { name: "Clip Latón",  price: "$ 25.000", link: "/producto/clip-decorativo-laton" },
-  { name: "Clip Acero",  price: "$ 25.000", link: "/producto/clip-decorativo-acero" },
-  { name: "Base 36×36", price: "$ 95.000", link: "/producto/base-36-36" },
+  { name: "Clip Latón",  price: "$ 29.000", link: "/producto/clip-decorativo-laton" },
+  { name: "Clip Acero",  price: "$ 22.000", link: "/producto/clip-decorativo-acero" },
+  { name: "Base 36×36", price: "$ 87.000", link: "/producto/base-36-36" },
 ];
 
 export function CartDrawer() {
