@@ -32,8 +32,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 18, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·1X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 159000 })),
-      ...C.map(c => ({ sku: `MOD·1X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 153000 })),
+      ...C.map(c => ({ sku: `MOD·1X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 141000 })),
+      ...C.map(c => ({ sku: `MOD·1X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 136000 })),
     ],
   },
 
@@ -43,8 +43,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 24, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·1X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 168000 })),
-      ...C.map(c => ({ sku: `MOD·1X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 160000 })),
+      ...C.map(c => ({ sku: `MOD·1X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 149000 })),
+      ...C.map(c => ({ sku: `MOD·1X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 142000 })),
     ],
   },
 
@@ -54,12 +54,12 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 36, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·1X1·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 186000 })),
-      ...C.map(c => ({ sku: `MOD·1X1·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 174000 })),
-      ...C.map(c => ({ sku: `MOD·1X1·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 205000 })),
-      ...C.map(c => ({ sku: `MOD·1X1·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 196000 })),
-      ...C.map(c => ({ sku: `MOD·1X1·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 216000 })),
-      ...C.map(c => ({ sku: `MOD·1X1·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 236000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 164000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 154000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 181000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 173000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 191000 })),
+      ...C.map(c => ({ sku: `MOD·1X1·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 208000 })),
     ],
   },
 
@@ -69,12 +69,12 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 72, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·1X2·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 249000 })),
-      ...C.map(c => ({ sku: `MOD·1X2·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 227000 })),
-      ...C.map(c => ({ sku: `MOD·1X2·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 269000 })),
-      ...C.map(c => ({ sku: `MOD·1X2·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 248000 })),
-      ...C.map(c => ({ sku: `MOD·1X2·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 279000 })),
-      ...C.map(c => ({ sku: `MOD·1X2·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 297000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 219000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 200000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 236000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 218000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 243000 })),
+      ...C.map(c => ({ sku: `MOD·1X2·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 260000 })),
     ],
   },
 
@@ -84,8 +84,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 18, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·2X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 222000 })),
-      ...C.map(c => ({ sku: `MOD·2X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 211000 })),
+      ...C.map(c => ({ sku: `MOD·2X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 197000 })),
+      ...C.map(c => ({ sku: `MOD·2X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 187000 })),
     ],
   },
 
@@ -95,8 +95,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 24, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·2X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 233000 })),
-      ...C.map(c => ({ sku: `MOD·2X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 218000 })),
+      ...C.map(c => ({ sku: `MOD·2X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 205000 })),
+      ...C.map(c => ({ sku: `MOD·2X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 193000 })),
     ],
   },
 
@@ -106,12 +106,12 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 36, depthCm: 36,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MOD·2X1·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 254000 })),
-      ...C.map(c => ({ sku: `MOD·2X1·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 233000 })),
-      ...C.map(c => ({ sku: `MOD·2X1·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 293000 })),
-      ...C.map(c => ({ sku: `MOD·2X1·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 272000 })),
-      ...C.map(c => ({ sku: `MOD·2X1·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 309000 })),
-      ...C.map(c => ({ sku: `MOD·2X1·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 336000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·A·B·${c}`,  interior: 'Abierto',             panel: 'Con panel', color: c, price: 224000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·A·O·${c}`,  interior: 'Abierto',             panel: 'Sin panel', color: c, price: 205000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·S·B·${c}`,  interior: 'Con repisa',          panel: 'Con panel', color: c, price: 256000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·S·O·${c}`,  interior: 'Con repisa',          panel: 'Sin panel', color: c, price: 238000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·D·B·${c}`,  interior: 'Con puerta',          panel: 'Con panel', color: c, price: 271000 })),
+      ...C.map(c => ({ sku: `MOD·2X1·DS·B·${c}`, interior: 'Con puerta y repisa', panel: 'Con panel', color: c, price: 293000 })),
     ],
   },
 
@@ -121,7 +121,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 72, depthCm: 36,
     hasOptions: false, isOneOff: true,
     variants: [
-      ...C.map(c => ({ sku: `MOD·2X2·DD·B·${c}`, interior: 'Con puerta', panel: 'Con panel', color: c, price: 415000 })),
+      ...C.map(c => ({ sku: `MOD·2X2·DD·B·${c}`, interior: 'Con puerta', panel: 'Con panel', color: c, price: 360000 })),
     ],
   },
 
@@ -131,8 +131,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 18, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MODH·1X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 124000 })),
-      ...C.map(c => ({ sku: `MODH·1X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 119000 })),
+      ...C.map(c => ({ sku: `MODH·1X05·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 111000 })),
+      ...C.map(c => ({ sku: `MODH·1X05·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 108000 })),
     ],
   },
 
@@ -142,8 +142,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 24, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MODH·1X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 130000 })),
-      ...C.map(c => ({ sku: `MODH·1X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 123000 })),
+      ...C.map(c => ({ sku: `MODH·1X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 116000 })),
+      ...C.map(c => ({ sku: `MODH·1X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 110000 })),
     ],
   },
 
@@ -153,9 +153,9 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 36, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MODH·1X1·A·B·${c}`, interior: 'Abierto',    panel: 'Con panel', color: c, price: 141000 })),
-      ...C.map(c => ({ sku: `MODH·1X1·A·O·${c}`, interior: 'Abierto',    panel: 'Sin panel', color: c, price: 130000 })),
-      ...C.map(c => ({ sku: `MODH·1X1·D·B·${c}`, interior: 'Con puerta', panel: 'Con panel', color: c, price: 172000 })),
+      ...C.map(c => ({ sku: `MODH·1X1·A·B·${c}`, interior: 'Abierto',    panel: 'Con panel', color: c, price: 125000 })),
+      ...C.map(c => ({ sku: `MODH·1X1·A·O·${c}`, interior: 'Abierto',    panel: 'Sin panel', color: c, price: 116000 })),
+      ...C.map(c => ({ sku: `MODH·1X1·D·B·${c}`, interior: 'Con puerta', panel: 'Con panel', color: c, price: 152000 })),
     ],
   },
 
@@ -165,8 +165,8 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 24, depthCm: 18,
     hasOptions: true, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `MODH·2X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 174000 })),
-      ...C.map(c => ({ sku: `MODH·2X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 160000 })),
+      ...C.map(c => ({ sku: `MODH·2X07·A·B·${c}`, interior: 'Abierto', panel: 'Con panel', color: c, price: 156000 })),
+      ...C.map(c => ({ sku: `MODH·2X07·A·O·${c}`, interior: 'Abierto', panel: 'Sin panel', color: c, price: 143000 })),
     ],
   },
 
@@ -176,7 +176,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 36, heightCm: 36, depthCm: 36,
     hasOptions: false, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `PLT·1X1·${c}`, interior: '', panel: '', color: c, price: 87000 })),
+      ...C.map(c => ({ sku: `PLT·1X1·${c}`, interior: '', panel: '', color: c, price: 78000 })),
     ],
   },
 
@@ -186,7 +186,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
     widthCm: 72, heightCm: 36, depthCm: 36,
     hasOptions: false, isOneOff: false,
     variants: [
-      ...C.map(c => ({ sku: `PLT·2X1·${c}`, interior: '', panel: '', color: c, price: 110000 })),
+      ...C.map(c => ({ sku: `PLT·2X1·${c}`, interior: '', panel: '', color: c, price: 97000 })),
     ],
   },
 
