@@ -158,9 +158,10 @@ function NodoModel({ url }: { url: string }) {
   );
 }
 
-function NodoViewer({ glbUrl, backgroundColor, moduleWidth }: { glbUrl: string; backgroundColor: string; moduleWidth: number }) {
+function NodoViewer({ glbUrl, backgroundColor, moduleWidth, moduleHeight }: { glbUrl: string; backgroundColor: string; moduleWidth: number; moduleHeight: number }) {
   const bg = backgroundColor || '#EDE9E1';
-  const scale = moduleWidth >= 72 ? 1.5 : 1;
+  const maxDim = Math.max(moduleWidth, moduleHeight);
+  const scale = maxDim <= 36 ? 1 : maxDim <= 54 ? 1.3 : 1.6;
   const cameraPosition: [number, number, number] = [-8 * scale, 6 * scale, 8 * scale];
 
   return (
@@ -519,7 +520,7 @@ export default function ProductoPage() {
             {/* Main display */}
             <div className="w-full overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
               {glbUrl ? (
-                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" moduleWidth={nodoProduct?.widthCm || 36} />
+                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" moduleWidth={nodoProduct?.widthCm || 36} moduleHeight={nodoProduct?.heightCm || 36} />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                   <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
