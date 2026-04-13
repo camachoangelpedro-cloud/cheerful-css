@@ -70,6 +70,16 @@ export function getSupportY(
   return highest;
 }
 
+export interface WallConfig {
+  widthCm: number;
+  heightCm: number;
+  hasWindow: boolean;
+  windowXCm: number;
+  windowYCm: number;
+  windowWidthCm: number;
+  windowHeightCm: number;
+}
+
 interface ConfigStore {
   placedModules: PlacedModule[];
   selectedId: string | null;
@@ -78,9 +88,11 @@ interface ConfigStore {
   undoStack: PlacedModule[][];
   redoStack: PlacedModule[][];
   clfQuantities: Record<string, number>;
+  wall: WallConfig | null;
 
   setDragHandle: (h: string | null) => void;
   setColorCode: (code: string) => void;
+  setWall: (wall: WallConfig) => void;
   dropModule: (handle: string, xCm: number, yCm: number) => void;
   removeModule: (id: string) => void;
   selectInstance: (id: string | null) => void;
@@ -112,9 +124,11 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
+  wall: null,
 
   setDragHandle: (h) => set({ dragHandle: h }),
   setColorCode:  (code) => set({ selectedColorCode: code }),
+  setWall: (wall) => set({ wall }),
 
   dropModule: (handle, xCm, yCm) => {
     const state = get();
