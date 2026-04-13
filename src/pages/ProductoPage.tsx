@@ -16,7 +16,7 @@ import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { fetchProductByHandle, ShopifyProduct } from '@/lib/shopify';
 import { Canvas } from '@react-three/fiber';
-import { useGLTF, Bounds, OrbitControls } from '@react-three/drei';
+import { useGLTF, Center, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCartStore } from '@/stores/cartStore';
 import {
@@ -152,9 +152,9 @@ function NodoModel({ url }: { url: string }) {
   }, [scene]);
 
   return (
-    <Bounds fit clip observe margin={1.1}>
+    <Center>
       <primitive object={clone} />
-    </Bounds>
+    </Center>
   );
 }
 
@@ -181,10 +181,13 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
       <OrbitControls
         makeDefault
         enablePan={false}
-        enableZoom={false}
-        minPolarAngle={0.35}
-        maxPolarAngle={1.48}
-        rotateSpeed={0.7}
+        enableZoom={true}
+        minDistance={3}
+        maxDistance={8}
+        minPolarAngle={0.3}
+        maxPolarAngle={1.5}
+        rotateSpeed={0.5}
+        zoomSpeed={0.5}
       />
     </Canvas>
   );
