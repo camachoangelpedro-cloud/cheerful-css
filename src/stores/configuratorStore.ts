@@ -124,9 +124,11 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
+  wall: null,
 
   setDragHandle: (h) => set({ dragHandle: h }),
   setColorCode:  (code) => set({ selectedColorCode: code }),
+  setWall: (wall) => set({ wall }),
 
   dropModule: (handle, xCm, yCm) => {
     const state = get();
