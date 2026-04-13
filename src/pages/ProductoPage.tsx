@@ -520,7 +520,7 @@ export default function ProductoPage() {
             {/* Main display */}
             <div className="w-full overflow-hidden relative" style={{ backgroundColor: '#EDE9E1', aspectRatio: '1/1', maxHeight: '70vh' }}>
               {glbUrl ? (
-                <NodoViewer glbUrl={glbUrl} backgroundColor="#EDE9E1" moduleWidth={nodoProduct ? Math.max(nodoProduct.widthCm, nodoProduct.heightCm) : 36} />
+                <NodoViewer glbUrl={glbUrl} backgroundColor="#F0F0F0" moduleWidth={nodoProduct ? Math.max(nodoProduct.widthCm, nodoProduct.heightCm) : 36} />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                   <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
