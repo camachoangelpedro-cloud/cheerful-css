@@ -153,7 +153,7 @@ function NodoModel({ url }: { url: string }) {
 
   return (
     <Center>
-      <primitive object={clone} />
+      <primitive object={clone} scale={0.01} />
     </Center>
   );
 }
@@ -165,7 +165,7 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
     <Canvas
       frameloop="demand"
       gl={{ antialias: true, preserveDrawingBuffer: true }}
-      camera={{ position: [-5, 4, 5], fov: 38, up: [0, 1, 0] }}
+      camera={{ position: [-8, 6, 8], fov: 30, near: 0.1, far: 100, up: [0, 1, 0] }}
       style={{ width: '100%', height: '100%', background: bg }}
     >
       {/* Warm three-point light rig matching original */}
@@ -182,8 +182,8 @@ function NodoViewer({ glbUrl, backgroundColor }: { glbUrl: string; backgroundCol
         makeDefault
         enablePan={false}
         enableZoom={true}
-        minDistance={3}
-        maxDistance={8}
+        minDistance={6}
+        maxDistance={15}
         minPolarAngle={0.3}
         maxPolarAngle={1.5}
         rotateSpeed={0.5}
