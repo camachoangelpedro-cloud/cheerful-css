@@ -44,7 +44,7 @@ export function isModuleSupported(
     const mp = NODO_PRODUCTS.find(p => p.handle === m.handle);
     if (!mp) return false;
     return (
-      m.yCm + stackHeight(mp) === yCm &&
+      Math.abs(m.yCm + stackHeight(mp) - yCm) < 0.01 &&
       xCm < m.xCm + mp.widthCm &&
       xCm + widthCm > m.xCm
     );
