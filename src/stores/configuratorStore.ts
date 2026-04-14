@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { NODO_PRODUCTS, STRUCTURAL_CLIP_PRICE } from '@/data/modulesCatalog';
+import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 
 /* ── Types ────────────────────────────────────────────────── */
 
@@ -70,16 +70,6 @@ export function getSupportY(
   return highest;
 }
 
-export interface WallConfig {
-  widthCm: number;
-  heightCm: number;
-  hasWindow: boolean;
-  windowXCm: number;
-  windowYCm: number;
-  windowWidthCm: number;
-  windowHeightCm: number;
-}
-
 interface ConfigStore {
   placedModules: PlacedModule[];
   selectedId: string | null;
@@ -88,11 +78,9 @@ interface ConfigStore {
   undoStack: PlacedModule[][];
   redoStack: PlacedModule[][];
   clfQuantities: Record<string, number>;
-  wall: WallConfig | null;
 
   setDragHandle: (h: string | null) => void;
   setColorCode: (code: string) => void;
-  setWall: (wall: WallConfig) => void;
   dropModule: (handle: string, xCm: number, yCm: number) => void;
   removeModule: (id: string) => void;
   selectInstance: (id: string | null) => void;
@@ -124,11 +112,9 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
-  wall: null,
 
   setDragHandle: (h) => set({ dragHandle: h }),
   setColorCode:  (code) => set({ selectedColorCode: code }),
-  setWall: (wall) => set({ wall }),
 
   dropModule: (handle, xCm, yCm) => {
     const state = get();
@@ -274,12 +260,7 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
       const product = NODO_PRODUCTS.find(p => p.handle === handle);
       return sum + (product?.variants[0]?.price ?? 0) * qty;
     }, 0);
-    const moduleCount = placedModules.filter(m => {
-      const p = NODO_PRODUCTS.find(pp => pp.handle === m.handle);
-      return p && (p.family === 'MOD' || p.family === 'MODH');
-    }).length;
-    const clipTotal = moduleCount >= 2 ? moduleCount * 2 * STRUCTURAL_CLIP_PRICE : 0;
-    return clfTotal + clipTotal + placedModules.reduce((sum, m) => {
+    return clfTotal + placedModules.reduce((sum, m) => {
       const product = NODO_PRODUCTS.find(p => p.handle === m.handle);
       if (!product) return sum;
       const variant = product.variants.find(v =>
