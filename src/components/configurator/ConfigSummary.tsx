@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Loader2, ArrowRight } from 'lucide-react';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 import { useCartStore } from '@/stores/cartStore';
@@ -15,6 +15,11 @@ export default function ConfigSummary() {
   const summary = getModuleSummary();
   const total   = getTotalPrice();
   const [isAdding, setIsAdding] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  useEffect(() => {
+    setAddedToCart(false);
+  }, [placedModules]);
 
   const handleAddToCart = async () => {
     if (placedModules.length === 0) {
@@ -81,6 +86,7 @@ setIsAdding(true);
         toast.warning(`${addedCount} producto(s) añadidos. ${failedCount} no se pudieron agregar.`);
       } else {
         toast.success('¡Módulos añadidos al carrito!');
+        setAddedToCart(true);
       }
     } catch (err) {
       console.error('Error adding configurator items to cart:', err);
@@ -129,13 +135,22 @@ setIsAdding(true);
       </div>
 
       <button
-        onClick={handleAddToCart}
+        onClick={() => {
+          if (addedToCart) {
+            const checkoutUrl = useCartStore.getState().checkoutUrl;
+            if (checkoutUrl) window.location.href = checkoutUrl;
+          } else {
+            handleAddToCart();
+          }
+        }}
         disabled={placedModules.length === 0 || isAdding}
         className="w-full rounded-full py-3 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
       >
         {isAdding
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          : 'Añadir al carrito'
+          : addedToCart
+            ? <><ArrowRight className="w-3.5 h-3.5" />Ir al checkout</>
+            : 'Añadir al carrito'
         }
       </button>
     </div>
