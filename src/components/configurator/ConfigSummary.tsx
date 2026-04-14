@@ -138,7 +138,7 @@ setIsAdding(true);
         onClick={() => {
           if (addedToCart) {
             const checkoutUrl = useCartStore.getState().checkoutUrl;
-            if (checkoutUrl) window.location.href = checkoutUrl;
+            if (checkoutUrl) window.open(checkoutUrl, '_blank');
           } else {
             handleAddToCart();
           }
