@@ -75,7 +75,7 @@ const STAR_PATH = 'M10 1l2.47 5.01L18 6.9l-4 3.9.94 5.5L10 13.4l-4.94 2.9.94-5.5
 function FullStar() {
   return (
     <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" aria-hidden="true">
-      <path d={STAR_PATH} fill="rgba(242,237,228,0.55)" />
+      <path d={STAR_PATH} fill="rgba(255,255,255,0.55)" />
     </svg>
   );
 }
@@ -88,8 +88,8 @@ function HalfStar({ uid }: { uid: string }) {
           <rect x="0" y="0" width="10" height="20" />
         </clipPath>
       </defs>
-      <path d={STAR_PATH} fill="rgba(242,237,228,0.15)" />
-      <path d={STAR_PATH} fill="rgba(242,237,228,0.55)" clipPath={`url(#half-${uid})`} />
+      <path d={STAR_PATH} fill="rgba(255,255,255,0.15)" />
+      <path d={STAR_PATH} fill="rgba(255,255,255,0.55)" clipPath={`url(#half-${uid})`} />
     </svg>
   );
 }
@@ -97,7 +97,7 @@ function HalfStar({ uid }: { uid: string }) {
 function EmptyStar() {
   return (
     <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" aria-hidden="true">
-      <path d={STAR_PATH} fill="rgba(242,237,228,0.15)" />
+      <path d={STAR_PATH} fill="rgba(255,255,255,0.15)" />
     </svg>
   );
 }
@@ -148,32 +148,32 @@ export default function HomePage() {
               style={{ backgroundColor: '#1C1C1A', minHeight: '500px' }}
             >
               <div>
-                <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(242,237,228,0.5)' }}>
+                <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
                 </p>
                 <h2
                   className="font-display text-2xl lg:text-3xl font-light mt-3"
-                  style={{ color: '#F2EDE4', lineHeight: 1.2 }}
+                  style={{ color: '#FFFFFF', lineHeight: 1.2 }}
                 >
                   Muebles que se adaptan a ti
                 </h2>
 
                 <div className="mt-8 flex flex-col gap-6">
                   <div>
-                    <p className="text-sm font-medium" style={{ color: '#F2EDE4' }}>Diseña a tu medida</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(242,237,228,0.65)' }}>
+                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Diseña a tu medida</p>
+                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                       Elige módulos, colores y configuraciones que se ajusten exactamente a tu espacio. Sin catálogos genéricos — tu estantería, tus reglas.
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium" style={{ color: '#F2EDE4' }}>Precio claro, sin sorpresas</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(242,237,228,0.65)' }}>
+                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Precio claro, sin sorpresas</p>
+                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                       Cada módulo tiene un precio fijo. Configura, suma y compra con total transparencia — sin cotizaciones ocultas ni costos inesperados.
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium" style={{ color: '#F2EDE4' }}>Se mueve contigo</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(242,237,228,0.65)' }}>
+                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Se mueve contigo</p>
+                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                       Sistema modular que se conecta y se desconecta en minutos. Te cambias de apartamento, tu NODO va contigo — y crece cuando lo necesitas.
                     </p>
                   </div>
@@ -183,7 +183,7 @@ export default function HomePage() {
               <div className="mt-8">
                 <Link
                   to="/catalogo"
-                  className="inline-block rounded-full border border-[#F2EDE4]/40 text-[#F2EDE4] px-6 py-3 text-xs tracking-wide font-medium hover:bg-[#F2EDE4] hover:text-[#1C1C1A] transition-all"
+                  className="inline-block rounded-full border border-white/40 text-white px-6 py-3 text-xs tracking-wide font-medium hover:bg-[#F2EDE4] hover:text-[#1C1C1A] transition-all"
                 >
                   Ver todos los muebles
                 </Link>
@@ -198,7 +198,7 @@ export default function HomePage() {
           <div className="nodo-container">
             <h2
               className="font-display text-2xl md:text-3xl font-light mb-12"
-              style={{ color: '#F2EDE4' }}
+              style={{ color: '#FFFFFF' }}
             >
               Lo que dicen nuestros clientes
             </h2>
@@ -230,24 +230,24 @@ export default function HomePage() {
                 <div
                   key={t.uid}
                   className="flex flex-col rounded-lg p-7"
-                  style={{ backgroundColor: 'rgba(242,237,228,0.06)' }}
+                  style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
                 >
                   <StarRating rating={t.rating} uid={t.uid} />
                   <p
                     className="text-sm italic leading-relaxed flex-1 mb-5"
-                    style={{ color: 'rgba(242,237,228,0.75)' }}
+                    style={{ color: 'rgba(255,255,255,0.75)' }}
                   >
                     {t.quote}
                   </p>
-                  <div style={{ borderTop: '1px solid rgba(242,237,228,0.10)', paddingTop: '16px' }}>
-                    <p className="text-sm font-medium" style={{ color: '#F2EDE4' }}>{t.name}</p>
-                    <p className="text-xs mt-1" style={{ color: 'rgba(242,237,228,0.45)' }}>{t.location}</p>
+                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.10)', paddingTop: '16px' }}>
+                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>{t.name}</p>
+                    <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>{t.location}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <p className="text-center mt-8" style={{ fontSize: '12px', color: 'rgba(242,237,228,0.35)' }}>
+            <p className="text-center mt-8" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
               * Testimonios simulados con fines de demostración del MVP.
             </p>
           </div>
