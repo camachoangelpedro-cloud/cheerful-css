@@ -42,7 +42,7 @@ export default function WallSetup() {
       onClick={() => setter(value)}
       className={`font-body text-[10px] px-2.5 py-1 border rounded-lg transition-colors
         ${current === value
-          ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]'
+          ? 'bg-[#1C1C1A] text-white border-[#1C1C1A]'
           : 'border-border hover:border-foreground/40'}`}
     >
       {value}
@@ -194,7 +194,7 @@ export default function WallSetup() {
           <button
             onClick={handleConfirm}
             disabled={widthCm < 72 || heightCm < 100}
-            className="w-full rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
+            className="w-full rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
           >
             Empezar a diseñar →
           </button>
