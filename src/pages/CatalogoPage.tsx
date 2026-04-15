@@ -6,7 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import type { ProductCategory } from '@/data/products';
-import { getRenderUrl, getDefaultRenderUrl } from '@/data/renderMap';
+import { getRenderUrlByName, getDefaultRenderUrl } from '@/data/renderMap';
 
 const COLOR_HEX: Record<string, string> = {
   'Blanco Hueso': '#F2EDE4',
@@ -68,7 +68,7 @@ function ProductCard({ product }: { product: MappedProduct }) {
   const [selectedCardColor, setSelectedCardColor] = useState<string | null>(defaultColor);
 
   const renderUrl = selectedCardColor
-    ? getRenderUrl(product.slug, selectedCardColor) ?? defaultRender
+    ? getRenderUrlByName(product.slug, selectedCardColor) ?? defaultRender
     : defaultRender;
 
   return (
@@ -82,18 +82,17 @@ function ProductCard({ product }: { product: MappedProduct }) {
             aspectRatio: '4/5',
           }}
         >
-          {renderUrl ? (
+          {renderUrl && (
             <img
               src={renderUrl}
               alt={`${product.name}${selectedCardColor ? ' — ' + selectedCardColor : ''}`}
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
               loading="lazy"
             />
-          ) : (
-            <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
-              {product.name}
-            </span>
           )}
+          <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
+            {product.name}
+          </span>
         </div>
 
         {/* Text info */}
