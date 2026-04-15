@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import type { ProductCategory } from '@/data/products';
+import { getRenderUrl, getDefaultRenderUrl } from '@/data/renderMap';
 
 const COLOR_HEX: Record<string, string> = {
   'Blanco Hueso': '#F2EDE4',
@@ -62,7 +63,13 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 
 // ── Product card ─────────────────────────────────────────────────────────────
 function ProductCard({ product }: { product: MappedProduct }) {
-  const [hoveredColor, setHoveredColor] = useState<string | null>(null);
+  const defaultRender = getDefaultRenderUrl(product.slug);
+  const defaultColor  = product.colors[0] ?? null;
+  const [selectedCardColor, setSelectedCardColor] = useState<string | null>(defaultColor);
+
+  const renderUrl = selectedCardColor
+    ? getRenderUrl(product.slug, selectedCardColor) ?? defaultRender
+    : defaultRender;
 
   return (
     <div className="group">
@@ -71,14 +78,22 @@ function ProductCard({ product }: { product: MappedProduct }) {
         <div
           className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
           style={{
-            backgroundColor: hoveredColor ? COLOR_HEX[hoveredColor] ?? '#F2EDE4' : '#F2EDE4',
+            backgroundColor: selectedCardColor ? COLOR_HEX[selectedCardColor] ?? '#F2EDE4' : '#F2EDE4',
             aspectRatio: '4/5',
-            transition: 'background-color 0.2s ease',
           }}
         >
-          <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
-            {product.name}
-          </span>
+          {renderUrl ? (
+            <img
+              src={renderUrl}
+              alt={`${product.name}${selectedCardColor ? ' — ' + selectedCardColor : ''}`}
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+              loading="lazy"
+            />
+          ) : (
+            <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
+              {product.name}
+            </span>
+          )}
         </div>
 
         {/* Text info */}
@@ -100,17 +115,16 @@ function ProductCard({ product }: { product: MappedProduct }) {
         </div>
       </Link>
 
-      {/* Colour swatches */}
+      {/* Colour swatches — click to select */}
       {product.colors.length > 0 && (
         <div className="flex items-center gap-[6px] pt-3 px-1">
           {product.colors.map(colorName => (
             <button
               key={colorName}
-              onMouseEnter={() => setHoveredColor(colorName)}
-              onMouseLeave={() => setHoveredColor(null)}
+              onClick={() => setSelectedCardColor(colorName)}
               aria-label={colorName}
               className={`w-6 h-6 rounded-full shrink-0 border transition-all
-                ${hoveredColor === colorName
+                ${selectedCardColor === colorName
                   ? 'ring-2 ring-offset-2 ring-foreground scale-110'
                   : 'hover:scale-105'}`}
               style={{
@@ -119,9 +133,9 @@ function ProductCard({ product }: { product: MappedProduct }) {
               }}
             />
           ))}
-          {hoveredColor && (
+          {selectedCardColor && (
             <span className="ml-1 text-[11px]" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
-              {hoveredColor}
+              {selectedCardColor}
             </span>
           )}
         </div>
