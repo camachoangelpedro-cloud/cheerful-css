@@ -366,7 +366,7 @@ export default function ProductoPage() {
           {num}
         </span>
       )}
-      <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground font-medium">{label}</span>
+      <span className="font-body text-[10px] tracking-wide text-muted-foreground font-medium">{label}</span>
       {suffix && (
         <>
           <span className="font-body text-[10px] text-muted-foreground/50">—</span>
@@ -379,7 +379,7 @@ export default function ProductoPage() {
   const OptionCard = ({ active, locked, svg, label, onClick }: { active: boolean; locked?: boolean; svg: React.ReactNode; label: string; onClick: () => void }) => (
     <div
       onClick={locked ? undefined : onClick}
-      className={`flex flex-col items-center gap-2 p-3 min-w-[72px] flex-1 max-w-[90px] border cursor-pointer rounded-none transition-all duration-150
+      className={`flex flex-col items-center gap-2 p-3 min-w-[72px] flex-1 max-w-[90px] border cursor-pointer rounded-lg transition-all duration-150
         ${active ? 'border-[#1C1C1A] bg-[#F2EDE4]' : 'border-border hover:border-foreground/40'}
         ${locked ? 'opacity-30 pointer-events-none' : ''}`}
     >
@@ -477,7 +477,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="font-body text-[9px] uppercase tracking-[.14em] px-5 py-2 rounded-full bg-[#1C1C1A] text-[#F2EDE4] hover:opacity-85 disabled:opacity-40 transition-opacity"
+              className="rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-6 py-3 font-body text-xs tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {addedToCart ? 'Añadido ✓' : 'Añadir'}
             </button>
@@ -535,7 +535,7 @@ export default function ProductoPage() {
 
             {/* Title block — compact, name + dims + price read as one unit */}
             <h1 className="font-display font-light text-3xl md:text-4xl leading-snug">{product.title}</h1>
-            {dims && <p className="font-body text-xs text-muted-foreground tracking-[.06em] mt-1.5">{dims}</p>}
+            {dims && <p className="font-body text-xs text-muted-foreground tracking-wide mt-1.5">{dims}</p>}
             <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
 
             {/* Stock indicator */}
@@ -561,7 +561,7 @@ export default function ProductoPage() {
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
-                      className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                      className={`w-6 h-6 rounded-full cursor-pointer transition-all duration-150
                         ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
                       style={{ backgroundColor: c.hex, border: '1.5px solid rgba(28,28,26,0.18)' }}
                       title={c.name}
@@ -596,12 +596,12 @@ export default function ProductoPage() {
                 {/* Tirador */}
                 {hasSingleDoor && (selectedInterior === 'Con puerta' || selectedInterior === 'Con puerta y repisa') && (
                   <div className="flex items-center gap-3 mt-5">
-                    <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground w-14 shrink-0">Tirador</span>
+                    <span className="font-body text-[10px] tracking-wide text-muted-foreground w-14 shrink-0">Tirador</span>
                     {['Derecha', 'Izquierda'].map(a => (
                       <button
                         key={a}
                         onClick={() => setSelectedApertura(a)}
-                        className={`font-body text-[10px] tracking-[.12em] uppercase px-4 py-2 border rounded-none cursor-pointer transition-colors
+                        className={`font-body text-[10px] tracking-wide px-4 py-2 border rounded-lg cursor-pointer transition-colors
                           ${selectedApertura === a ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]' : 'border-border text-foreground hover:border-foreground/60'}`}
                       >
                         {a}
@@ -634,7 +634,7 @@ export default function ProductoPage() {
                     <button
                       key={a}
                       onClick={() => setSelectedAcabado(a)}
-                      className={`font-body text-sm border px-4 py-2 rounded-none transition-colors
+                      className={`font-body text-sm border px-4 py-2 rounded-lg transition-colors
                         ${selectedAcabado === a ? 'bg-foreground text-background border-foreground' : 'border-border hover:border-foreground'}`}
                     >
                       {a}
@@ -654,7 +654,7 @@ export default function ProductoPage() {
                       <button
                         key={c.code}
                         onClick={() => setSelectedColor(c)}
-                        className={`w-7 h-7 rounded-full cursor-pointer transition-all duration-150
+                        className={`w-6 h-6 rounded-full cursor-pointer transition-all duration-150
                           ${selectedColor.code === c.code ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
                         style={{ backgroundColor: c.hex, border: '1.5px solid rgba(28,28,26,0.18)' }}
                         title={c.name}
@@ -711,7 +711,7 @@ export default function ProductoPage() {
               {/* Quantity selector + add-to-cart */}
               <div className="flex items-center gap-3">
                 {/* Quantity */}
-                <div className="flex items-center border border-border rounded-none h-[46px] shrink-0">
+                <div className="flex items-center border border-border rounded-lg h-[46px] shrink-0">
                   <button
                     onClick={() => setQty(q => Math.max(1, q - 1))}
                     className="w-10 h-full flex items-center justify-center text-foreground hover:bg-muted transition-colors font-body text-base"
@@ -733,7 +733,7 @@ export default function ProductoPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                  className="flex-1 rounded-full py-[14px] bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.14em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {cartLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -750,7 +750,7 @@ export default function ProductoPage() {
               </div>
 
               {/* Shipping info block */}
-              <div className="mt-4 rounded-none bg-muted/50 px-4 py-3.5 space-y-2">
+              <div className="mt-4 rounded-lg bg-muted/50 px-4 py-3.5 space-y-2">
                 <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
                   <Truck className="w-3.5 h-3.5 shrink-0" />
                   <span>Envío gratis con código LANZAMIENTO</span>
@@ -770,7 +770,7 @@ export default function ProductoPage() {
             <div className="mt-12 border-t border-border">
               <Accordion type="single" collapsible>
                 <AccordionItem value="description">
-                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Descripción</AccordionTrigger>
+                  <AccordionTrigger className="font-body text-xs tracking-wide font-medium py-5 hover:no-underline">Descripción</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     {product.description || 'Sistema modular NODO. Melamina 18mm Tablemac Duratex. Ensamblado en taller en Bogotá.'}
                   </AccordionContent>
@@ -778,7 +778,7 @@ export default function ProductoPage() {
 
                 {parsedDims && (
                   <AccordionItem value="dimensions">
-                    <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Dimensiones</AccordionTrigger>
+                    <AccordionTrigger className="font-body text-xs tracking-wide font-medium py-5 hover:no-underline">Dimensiones</AccordionTrigger>
                     <AccordionContent className="font-body text-sm text-muted-foreground pb-6">
                       <div className="w-full space-y-3">
                         <div className="flex justify-between">
@@ -801,21 +801,21 @@ export default function ProductoPage() {
                 )}
 
                 <AccordionItem value="materials">
-                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Materiales</AccordionTrigger>
+                  <AccordionTrigger className="font-body text-xs tracking-wide font-medium py-5 hover:no-underline">Materiales</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     Melamina de alta calidad de 18 mm con acabado mate. Canto ABS de 0.5 mm. Panel trasero en HDF de 6 mm, remetido 25 mm desde la cara posterior. Ensamblado en taller en Bogotá.
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="shipping">
-                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Envío y entrega</AccordionTrigger>
+                  <AccordionTrigger className="font-body text-xs tracking-wide font-medium py-5 hover:no-underline">Envío y entrega</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     Todos los productos NODO se fabrican a pedido en nuestro taller en Bogotá. El tiempo estimado de entrega es de 2 a 3 semanas desde la confirmación del pedido. Actualmente realizamos envíos únicamente dentro de Bogotá D.C. Cada módulo llega completamente armado — solo tienes que conectar los módulos entre sí con los clips estructurales incluidos.
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="warranty">
-                  <AccordionTrigger className="font-body text-xs uppercase tracking-[.10em] font-medium py-5 hover:no-underline">Garantía y devoluciones</AccordionTrigger>
+                  <AccordionTrigger className="font-body text-xs tracking-wide font-medium py-5 hover:no-underline">Garantía y devoluciones</AccordionTrigger>
                   <AccordionContent className="font-body text-sm text-muted-foreground pb-6 leading-relaxed">
                     <p>Todos los productos NODO cuentan con garantía legal de un (1) año a partir de la fecha de entrega, conforme a la Ley 1480 de 2011 (Estatuto del Consumidor). La garantía cubre defectos de fabricación y materiales. No cubre daños por uso inadecuado, modificaciones realizadas por el cliente, o desgaste natural.</p>
                     <p className="mt-3">Tienes derecho a ejercer el retracto dentro de los cinco (5) días hábiles siguientes a la entrega del producto. La devolución del dinero se realizará en un plazo máximo de quince (15) días calendario conforme a la Ley 2439 de 2024. Para solicitudes, escríbenos a nodomodulardesign@gmail.com</p>
@@ -831,8 +831,8 @@ export default function ProductoPage() {
       {/* ── Reviews placeholder ── */}
       <section className="border-t border-border">
         <div className="nodo-container py-16">
-          <h3 className="font-body text-[9px] uppercase tracking-[.16em] text-muted-foreground mb-6">Reseñas</h3>
-          <div className="bg-muted/40 rounded-none px-6 py-10 flex flex-col items-center text-center gap-3">
+          <h3 className="font-body text-[9px] tracking-wide text-muted-foreground mb-6">Reseñas</h3>
+          <div className="bg-muted/40 rounded-lg px-6 py-10 flex flex-col items-center text-center gap-3">
             <MessageCircle className="w-6 h-6 text-muted-foreground/40" />
             <p className="font-body text-muted-foreground" style={{ fontSize: '14px' }}>
               Las reseñas de clientes estarán disponibles próximamente.
@@ -849,7 +849,7 @@ export default function ProductoPage() {
       {/* ── Bought Together ── */}
       <section className="border-t border-border">
         <div className="nodo-container py-16">
-          <p className="font-body text-[9px] uppercase tracking-[.16em] text-muted-foreground mb-8">
+          <p className="font-body text-[9px] tracking-wide text-muted-foreground mb-8">
             Completa tu configuración
           </p>
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x">
@@ -865,7 +865,7 @@ export default function ProductoPage() {
                     className="aspect-square mb-3 overflow-hidden flex items-center justify-center"
                     style={{ backgroundColor: '#EDE9E1' }}
                   >
-                    <span className="font-body text-[8px] uppercase tracking-[.10em] text-muted-foreground/40">{p.title}</span>
+                    <span className="font-body text-[8px] tracking-wide text-muted-foreground/40">{p.title}</span>
                   </div>
                   <p className="font-body text-xs font-medium group-hover:underline leading-snug">{p.title}</p>
                   <p className="font-body text-[10px] text-muted-foreground mt-0.5">
