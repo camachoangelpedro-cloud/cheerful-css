@@ -65,41 +65,57 @@ function ProductCard({ product }: { product: MappedProduct }) {
   const [hoveredColor, setHoveredColor] = useState<string | null>(null);
 
   return (
-    <Link to={`/producto/${product.slug}`} className="block group">
+    <div className="group">
+      <Link to={`/producto/${product.slug}`} className="block">
+        {/* Image / colour-tinted placeholder */}
+        <div
+          className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
+          style={{
+            backgroundColor: hoveredColor ? COLOR_HEX[hoveredColor] ?? '#F2EDE4' : '#F2EDE4',
+            aspectRatio: '4/5',
+            transition: 'background-color 0.2s ease',
+          }}
+        >
+          <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
+            {product.name}
+          </span>
+        </div>
 
-      {/* Image / colour-tinted placeholder */}
-      <div
-        className="w-full overflow-hidden relative flex items-center justify-center"
-        style={{
-          backgroundColor: hoveredColor ? COLOR_HEX[hoveredColor] ?? '#F2EDE4' : '#F2EDE4',
-          borderRadius: '8px',
-          aspectRatio: '4/5',
-          transition: 'background-color 0.2s ease',
-        }}
-      >
-        <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          {product.name}
-        </span>
-      </div>
+        {/* Text info */}
+        <div className="px-1 pt-2 pb-1">
+          <p
+            className="leading-tight"
+            style={{ fontSize: '13px', fontWeight: 300, color: '#1C1C1A', letterSpacing: 0 }}
+          >
+            {product.name}
+          </p>
+          {product.dimensions && product.dimensions !== '—' && (
+            <p className="mt-0.5" style={{ fontSize: '11px', color: '#9E9E9C', letterSpacing: 0 }}>
+              {product.dimensions}
+            </p>
+          )}
+          <p className="mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#5F5E5A', letterSpacing: 0 }}>
+            {COP(product.price)}
+          </p>
+        </div>
+      </Link>
 
       {/* Colour swatches */}
       {product.colors.length > 0 && (
-        <div
-          className="flex items-center gap-[6px] pt-3 px-1"
-          onClick={e => e.preventDefault()}
-        >
+        <div className="flex items-center gap-[6px] pt-3 px-1">
           {product.colors.map(colorName => (
             <button
               key={colorName}
               onMouseEnter={() => setHoveredColor(colorName)}
               onMouseLeave={() => setHoveredColor(null)}
               aria-label={colorName}
-              className="w-5 h-5 rounded-full shrink-0 border transition-all"
+              className={`w-6 h-6 rounded-full shrink-0 border transition-all
+                ${hoveredColor === colorName
+                  ? 'ring-2 ring-offset-2 ring-foreground scale-110'
+                  : 'hover:scale-105'}`}
               style={{
                 backgroundColor: COLOR_HEX[colorName] ?? '#ccc',
                 borderColor: colorName === 'Blanco Hueso' ? 'rgba(0,0,0,0.12)' : 'transparent',
-                outline: hoveredColor === colorName ? '2px solid #1C1C1A' : '2px solid transparent',
-                outlineOffset: '2px',
               }}
             />
           ))}
@@ -111,41 +127,14 @@ function ProductCard({ product }: { product: MappedProduct }) {
         </div>
       )}
 
-      {/* Text info */}
-      <div className="px-1 pt-2 pb-1">
-        <p
-          className="leading-tight"
-          style={{ fontSize: '13px', fontWeight: 300, color: '#1C1C1A', letterSpacing: 0 }}
-        >
-          {product.name}
-        </p>
-        {product.dimensions && product.dimensions !== '—' && (
-          <p className="mt-0.5" style={{ fontSize: '11px', color: '#9E9E9C', letterSpacing: 0 }}>
-            {product.dimensions}
-          </p>
-        )}
-        <p className="mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#5F5E5A', letterSpacing: 0 }}>
-          {COP(product.price)}
-        </p>
-      </div>
-
       {/* Personalizar CTA */}
-      <div
-        className="mx-1 mt-2 mb-1 flex items-center justify-center transition-opacity duration-200 group-hover:opacity-90"
-        style={{
-          backgroundColor: '#1C1C1A',
-          color: '#FFFFFF',
-          borderRadius: '999px',
-          padding: '9px 16px',
-          fontSize: '11px',
-          fontWeight: 400,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-        }}
+      <Link
+        to={`/producto/${product.slug}`}
+        className="block text-center rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-6 py-3 text-xs tracking-wide font-medium hover:opacity-90 transition-opacity mx-1 mt-2 mb-1"
       >
         Personalizar
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 
