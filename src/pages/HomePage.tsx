@@ -23,18 +23,17 @@ function ProductCard({ handle, label }: ProductCardProps) {
   const activeColor = NODO_COLORS.find(c => c.id === colorId);
 
   return (
-    <Link
-      to={`/producto/${handle}`}
-      className="block group min-w-[280px] max-w-[320px] flex-shrink-0 snap-start"
-    >
-      <div
-        className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
-        style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '3/4' }}
-      >
-        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          {label}
-        </span>
-      </div>
+    <div className="block group pb-2">
+      <Link to={`/producto/${handle}`} className="block">
+        <div
+          className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
+          style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '3/4' }}
+        >
+          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            {label}
+          </span>
+        </div>
+      </Link>
 
       <div
         className="flex items-center gap-[6px] pt-3"
@@ -58,8 +57,14 @@ function ProductCard({ handle, label }: ProductCardProps) {
         <p className="text-sm mt-0.5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
           Desde COP ${price.toLocaleString('es-CO')}
         </p>
+        <Link
+          to={`/producto/${handle}`}
+          className="inline-block mt-3 rounded-full border border-foreground/30 px-5 py-2 text-xs tracking-wide hover:bg-foreground hover:text-background transition-all"
+        >
+          Personalízalo
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -127,15 +132,11 @@ export default function HomePage() {
 
         {/* BLOCK 2 — Editorial split: product slider + value prop */}
         <section className="nodo-container py-20 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
-            {/* LEFT — Product slider */}
-            <div className="lg:col-span-3 lg:pr-8">
-              <div
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden"
-                style={{ scrollbarWidth: 'none' }}
-              >
-                <ProductCard handle="modulo-36-36" label="Módulo 36×36" />
+            {/* LEFT — 2 product cards */}
+            <div className="lg:col-span-2">
+              <div className="grid grid-cols-2 gap-6">
                 <ProductCard handle="modulo-36-72" label="Módulo 36×72" />
                 <ProductCard handle="modulo-72-36" label="Módulo 72×36" />
               </div>
@@ -143,7 +144,7 @@ export default function HomePage() {
 
             {/* RIGHT — Dark value prop */}
             <div
-              className="lg:col-span-2 rounded-lg p-8 lg:p-10 flex flex-col justify-between mt-6 lg:mt-0"
+              className="lg:col-span-1 rounded-lg p-8 lg:p-10 flex flex-col justify-between mt-6 lg:mt-0"
               style={{ backgroundColor: '#1C1C1A', minHeight: '500px' }}
             >
               <div>
