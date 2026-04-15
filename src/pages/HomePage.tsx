@@ -27,7 +27,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
       <Link to={`/producto/${handle}`} className="block">
         <div
           className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
-          style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '3/4' }}
+          style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
         >
           <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             {label}
@@ -44,7 +44,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
             key={c.id}
             onClick={e => { e.preventDefault(); setColorId(c.id); }}
             aria-label={c.name}
-            className={`w-5 h-5 rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-1 ring-foreground scale-110' : 'hover:scale-105'}`}
+            className={`w-6 h-6 rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
             style={{ backgroundColor: c.hex, border: '1px solid rgba(0,0,0,0.10)' }}
           />
         ))}
@@ -59,7 +59,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
         </p>
         <Link
           to={`/producto/${handle}`}
-          className="inline-block mt-3 rounded-full border border-foreground/30 px-5 py-2 text-xs tracking-wide hover:bg-foreground hover:text-background transition-all"
+          className="inline-block mt-3 rounded-full border border-foreground/30 px-6 py-3 text-xs tracking-wide font-medium hover:bg-foreground hover:text-background transition-all"
         >
           Personalízalo
         </Link>
@@ -183,8 +183,7 @@ export default function HomePage() {
               <div className="mt-8">
                 <Link
                   to="/catalogo"
-                  className="inline-block rounded-full px-6 py-3 text-sm tracking-wide transition-all hover:bg-[#F2EDE4] hover:text-[#1C1C1A]"
-                  style={{ border: '1px solid rgba(242,237,228,0.4)', color: '#F2EDE4' }}
+                  className="inline-block rounded-full border border-[#F2EDE4]/40 text-[#F2EDE4] px-6 py-3 text-xs tracking-wide font-medium hover:bg-[#F2EDE4] hover:text-[#1C1C1A] transition-all"
                 >
                   Ver todos los muebles
                 </Link>
