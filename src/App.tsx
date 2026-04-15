@@ -8,6 +8,7 @@ import { CookieBanner } from '@/components/CookieBanner';
 const HomePage               = lazy(() => import('@/pages/HomePage'));
 const CatalogoPage           = lazy(() => import('@/pages/CatalogoPage'));
 const ProductoPage           = lazy(() => import('@/pages/ProductoPage'));
+const ConfiguradorIntroPage  = lazy(() => import('@/pages/ConfiguradorIntroPage'));
 const ConfiguradorPage       = lazy(() => import('@/pages/ConfiguradorPage'));
 const NosotrosPage           = lazy(() => import('@/pages/NosotrosPage'));
 const ContactoPage           = lazy(() => import('@/pages/ContactoPage'));
@@ -24,7 +25,8 @@ function AppContent() {
         <Route path="/"                       element={<HomePage />} />
         <Route path="/catalogo"               element={<CatalogoPage />} />
         <Route path="/producto/:handle"       element={<ProductoPage />} />
-        <Route path="/configurador"           element={<ConfiguradorPage />} />
+        <Route path="/configurador"           element={<ConfiguradorIntroPage />} />
+        <Route path="/configurador/editor"   element={<ConfiguradorPage />} />
         <Route path="/nosotros"               element={<NosotrosPage />} />
         <Route path="/contacto"               element={<ContactoPage />} />
         <Route path="/politica-privacidad"    element={<PoliticaPrivacidadPage />} />
