@@ -40,7 +40,7 @@ export default function WallSetup() {
   }: { value: number; current: number; setter: (v: number) => void }) => (
     <button
       onClick={() => setter(value)}
-      className={`font-body text-[10px] px-2.5 py-1 border rounded-none transition-colors
+      className={`font-body text-[10px] px-2.5 py-1 border rounded-lg transition-colors
         ${current === value
           ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]'
           : 'border-border hover:border-foreground/40'}`}
@@ -65,7 +65,7 @@ export default function WallSetup() {
 
         {/* ── Live preview ──────────────────────────────── */}
         <div className="flex flex-col items-center gap-3">
-          <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground">Vista previa</p>
+          <p className="font-body text-[10px] tracking-wide text-muted-foreground">Vista previa</p>
 
           <svg width={pW} height={pH} className="border border-border/50 shadow-sm">
             {/* Wall */}
@@ -131,7 +131,7 @@ export default function WallSetup() {
 
           {/* Width */}
           <div>
-            <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground mb-2">
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2">
               Ancho — {widthCm} cm
             </p>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -144,7 +144,7 @@ export default function WallSetup() {
 
           {/* Height */}
           <div>
-            <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground mb-2">
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2">
               Alto — {heightCm} cm
             </p>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -163,7 +163,7 @@ export default function WallSetup() {
                 onChange={e => setHasWindow(e.target.checked)}
                 className="w-4 h-4 accent-[#1C1C1A]"
               />
-              <span className="font-body text-[10px] uppercase tracking-[.12em] font-medium">
+              <span className="font-body text-[10px] tracking-wide font-medium">
                 Añadir ventana
               </span>
             </label>
@@ -194,7 +194,7 @@ export default function WallSetup() {
           <button
             onClick={handleConfirm}
             disabled={widthCm < 72 || heightCm < 100}
-            className="w-full rounded-full py-4 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40"
+            className="w-full rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
           >
             Empezar a diseñar →
           </button>
