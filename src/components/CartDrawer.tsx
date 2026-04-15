@@ -170,7 +170,7 @@ export function CartDrawer() {
                 </p>
                 <Button 
                   onClick={handleCheckout} 
-                  className="w-full nodo-button rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 text-sm tracking-wide font-medium hover:opacity-90 transition-opacity"
+                  className="w-full nodo-button rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 text-sm tracking-wide font-medium hover:opacity-90 transition-opacity"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? (
