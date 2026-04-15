@@ -265,7 +265,7 @@ export default function ModuleEditPanel() {
                   onClick={() => handleApertura(ap)}
                   className={`flex-1 font-body text-[8px] tracking-wide px-2 py-1.5 border rounded-lg transition-colors
                     ${mod.apertura === ap
-                      ? 'border-[#1C1C1A] bg-[#1C1C1A] text-[#F2EDE4]'
+                      ? 'border-[#1C1C1A] bg-[#1C1C1A] text-white'
                       : 'border-border text-foreground hover:border-foreground/60'}`}
                 >
                   {ap === 'DER' ? 'Derecha' : 'Izquierda'}
