@@ -98,7 +98,7 @@ setIsAdding(true);
 
   return (
     <div className="border-t border-border bg-background p-4 space-y-3 shrink-0">
-      <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground">Resumen</p>
+      <p className="font-body text-[10px] tracking-wide text-muted-foreground">Resumen</p>
 
       {summary.length === 0 ? (
         <p className="font-body text-[10px] text-muted-foreground/60">Sin módulos colocados</p>
@@ -130,7 +130,7 @@ setIsAdding(true);
       )}
 
       <div className="flex items-center justify-between pt-2 border-t border-border">
-        <span className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground">Total</span>
+        <span className="font-body text-[10px] tracking-wide text-muted-foreground">Total</span>
         <span className="font-body text-sm font-semibold">{COP(total)}</span>
       </div>
 
@@ -144,7 +144,10 @@ setIsAdding(true);
           }
         }}
         disabled={placedModules.length === 0 || isAdding}
-        className="w-full rounded-full py-3 bg-[#1C1C1A] text-[#F2EDE4] font-body text-[10px] tracking-[.12em] uppercase font-medium hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+        className={`w-full rounded-full font-body text-sm tracking-wide font-medium transition-opacity disabled:opacity-40 flex items-center justify-center gap-2
+          ${addedToCart
+            ? 'border border-foreground/30 px-6 py-3 hover:bg-foreground hover:text-background'
+            : 'bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 hover:opacity-90'}`}
       >
         {isAdding
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
