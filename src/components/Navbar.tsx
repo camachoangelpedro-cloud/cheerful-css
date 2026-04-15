@@ -100,7 +100,7 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* Announcement Bar */}
-      <div className="py-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}>
+      <div className="py-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}>
         <style>{`
           @keyframes nodo-ticker {
             0%   { transform: translateX(0); }
@@ -420,7 +420,7 @@ export function Navbar() {
                   onClick={handleAuthSubmit}
                   disabled={authLoading}
                   className="w-full flex items-center justify-center gap-2 mt-1 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-70"
-                  style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4', borderRadius: '9999px', letterSpacing: 0 }}
+                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '9999px', letterSpacing: 0 }}
                 >
                   {authLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                   Iniciar sesión
@@ -480,7 +480,7 @@ export function Navbar() {
                   onClick={handleAuthSubmit}
                   disabled={authLoading}
                   className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-70"
-                  style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4', borderRadius: '9999px', letterSpacing: 0 }}
+                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '9999px', letterSpacing: 0 }}
                 >
                   {authLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                   Crear cuenta
