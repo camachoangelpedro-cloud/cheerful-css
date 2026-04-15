@@ -65,7 +65,7 @@ export function HeroSection() {
             <Link
               to={heroSlides[currentSlide].link}
               className="inline-block rounded-full px-10 py-4 text-base font-medium tracking-wide transition-opacity hover:opacity-85"
-              style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}
+              style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}
             >
               {heroSlides[currentSlide].cta}
             </Link>
