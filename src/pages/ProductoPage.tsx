@@ -477,7 +477,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-6 py-3 font-body text-xs tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="rounded-full bg-[#1C1C1A] text-white px-6 py-3 font-body text-xs tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {addedToCart ? 'Añadido ✓' : 'Añadir'}
             </button>
@@ -602,7 +602,7 @@ export default function ProductoPage() {
                         key={a}
                         onClick={() => setSelectedApertura(a)}
                         className={`font-body text-[10px] tracking-wide px-4 py-2 border rounded-lg cursor-pointer transition-colors
-                          ${selectedApertura === a ? 'bg-[#1C1C1A] text-[#F2EDE4] border-[#1C1C1A]' : 'border-border text-foreground hover:border-foreground/60'}`}
+                          ${selectedApertura === a ? 'bg-[#1C1C1A] text-white border-[#1C1C1A]' : 'border-border text-foreground hover:border-foreground/60'}`}
                       >
                         {a}
                       </button>
@@ -733,7 +733,7 @@ export default function ProductoPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                  className="flex-1 rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {cartLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
