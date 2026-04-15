@@ -207,7 +207,7 @@ export default function NosotrosPage() {
           <div className="nodo-container flex flex-col items-center text-center gap-6">
             <h2
               className="text-3xl lg:text-4xl"
-              style={{ fontWeight: 300, color: '#F2EDE4', letterSpacing: 0, lineHeight: 1.1 }}
+              style={{ fontWeight: 300, color: '#FFFFFF', letterSpacing: 0, lineHeight: 1.1 }}
             >
               Diseña tu primer NODO
             </h2>
@@ -218,7 +218,7 @@ export default function NosotrosPage() {
             >
               Ir al configurador
             </Link>
-            <p className="text-xs" style={{ color: 'rgba(242, 237, 228, 0.45)', letterSpacing: 0 }}>
+            <p className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.45)', letterSpacing: 0 }}>
               Sin compromiso. Configura y explora.
             </p>
           </div>
