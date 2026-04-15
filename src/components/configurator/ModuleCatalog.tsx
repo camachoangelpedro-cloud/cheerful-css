@@ -11,10 +11,10 @@ const PREVIEW_SCALE = 0.5; // px per cm for card previews
 export default function ModuleCatalog() {
   const { selectedColorCode, dragHandle, setDragHandle, setColorCode, clfQuantities, setClfQuantity } =
     useConfiguratorStore();
-  const [modOpen,  setModOpen]  = useState(true);
-  const [modhOpen, setModhOpen] = useState(true);
-  const [clfOpen,  setClfOpen]  = useState(true);
-  const [pltOpen,  setPltOpen]  = useState(true);
+  const [modOpen,  setModOpen]  = useState(false);
+  const [modhOpen, setModhOpen] = useState(false);
+  const [clfOpen,  setClfOpen]  = useState(false);
+  const [pltOpen,  setPltOpen]  = useState(false);
 
   const modulos  = NODO_PRODUCTS.filter(p => p.family === 'MOD');
   const modhs    = NODO_PRODUCTS.filter(p => p.family === 'MODH');
@@ -142,29 +142,9 @@ export default function ModuleCatalog() {
         </p>
       </div>
 
-      {/* Full depth 36cm */}
+      {/* Bases */}
       <div className="border-b border-border">
-        <SectionHeader label="Profundidad completa 36 cm" open={modOpen} toggle={() => setModOpen(v => !v)} />
-        {modOpen && (
-          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
-            {modulos.map(p => <ProductCard key={p.handle} product={p} />)}
-          </div>
-        )}
-      </div>
-
-      {/* Half depth 18cm */}
-      <div className="border-b border-border">
-        <SectionHeader label="Media profundidad 18 cm" open={modhOpen} toggle={() => setModhOpen(v => !v)} />
-        {modhOpen && (
-          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
-            {modhs.map(p => <ProductCard key={p.handle} product={p} />)}
-          </div>
-        )}
-      </div>
-
-      {/* Placas */}
-      <div className="border-b border-border">
-        <SectionHeader label="Placas" open={pltOpen} toggle={() => setPltOpen(v => !v)} />
+        <SectionHeader label="Bases" open={pltOpen} toggle={() => setPltOpen(v => !v)} />
         {pltOpen && (
           <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
             {placas.map(p => <ProductCard key={p.handle} product={p} />)}
@@ -172,9 +152,29 @@ export default function ModuleCatalog() {
         )}
       </div>
 
+      {/* Full depth */}
+      <div className="border-b border-border">
+        <SectionHeader label="Muebles profundidad completa" open={modOpen} toggle={() => setModOpen(v => !v)} />
+        {modOpen && (
+          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
+            {modulos.map(p => <ProductCard key={p.handle} product={p} />)}
+          </div>
+        )}
+      </div>
+
+      {/* Half depth */}
+      <div className="border-b border-border">
+        <SectionHeader label="Muebles media profundidad" open={modhOpen} toggle={() => setModhOpen(v => !v)} />
+        {modhOpen && (
+          <div className="grid grid-cols-2 gap-1.5 px-3 pb-3">
+            {modhs.map(p => <ProductCard key={p.handle} product={p} />)}
+          </div>
+        )}
+      </div>
+
       {/* Clips */}
       <div>
-        <SectionHeader label="Clips" open={clfOpen} toggle={() => setClfOpen(v => !v)} />
+        <SectionHeader label="Clips y accesorios" open={clfOpen} toggle={() => setClfOpen(v => !v)} />
         {clfOpen && (
           <div className="px-3 pb-3 flex flex-col gap-1.5">
             {clips.map(p => <ClipCard key={p.handle} product={p} />)}
