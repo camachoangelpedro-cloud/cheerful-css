@@ -49,7 +49,7 @@ export default function ModuleCatalog() {
             border: '1px solid rgba(0,0,0,0.10)',
           }}
         />
-        <span className="font-body text-[9px] uppercase tracking-[.08em] text-foreground/80 text-center leading-tight">
+        <span className="font-body text-[10px] tracking-wide font-medium text-foreground/80 text-center leading-tight">
           {product.title}
         </span>
         <span className="font-body text-[9px] text-muted-foreground">
@@ -66,7 +66,7 @@ export default function ModuleCatalog() {
     const qty = clfQuantities[product.handle] ?? 0;
     return (
       <div className="flex flex-col gap-1.5 p-2.5 border border-border rounded-lg">
-        <span className="font-body text-[9px] uppercase tracking-[.08em] text-foreground/80 leading-tight">
+        <span className="font-body text-[10px] tracking-wide font-medium text-foreground/80 leading-tight">
           {product.title}
         </span>
         <span className="font-body text-[9px] font-medium text-foreground">
@@ -99,7 +99,7 @@ export default function ModuleCatalog() {
       onClick={toggle}
       className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-muted/30 transition-colors"
     >
-      <span className="font-body text-[10px] uppercase tracking-[.12em] font-medium text-foreground">
+      <span className="font-body text-[10px] tracking-wide font-medium text-foreground">
         {label}
       </span>
       {open
@@ -114,7 +114,7 @@ export default function ModuleCatalog() {
 
       {/* Color selector */}
       <div className="p-4 border-b border-border shrink-0">
-        <p className="font-body text-[10px] uppercase tracking-[.12em] text-muted-foreground mb-2.5">Color</p>
+        <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2.5">Color</p>
         <div className="flex gap-2 mb-1.5">
           {NODO_COLORS.map(color => (
             <button
