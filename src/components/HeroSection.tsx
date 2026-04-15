@@ -6,10 +6,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const heroSlides = [
   {
     image: '/hero-banner.webp',
-    title: 'Sistema 01',
-    subtitle: 'Discover all',
+    title: 'Diseña el espacio que siempre quisiste',
+    subtitle: 'Módulos que llegan armados. Tú solo los conectas.',
     link: '/configurador',
-    cta: 'Configura'
+    cta: 'Empieza a diseñar'
   },
 ];
 
@@ -55,18 +55,27 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-white"
         >
-          <p className="font-body text-sm tracking-wide mb-2 opacity-80">
+          <p className="font-body text-sm tracking-wide mb-3 opacity-80">
             {heroSlides[currentSlide].subtitle}
           </p>
-          <h2 className="font-display text-3xl lg:text-4xl mb-4">
+          <h2 className="font-display text-3xl lg:text-5xl font-light mb-6 max-w-lg leading-tight">
             {heroSlides[currentSlide].title}
           </h2>
-          <Link 
-            to={heroSlides[currentSlide].link}
-            className="inline-block rounded-full border border-white/60 text-white px-6 py-2.5 text-sm tracking-wide hover:bg-white hover:text-black transition-all duration-300"
-          >
-            {heroSlides[currentSlide].cta}
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link
+              to={heroSlides[currentSlide].link}
+              className="inline-block rounded-full px-10 py-4 text-base font-medium tracking-wide transition-opacity hover:opacity-85"
+              style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}
+            >
+              {heroSlides[currentSlide].cta}
+            </Link>
+            <Link
+              to="/catalogo"
+              className="font-body text-sm text-white underline underline-offset-4 hover:opacity-70 transition-opacity"
+            >
+              Ver catálogo
+            </Link>
+          </div>
         </motion.div>
       </div>
 
