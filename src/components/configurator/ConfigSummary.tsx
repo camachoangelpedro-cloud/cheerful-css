@@ -147,7 +147,7 @@ setIsAdding(true);
         className={`w-full rounded-full font-body text-sm tracking-wide font-medium transition-opacity disabled:opacity-40 flex items-center justify-center gap-2
           ${addedToCart
             ? 'border border-foreground/30 px-6 py-3 hover:bg-foreground hover:text-background'
-            : 'bg-[#1C1C1A] text-[#F2EDE4] px-8 py-3.5 hover:opacity-90'}`}
+            : 'bg-[#1C1C1A] text-white px-8 py-3.5 hover:opacity-90'}`}
       >
         {isAdding
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
