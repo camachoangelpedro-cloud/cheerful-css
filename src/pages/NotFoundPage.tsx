@@ -36,7 +36,7 @@ export default function NotFoundPage() {
           <Link
             to="/"
             className="inline-flex items-center px-7 py-3 font-body text-sm font-medium transition-opacity hover:opacity-80"
-            style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4', borderRadius: '9999px' }}
+            style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '9999px' }}
           >
             Volver al inicio
           </Link>
