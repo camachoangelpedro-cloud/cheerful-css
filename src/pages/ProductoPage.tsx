@@ -11,6 +11,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Loader2, Truck, Clock, Package, MessageCircle } from 'lucide-react';
 import { NODO_PRODUCTS } from '@/data/modulesCatalog';
+import { getRenderUrlByCode } from '@/data/renderMap';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -527,6 +528,23 @@ export default function ProductoPage() {
                 </div>
               )}
             </div>
+
+            {/* Render image — lifestyle photo for the selected colour */}
+            {(() => {
+              const renderUrl = handle ? getRenderUrlByCode(handle, selectedColor.code) : null;
+              if (!renderUrl) return null;
+              return (
+                <div className="mt-3 w-full overflow-hidden rounded-lg" style={{ aspectRatio: '4/5', backgroundColor: '#F2EDE4' }}>
+                  <img
+                    key={renderUrl}
+                    src={renderUrl}
+                    alt={`${product.title} — ${selectedColor.name}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })()}
 
           </div>
 
