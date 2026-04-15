@@ -15,6 +15,16 @@ export interface PlacedModule {
   pasacables: boolean; // cable grommet cut-out (AP variants)
 }
 
+export interface Wall {
+  widthCm: number;
+  heightCm: number;
+  hasWindow: boolean;
+  windowXCm: number;
+  windowYCm: number;
+  windowWidthCm: number;
+  windowHeightCm: number;
+}
+
 export interface ModuleSummaryItem {
   handle: string;
   colorCode: string;
@@ -78,9 +88,11 @@ interface ConfigStore {
   undoStack: PlacedModule[][];
   redoStack: PlacedModule[][];
   clfQuantities: Record<string, number>;
+  wall: Wall;
 
   setDragHandle: (h: string | null) => void;
   setColorCode: (code: string) => void;
+  setWall: (wall: Partial<Wall>) => void;
   dropModule: (handle: string, xCm: number, yCm: number) => void;
   removeModule: (id: string) => void;
   selectInstance: (id: string | null) => void;
@@ -109,12 +121,22 @@ export const useConfiguratorStore = create<ConfigStore>()((set, get) => ({
   selectedId: null,
   dragHandle: null,
   clfQuantities: {},
+  wall: {
+    widthCm: 360,
+    heightCm: 240,
+    hasWindow: false,
+    windowXCm: 0,
+    windowYCm: 0,
+    windowWidthCm: 0,
+    windowHeightCm: 0,
+  },
   selectedColorCode: 'BH',
   undoStack: [],
   redoStack: [],
 
   setDragHandle: (h) => set({ dragHandle: h }),
   setColorCode:  (code) => set({ selectedColorCode: code }),
+  setWall: (w) => set((s) => ({ wall: { ...s.wall, ...w } })),
 
   dropModule: (handle, xCm, yCm) => {
     const state = get();
