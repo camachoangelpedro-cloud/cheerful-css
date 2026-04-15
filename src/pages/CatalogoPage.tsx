@@ -130,7 +130,7 @@ function ProductCard({ product }: { product: MappedProduct }) {
       {/* Personalizar CTA */}
       <Link
         to={`/producto/${product.slug}`}
-        className="block text-center rounded-full bg-[#1C1C1A] text-[#F2EDE4] px-6 py-3 text-xs tracking-wide font-medium hover:opacity-90 transition-opacity mx-1 mt-2 mb-1"
+        className="block text-center rounded-full bg-[#1C1C1A] text-white px-6 py-3 text-xs tracking-wide font-medium hover:opacity-90 transition-opacity mx-1 mt-2 mb-1"
       >
         Personalizar
       </Link>
@@ -356,7 +356,7 @@ export default function CatalogoPage() {
                       {hasActiveFilters && (
                         <span
                           className="inline-flex items-center justify-center text-[10px] font-medium w-4 h-4 rounded-full"
-                          style={{ backgroundColor: '#1C1C1A', color: '#F2EDE4' }}
+                          style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}
                         >
                           {activeCategories.size + activeColors.size}
                         </span>
