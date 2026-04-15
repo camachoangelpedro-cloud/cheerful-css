@@ -49,7 +49,7 @@ export default function ConfigToolbar() {
       {floatingCount > 0 ? (
         <button
           onClick={removeFloating}
-          className="font-body text-[10px] uppercase tracking-[.12em] text-red-500 hover:text-red-700 transition-colors"
+          className="font-body text-[10px] tracking-wide text-red-500 hover:text-red-700 transition-colors"
         >
           Eliminar flotantes ({floatingCount})
         </button>
