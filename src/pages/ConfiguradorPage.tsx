@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Monitor } from 'lucide-react';
 import IsometricCanvas from '@/components/configurator/IsometricCanvas';
 import ModuleCatalog from '@/components/configurator/ModuleCatalog';
 import ConfigToolbar from '@/components/configurator/ConfigToolbar';
@@ -8,6 +9,35 @@ import ConfigSummary from '@/components/configurator/ConfigSummary';
 import ModuleEditPanel from '@/components/configurator/ModuleEditPanel';
 
 export default function ConfiguradorPage() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <Monitor className="w-16 h-16 mb-6 text-muted-foreground" />
+        <h1 className="font-display text-2xl font-light mb-4">
+          El configurador 3D está disponible en escritorio
+        </h1>
+        <p className="text-muted-foreground text-sm mb-8 max-w-md">
+          Para diseñar tu sistema NODO con nuestro configurador interactivo, visítanos desde un ordenador. También puedes explorar y comprar módulos individuales desde tu celular.
+        </p>
+        <a
+          href="/catalogo"
+          className="rounded-full bg-foreground text-background px-8 py-3.5 text-sm tracking-wide hover:opacity-85 transition-opacity"
+        >
+          Explorar nuestros muebles
+        </a>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
       <Helmet>
