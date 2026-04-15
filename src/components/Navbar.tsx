@@ -150,21 +150,21 @@ export function Navbar() {
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
               style={{ letterSpacing: 0 }}
             >
-              Configurador
+              Diseña Tú Mismo
             </Link>
             <Link
               to="/catalogo"
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
               style={{ letterSpacing: 0 }}
             >
-              Módulos
+              Nuestros Muebles
             </Link>
             <Link
               to="/nosotros"
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
               style={{ letterSpacing: 0 }}
             >
-              Nosotros
+              Nuestra Filosofía
             </Link>
           </div>
 
@@ -235,7 +235,7 @@ export function Navbar() {
             style={{ letterSpacing: 0 }}
             onClick={() => setMobileOpen(false)}
           >
-            Configurador
+            Diseña Tú Mismo
           </Link>
           <Link
             to="/catalogo"
@@ -243,7 +243,7 @@ export function Navbar() {
             style={{ letterSpacing: 0 }}
             onClick={() => setMobileOpen(false)}
           >
-            Módulos
+            Nuestros Muebles
           </Link>
           <Link
             to="/nosotros"
@@ -251,7 +251,7 @@ export function Navbar() {
             style={{ letterSpacing: 0 }}
             onClick={() => setMobileOpen(false)}
           >
-            Nosotros
+            Nuestra Filosofía
           </Link>
         </div>
       </div>
