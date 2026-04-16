@@ -70,10 +70,10 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-white"
         >
-          <p className="font-body text-sm tracking-wide mb-3 opacity-80">
+          <p className="font-body text-sm font-medium tracking-wide mb-3 opacity-80">
             {heroSlides[currentSlide].subtitle}
           </p>
-          <h2 className="font-display text-3xl lg:text-5xl font-light mb-6 max-w-lg leading-tight">
+          <h2 className="font-display text-3xl lg:text-5xl font-semibold mb-6 max-w-lg leading-tight">
             {heroSlides[currentSlide].title}
           </h2>
           <div className="flex items-center gap-5">
