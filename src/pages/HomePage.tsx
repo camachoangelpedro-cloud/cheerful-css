@@ -151,12 +151,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT — Dark value prop */}
-            <div
-              className="lg:col-span-1 rounded-lg p-8 lg:p-10 flex flex-col justify-between mt-6 lg:mt-0"
-              style={{ backgroundColor: '#1C1C1A' }}
-            >
-              <div>
+            {/* RIGHT — Dark value prop + CTA below */}
+            <div className="lg:col-span-1 flex flex-col mt-6 lg:mt-0">
+
+              {/* Dark box — no CTA inside */}
+              <div
+                className="rounded-lg p-8 lg:p-10"
+                style={{ backgroundColor: '#1C1C1A' }}
+              >
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
                 </p>
@@ -189,14 +191,20 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-8">
+              {/* Spacer pushes CTA to bottom of the grid row */}
+              <div className="flex-1" />
+
+              {/* CTA outside box, bottom aligned with product cards price text */}
+              <div className="pt-6">
                 <Link
                   to="/catalogo"
-                  className="inline-block rounded-full border border-white/40 text-white px-6 py-3 text-xs tracking-wide font-medium hover:bg-[#F2EDE4] hover:text-[#1C1C1A] transition-all"
+                  className="inline-block rounded-full border border-foreground/30 px-6 py-3 text-xs tracking-wide font-medium hover:bg-foreground hover:text-background transition-all"
+                  style={{ color: '#1C1C1A' }}
                 >
                   Ver todos los muebles
                 </Link>
               </div>
+
             </div>
 
           </div>
