@@ -656,24 +656,6 @@ export default function ProductoPage() {
               </div>
             )}
 
-            {/* TYPE_ACABADO */}
-            {pType === 'TYPE_ACABADO' && (
-              <div className="mb-8">
-                <StepHeader label="Acabado" />
-                <div className="flex gap-2 mt-3">
-                  {['Acero Cepillado', 'Latón'].map(a => (
-                    <button
-                      key={a}
-                      onClick={() => setSelectedAcabado(a)}
-                      className={`font-body text-sm border px-4 py-2 rounded-lg transition-colors
-                        ${selectedAcabado === a ? 'bg-foreground text-background border-foreground' : 'border-border hover:border-foreground'}`}
-                    >
-                      {a}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* TYPE_72x72 */}
             {is72x72 && (
