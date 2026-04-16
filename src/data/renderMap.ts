@@ -11,9 +11,9 @@ export const RENDER_LETTER: Record<string, string> = {
   'modulo-h-36-24': 'J',
   'modulo-h-36-36': 'K',
   'modulo-h-72-24': 'L',
-  'clip-decorativo-laton': 'M',
-  'base-36': 'N',
-  'base-72': 'O',
+  'clf-std': 'M',
+  'base-36-36': 'N',
+  'base-72-36': 'O',
 };
 
 export const COLOR_TO_CODE: Record<string, string> = {
@@ -21,4 +21,12 @@ export const COLOR_TO_CODE: Record<string, string> = {
   'Roble Natural': 'RO',
   'Verde Agave': 'VA',
   'Azul Fes': 'AF',
+};
+
+export const CLIP_COLOR_TO_CODE: Record<string, string> = {
+  'Acero': 'BS',
+  'Acero Cepillado': 'BS',
+  'Brushed Steel': 'BS',
+  'Latón': 'BR',
+  'Brass': 'BR',
 };
