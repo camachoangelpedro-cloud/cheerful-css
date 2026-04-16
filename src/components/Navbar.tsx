@@ -150,7 +150,7 @@ export function Navbar() {
               className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
               style={{ letterSpacing: 0 }}
             >
-              Diseña Tú Mismo
+              Diseña tú Mismo
             </Link>
             <Link
               to="/catalogo"
@@ -235,7 +235,7 @@ export function Navbar() {
             style={{ letterSpacing: 0 }}
             onClick={() => setMobileOpen(false)}
           >
-            Diseña Tú Mismo
+            Diseña tú Mismo
           </Link>
           <Link
             to="/catalogo"
