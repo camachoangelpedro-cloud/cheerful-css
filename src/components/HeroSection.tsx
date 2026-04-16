@@ -5,7 +5,21 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const heroSlides = [
   {
-    image: '/hero-banner.webp',
+    image: '/banner1.webp',
+    title: 'Diseña el espacio que siempre quisiste',
+    subtitle: 'Módulos que llegan armados. Tú solo los conectas.',
+    link: '/configurador',
+    cta: 'Empieza a diseñar'
+  },
+  {
+    image: '/banner2.webp',
+    title: 'Diseña el espacio que siempre quisiste',
+    subtitle: 'Módulos que llegan armados. Tú solo los conectas.',
+    link: '/configurador',
+    cta: 'Empieza a diseñar'
+  },
+  {
+    image: '/banner3.webp',
     title: 'Diseña el espacio que siempre quisiste',
     subtitle: 'Módulos que llegan armados. Tú solo los conectas.',
     link: '/configurador',
