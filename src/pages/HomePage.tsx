@@ -154,10 +154,10 @@ export default function HomePage() {
             {/* RIGHT — Dark value prop + CTA below */}
             <div className="lg:col-span-1 flex flex-col mt-6 lg:mt-0">
 
-              {/* Dark box — no CTA inside */}
+              {/* Dark box — aspect-ratio 4/5 matches product card image height */}
               <div
-                className="rounded-lg p-8 lg:p-10"
-                style={{ backgroundColor: '#1C1C1A' }}
+                className="rounded-lg p-8 lg:p-10 flex flex-col overflow-hidden"
+                style={{ backgroundColor: '#1C1C1A', aspectRatio: '4/5' }}
               >
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
@@ -191,11 +191,8 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Spacer pushes CTA to bottom of the grid row */}
-              <div className="flex-1" />
-
-              {/* CTA outside box, bottom aligned with product cards price text */}
-              <div className="pt-6">
+              {/* CTA sits below the box */}
+              <div className="pt-4">
                 <Link
                   to="/catalogo"
                   className="inline-block rounded-full border border-foreground/30 px-6 py-3 text-xs tracking-wide font-medium hover:bg-foreground hover:text-background transition-all"

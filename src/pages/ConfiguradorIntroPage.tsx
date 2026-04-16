@@ -25,33 +25,43 @@ export default function ConfiguradorIntroPage() {
           </p>
         </div>
 
-        {/* SECTION 2 — Three steps */}
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-16">
-
-          <div>
-            <p className="text-5xl font-light text-muted-foreground/30">01</p>
-            <h3 className="font-body font-medium text-lg mt-2">Empieza por la base</h3>
-            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              Arrastra una base al canvas. Es el punto de apoyo de tu sistema — define dónde empieza tu mueble.
+        {/* SECTION 2 — Three steps in dark box */}
+        <div className="max-w-4xl mx-auto mt-16">
+          <div
+            className="rounded-lg p-8 lg:p-10"
+            style={{ backgroundColor: '#1C1C1A' }}
+          >
+            <p className="text-xs tracking-wider uppercase mb-8" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              Cómo funciona
             </p>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
 
-          <div>
-            <p className="text-5xl font-light text-muted-foreground/30">02</p>
-            <h3 className="font-body font-medium text-lg mt-2">Apila tus muebles</h3>
-            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              Elige muebles del menú derecho y colócalos encima de la base o de otros muebles. Recomendamos colocar los muebles de profundidad completa abajo y los de media profundidad arriba — así tu sistema queda más estable y visualmente equilibrado. Puedes elegir el color, si tiene fondo, repisa o puerta.
-            </p>
-          </div>
+              <div>
+                <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>01</p>
+                <h3 className="font-body font-medium text-base mt-2" style={{ color: '#FFFFFF' }}>Empieza por la base</h3>
+                <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                  Arrastra una base al canvas. Es el punto de apoyo de tu sistema — define dónde empieza tu mueble.
+                </p>
+              </div>
 
-          <div>
-            <p className="text-5xl font-light text-muted-foreground/30">03</p>
-            <h3 className="font-body font-medium text-lg mt-2">Conecta y compra</h3>
-            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              Cuando tu diseño esté listo, revisa el resumen con el precio total y añádelo al carrito. Cada mueble llega armado — solo los conectas con los clips incluidos.
-            </p>
-          </div>
+              <div>
+                <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>02</p>
+                <h3 className="font-body font-medium text-base mt-2" style={{ color: '#FFFFFF' }}>Apila tus muebles</h3>
+                <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                  Elige muebles del menú derecho y colócalos encima de la base o de otros muebles. Recomendamos colocar los muebles de profundidad completa abajo y los de media profundidad arriba — así tu sistema queda más estable y visualmente equilibrado.
+                </p>
+              </div>
 
+              <div>
+                <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>03</p>
+                <h3 className="font-body font-medium text-base mt-2" style={{ color: '#FFFFFF' }}>Conecta y compra</h3>
+                <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                  Cuando tu diseño esté listo, revisa el resumen con el precio total y añádelo al carrito. Cada mueble llega armado — solo los conectas con los clips incluidos.
+                </p>
+              </div>
+
+            </div>
+          </div>
         </div>
 
         {/* SECTION 3 — Tip */}
