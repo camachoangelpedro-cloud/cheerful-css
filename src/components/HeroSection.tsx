@@ -52,11 +52,12 @@ export function HeroSection() {
           transition={{ duration: 1, ease: "easeOut" }}
           className="absolute inset-0"
         >
-          <div 
-            className="absolute inset-0 bg-cover"
-            style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')`, backgroundPosition: '75% center' }}
+          <img
+            src={heroSlides[currentSlide].image}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-center md:object-[75%_center]"
           />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/10" />
         </motion.div>
       </AnimatePresence>
 
