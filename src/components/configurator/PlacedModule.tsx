@@ -1,4 +1,4 @@
-import { MODULE_COLORS, VISUAL_SCALE } from '@/data/modulesCatalog';
+import { MODULE_COLORS, VISUAL_SCALE, NODO_PRODUCTS } from '@/data/modulesCatalog';
 import type { PlacedModule as PlacedModuleType } from '@/stores/configuratorStore';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { X } from 'lucide-react';
@@ -8,19 +8,25 @@ interface Props {
 }
 
 export default function PlacedModule({ module }: Props) {
-  const { selectedInstanceId, selectInstance, removeModule } = useConfiguratorStore();
-  const color = MODULE_COLORS.find(c => c.id === module.colorId);
-  const isSelected = selectedInstanceId === module.instanceId;
+  const { selectedId, selectInstance, removeModule } = useConfiguratorStore();
+  const product = NODO_PRODUCTS.find(p => p.handle === module.handle);
+  const color = MODULE_COLORS.find(c => c.code === module.colorCode);
+  const isSelected = selectedId === module.instanceId;
 
-  const w = module.moduleType.gridW * VISUAL_SCALE;
-  const h = module.moduleType.gridH * VISUAL_SCALE;
-  const depth = VISUAL_SCALE * 0.6; // visual depth for isometric
+  if (!product) return null;
 
-  // Position: gridX determines horizontal, gridY determines vertical offset
-  const left = module.gridX * VISUAL_SCALE;
-  const bottom = module.gridY * VISUAL_SCALE;
+  // Convert cm to visual pixels (VISUAL_SCALE px per 36cm grid unit)
+  const pxPerCm = VISUAL_SCALE / 36;
+  const w = product.widthCm * pxPerCm;
+  const h = product.heightCm * pxPerCm;
+  const depth = product.depthCm * pxPerCm * 0.4;
+
+  const left = module.xCm * pxPerCm;
+  const bottom = module.yCm * pxPerCm;
 
   const baseColor = color?.hex || '#888';
+  const hasDoor = module.interior.includes('puerta');
+  const hasShelf = module.interior.includes('repisa');
 
   return (
     <div
@@ -30,7 +36,7 @@ export default function PlacedModule({ module }: Props) {
         bottom: `${bottom}px`,
         width: `${w}px`,
         height: `${h}px`,
-        zIndex: Math.round(module.gridY * 10) + module.gridX,
+        zIndex: Math.round(module.yCm * 10) + Math.round(module.xCm),
       }}
       onClick={(e) => { e.stopPropagation(); selectInstance(module.instanceId); }}
     >
@@ -75,18 +81,16 @@ export default function PlacedModule({ module }: Props) {
         }}
       >
         <span className="text-[10px] font-mono text-white/80 mix-blend-difference select-none">
-          {module.moduleType.sku}
+          {product.variants[0]?.sku}
         </span>
 
-        {/* Door indicator */}
-        {module.moduleType.hasDoor && (
+        {hasDoor && (
           <div className="absolute inset-[3px] border border-white/20 rounded-[1px]">
             <div className="absolute right-1 top-1/2 -translate-y-1/2 w-1 h-3 bg-white/30 rounded-full" />
           </div>
         )}
 
-        {/* Shelf indicator */}
-        {module.moduleType.hasShelf && (
+        {hasShelf && (
           <div
             className="absolute left-[3px] right-[3px]"
             style={{ top: '45%', height: '2px', background: 'rgba(255,255,255,0.25)' }}
@@ -94,7 +98,6 @@ export default function PlacedModule({ module }: Props) {
         )}
       </div>
 
-      {/* Delete button on selection */}
       {isSelected && (
         <button
           onClick={(e) => { e.stopPropagation(); removeModule(module.instanceId); }}
