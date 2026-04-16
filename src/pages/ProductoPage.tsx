@@ -37,8 +37,8 @@ const NODO_COLORS = [
 ];
 
 const CLIP_COLORS = [
-  { code: 'BR', name: 'Latón',  hex: '#B8860B' },
-  { code: 'BS', name: 'Acero',  hex: '#B0B0B0' },
+  { code: 'BR', name: 'Bronce',          hex: '#B8860B' },
+  { code: 'BS', name: 'Acero cepillado', hex: '#B0B0B0' },
 ];
 
 const COLOR_NAME_MAP: Record<string, string> = {

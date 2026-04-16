@@ -15,6 +15,7 @@ const COLOR_HEX: Record<string, string> = {
   'Azul Fes': '#2E3B6E',
   'Negro': '#1C1C1A',
   'Latón': '#B8860B',
+  'Bronce': '#B8860B',
   'Brass': '#B8860B',
   'Acero': '#B0B0B0',
   'Acero Cepillado': '#B0B0B0',

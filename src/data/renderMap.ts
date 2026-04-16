@@ -24,11 +24,13 @@ export const COLOR_TO_CODE: Record<string, string> = {
 };
 
 export const CLIP_COLOR_TO_CODE: Record<string, string> = {
-  'Acero': 'BS',
+  'Bronce': 'BR',
+  'Brass': 'BR',
+  'Latón': 'BR',
+  'Acero cepillado': 'BS',
   'Acero Cepillado': 'BS',
   'Brushed Steel': 'BS',
-  'Latón': 'BR',
-  'Brass': 'BR',
+  'Acero': 'BS',
 };
 
 export function getRenderUrl(handle: string, colorCode: string): string | null {
