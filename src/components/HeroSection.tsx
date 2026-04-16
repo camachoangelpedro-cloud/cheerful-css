@@ -55,7 +55,7 @@ export function HeroSection() {
           <img
             src={heroSlides[currentSlide].image}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-[center_30%] md:object-[75%_30%]"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/[0.04]" />
         </motion.div>
@@ -83,12 +83,6 @@ export function HeroSection() {
               style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}
             >
               {heroSlides[currentSlide].cta}
-            </Link>
-            <Link
-              to="/catalogo"
-              className="font-body text-sm text-white underline underline-offset-4 hover:opacity-70 transition-opacity"
-            >
-              Ver catálogo
             </Link>
           </div>
         </motion.div>

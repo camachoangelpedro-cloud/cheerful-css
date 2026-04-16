@@ -100,7 +100,7 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* Announcement Bar */}
-      <div className="py-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}>
+      <div className="py-[10px] flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}>
         <style>{`
           @keyframes nodo-ticker {
             0%   { transform: translateX(0); }
