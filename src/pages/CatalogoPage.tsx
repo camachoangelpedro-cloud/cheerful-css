@@ -7,6 +7,7 @@ import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import type { ProductCategory } from '@/data/products';
 import { RENDER_LETTER, COLOR_TO_CODE, CLIP_COLOR_TO_CODE } from '@/data/renderMap';
+import { NODO_PRODUCTS } from '@/data/modulesCatalog';
 
 const COLOR_HEX: Record<string, string> = {
   'Blanco Hueso': '#F2EDE4',
@@ -55,7 +56,7 @@ const CATEGORY_OPTIONS: { value: ProductCategory; label: string }[] = [
   { value: 'clip',                        label: 'Clips y Accesorios' },
 ];
 
-const COLOR_OPTIONS = ['Blanco Hueso', 'Roble Natural', 'Verde Agave', 'Azul Fes'];
+const COLOR_OPTIONS = ['Roble Natural', 'Verde Agave', 'Azul Fes', 'Blanco Hueso'];
 
 type SortKey = 'relevance' | 'price-asc' | 'price-desc' | 'name-az';
 
@@ -67,9 +68,17 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 ];
 
 // ── Product card ─────────────────────────────────────────────────────────────
-function ProductCard({ product }: { product: MappedProduct }) {
+function ProductCard({ product, activeColorFilter }: { product: MappedProduct; activeColorFilter: string | null }) {
   const defaultColor  = product.colors[0] ?? null;
   const [selectedCardColor, setSelectedCardColor] = useState<string | null>(defaultColor);
+
+  useEffect(() => {
+    if (activeColorFilter && product.colors.includes(activeColorFilter)) {
+      setSelectedCardColor(activeColorFilter);
+    } else {
+      setSelectedCardColor(product.colors[0] ?? null);
+    }
+  }, [activeColorFilter, product.colors]);
 
   return (
     <div className="group">
@@ -204,21 +213,28 @@ export default function CatalogoPage() {
       const price = parseFloat(p.priceRange?.minVariantPrice?.amount ?? '0');
       const image = p.images?.edges?.[0]?.node?.url ?? '/placeholder.svg';
 
-      // Map Shopify productType → internal category
+      // Map handle → internal category via local catalogue (more reliable than Shopify productType)
       let category: ProductCategory = 'modulo-profundidad-completa';
       let categoryLabel = 'Módulos · Profundidad completa 36 cm';
-      const pt = (p.productType ?? '').trim();
-      if (pt === 'Módulo Half Depth') {
-        category      = 'modulo-media-profundidad';
-        categoryLabel = 'Módulos · Media profundidad 18 cm';
-      } else if (pt === 'Base') {
-        category      = 'base';
-        categoryLabel = 'Bases';
-      } else if (pt === 'Accesorio') {
-        category      = 'clip';
-        categoryLabel = 'Clips y Accesorios';
+      const nodoEntry = NODO_PRODUCTS.find(np => np.handle === p.handle);
+      if (nodoEntry) {
+        if (nodoEntry.family === 'PLT') {
+          category      = 'base';
+          categoryLabel = 'Bases';
+        } else if (nodoEntry.family === 'CLF') {
+          category      = 'clip';
+          categoryLabel = 'Clips y Accesorios';
+        } else if (nodoEntry.family === 'MODH') {
+          category      = 'modulo-media-profundidad';
+          categoryLabel = 'Módulos · Media profundidad 18 cm';
+        }
+      } else {
+        // Fallback to Shopify productType for products not in local catalogue
+        const pt = (p.productType ?? '').trim();
+        if (pt === 'Módulo Half Depth') { category = 'modulo-media-profundidad'; categoryLabel = 'Módulos · Media profundidad 18 cm'; }
+        else if (pt === 'Base')         { category = 'base';                     categoryLabel = 'Bases'; }
+        else if (pt === 'Accesorio')    { category = 'clip';                     categoryLabel = 'Clips y Accesorios'; }
       }
-      // pt === 'Módulo' → default above
 
       return {
         id:            p.id,
@@ -281,6 +297,7 @@ export default function CatalogoPage() {
   }, [catalogProducts, activeCategories, activeColors, sortBy]);
 
   const activeSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? 'Ordenar';
+  const activeColorFilter = activeColors.size === 1 ? [...activeColors][0] : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -520,7 +537,7 @@ export default function CatalogoPage() {
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 pb-24">
                   {displayed.map(product => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} activeColorFilter={activeColorFilter} />
                   ))}
                 </div>
               )}
