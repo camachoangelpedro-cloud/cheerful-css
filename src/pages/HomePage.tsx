@@ -140,8 +140,8 @@ export default function HomePage() {
         <HeroSection />
 
         {/* BLOCK 2 — Editorial split: product slider + value prop */}
-        <section className="nodo-container pt-20 lg:pt-28">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-end">
+        <section className="nodo-container py-20 lg:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
             {/* LEFT — 2 product cards */}
             <div className="lg:col-span-2">
