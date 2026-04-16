@@ -103,7 +103,7 @@ function ProductCard({ product }: { product: MappedProduct }) {
 
       {/* Swatches */}
       {product.colors.length > 0 && (
-        <div className="flex items-center gap-[5px] pt-2.5 px-0.5">
+        <div className="flex items-center gap-[5px] pt-4 px-0.5">
           {product.colors.map(colorName => (
             <button
               key={colorName}
@@ -124,14 +124,14 @@ function ProductCard({ product }: { product: MappedProduct }) {
 
       {/* Name + price */}
       <Link to={`/producto/${product.slug}`} className="block">
-        <div className="px-0.5 pt-1.5">
+        <div className="px-0.5 pt-3">
           <p
             className="leading-tight"
             style={{ fontSize: '12px', fontWeight: 400, color: '#1C1C1A', letterSpacing: 0 }}
           >
             {product.name}
           </p>
-          <p className="mt-0.5" style={{ fontSize: '12px', fontWeight: 300, color: '#5F5E5A', letterSpacing: 0 }}>
+          <p className="mt-1.5" style={{ fontSize: '12px', fontWeight: 300, color: '#5F5E5A', letterSpacing: 0 }}>
             {COP(product.price)}
           </p>
         </div>
