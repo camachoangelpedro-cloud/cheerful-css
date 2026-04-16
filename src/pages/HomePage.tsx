@@ -51,7 +51,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
       </Link>
 
       <div
-        className="flex items-center gap-[6px] pt-3"
+        className="flex items-center gap-[5px] pt-4"
         onClick={e => e.preventDefault()}
       >
         {NODO_COLORS.map(c => (
@@ -59,17 +59,17 @@ function ProductCard({ handle, label }: ProductCardProps) {
             key={c.id}
             onClick={e => { e.preventDefault(); setColorId(c.id); }}
             aria-label={c.name}
-            className={`w-6 h-6 rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'}`}
-            style={{ backgroundColor: c.hex, border: '1px solid rgba(0,0,0,0.10)' }}
+            className={`w-4 h-4 rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-1 ring-foreground scale-110' : 'hover:scale-110'}`}
+            style={{ backgroundColor: c.hex, border: c.id === 'BH' ? '1px solid rgba(0,0,0,0.15)' : '1px solid transparent' }}
           />
         ))}
       </div>
 
-      <div className="pt-2">
+      <div className="pt-3">
         <p className="text-sm font-medium" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
           {label}
         </p>
-        <p className="text-sm mt-0.5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+        <p className="text-sm mt-1.5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
           Desde COP ${price.toLocaleString('es-CO')}
         </p>
         <Link
