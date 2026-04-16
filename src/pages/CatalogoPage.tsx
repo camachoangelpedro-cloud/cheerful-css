@@ -73,8 +73,8 @@ function ProductCard({ product }: { product: MappedProduct }) {
 
   return (
     <div className="group">
+      {/* Image */}
       <Link to={`/producto/${product.slug}`} className="block">
-        {/* Image / colour-tinted placeholder */}
         <div
           className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
           style={{
@@ -98,62 +98,43 @@ function ProductCard({ product }: { product: MappedProduct }) {
               />
             );
           })()}
-          <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
-            {product.name}
-          </span>
-        </div>
-
-        {/* Text info */}
-        <div className="px-1 pt-2 pb-1">
-          <p
-            className="leading-tight"
-            style={{ fontSize: '13px', fontWeight: 300, color: '#1C1C1A', letterSpacing: 0 }}
-          >
-            {product.name}
-          </p>
-          {product.dimensions && product.dimensions !== '—' && (
-            <p className="mt-0.5" style={{ fontSize: '11px', color: '#9E9E9C', letterSpacing: 0 }}>
-              {product.dimensions}
-            </p>
-          )}
-          <p className="mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#5F5E5A', letterSpacing: 0 }}>
-            {COP(product.price)}
-          </p>
         </div>
       </Link>
 
-      {/* Colour swatches — click to select */}
+      {/* Swatches */}
       {product.colors.length > 0 && (
-        <div className="flex items-center gap-[6px] pt-3 px-1">
+        <div className="flex items-center gap-[5px] pt-2.5 px-0.5">
           {product.colors.map(colorName => (
             <button
               key={colorName}
               onClick={() => setSelectedCardColor(colorName)}
               aria-label={colorName}
-              className={`w-6 h-6 rounded-full shrink-0 border transition-all
+              className={`w-4 h-4 rounded-full shrink-0 transition-all
                 ${selectedCardColor === colorName
-                  ? 'ring-2 ring-offset-2 ring-foreground scale-110'
-                  : 'hover:scale-105'}`}
+                  ? 'ring-2 ring-offset-1 ring-foreground scale-110'
+                  : 'hover:scale-110'}`}
               style={{
                 backgroundColor: COLOR_HEX[colorName] ?? '#ccc',
-                borderColor: colorName === 'Blanco Hueso' ? 'rgba(0,0,0,0.12)' : 'transparent',
+                border: colorName === 'Blanco Hueso' ? '1px solid rgba(0,0,0,0.15)' : '1px solid transparent',
               }}
             />
           ))}
-          {selectedCardColor && (
-            <span className="ml-1 text-[11px]" style={{ color: '#9E9E9C', letterSpacing: 0 }}>
-              {selectedCardColor}
-            </span>
-          )}
         </div>
       )}
 
-      {/* Personalizar CTA */}
-      <Link
-        to={`/producto/${product.slug}`}
-        className="block text-center rounded-full bg-[#1C1C1A] text-white px-6 py-3 text-xs tracking-wide font-medium hover:opacity-90 transition-opacity mx-1 mt-2 mb-1"
-      >
-        Personalizar
+      {/* Name + price */}
+      <Link to={`/producto/${product.slug}`} className="block">
+        <div className="px-0.5 pt-1.5">
+          <p
+            className="leading-tight"
+            style={{ fontSize: '12px', fontWeight: 400, color: '#1C1C1A', letterSpacing: 0 }}
+          >
+            {product.name}
+          </p>
+          <p className="mt-0.5" style={{ fontSize: '12px', fontWeight: 300, color: '#5F5E5A', letterSpacing: 0 }}>
+            {COP(product.price)}
+          </p>
+        </div>
       </Link>
     </div>
   );
@@ -537,7 +518,7 @@ export default function CatalogoPage() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-24">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 pb-24">
                   {displayed.map(product => (
                     <ProductCard key={product.id} product={product} />
                   ))}
