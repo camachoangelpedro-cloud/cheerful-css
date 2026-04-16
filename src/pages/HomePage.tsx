@@ -17,7 +17,7 @@ interface ProductCardProps {
 }
 
 function ProductCard({ handle, label }: ProductCardProps) {
-  const [colorId, setColorId] = useState('BH');
+  const [colorId, setColorId] = useState('RO');
   const product = NODO_PRODUCTS.find(p => p.handle === handle);
   if (!product) return null;
   const price = getStartingPrice(product);
@@ -152,8 +152,8 @@ export default function HomePage() {
             {/* LEFT — 2 product cards */}
             <div className="lg:col-span-2">
               <div className="grid grid-cols-2 gap-6">
-                <ProductCard handle="modulo-36-36" label="Módulo 36×36" />
-                <ProductCard handle="modulo-72-36" label="Módulo 72×36" />
+                <ProductCard handle="modulo-72-72" label="Módulo 72×72" />
+                <ProductCard handle="modulo-36-18" label="Módulo 36×18" />
               </div>
             </div>
 
