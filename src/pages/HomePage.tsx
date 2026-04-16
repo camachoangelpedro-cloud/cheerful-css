@@ -7,6 +7,7 @@ import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import { NewsletterSignup } from '@/components/NewsletterSignup';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
+import { getRenderUrl } from '@/data/renderMap';
 
 /* ── Product card for slider ──────────────────────────────── */
 
@@ -25,14 +26,28 @@ function ProductCard({ handle, label }: ProductCardProps) {
   return (
     <div className="block group pb-2">
       <Link to={`/producto/${handle}`} className="block">
-        <div
-          className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
-          style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
-        >
-          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            {label}
-          </span>
-        </div>
+        {(() => {
+          const renderUrl = getRenderUrl(handle, colorId);
+          return (
+            <div
+              className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
+              style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
+            >
+              {renderUrl ? (
+                <img
+                  src={renderUrl}
+                  alt={label}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  {label}
+                </span>
+              )}
+            </div>
+          );
+        })()}
       </Link>
 
       <div
@@ -137,7 +152,7 @@ export default function HomePage() {
             {/* LEFT — 2 product cards */}
             <div className="lg:col-span-2">
               <div className="grid grid-cols-2 gap-6">
-                <ProductCard handle="modulo-36-72" label="Módulo 36×72" />
+                <ProductCard handle="modulo-36-36" label="Módulo 36×36" />
                 <ProductCard handle="modulo-72-36" label="Módulo 72×36" />
               </div>
             </div>
