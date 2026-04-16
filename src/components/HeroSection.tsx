@@ -55,7 +55,7 @@ export function HeroSection() {
           <img
             src={heroSlides[currentSlide].image}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center md:object-[75%_center]"
+            className="absolute inset-0 w-full h-full object-cover object-[center_30%] md:object-[75%_30%]"
           />
           <div className="absolute inset-0 bg-black/[0.04]" />
         </motion.div>
