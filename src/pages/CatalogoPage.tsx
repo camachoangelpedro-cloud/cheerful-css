@@ -6,7 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
 import type { ProductCategory } from '@/data/products';
-import { RENDER_LETTER, COLOR_TO_CODE } from '@/data/renderMap';
+import { RENDER_LETTER, COLOR_TO_CODE, CLIP_COLOR_TO_CODE } from '@/data/renderMap';
 
 const COLOR_HEX: Record<string, string> = {
   'Blanco Hueso': '#F2EDE4',
@@ -14,8 +14,12 @@ const COLOR_HEX: Record<string, string> = {
   'Verde Agave': '#7A9080',
   'Azul Fes': '#2E3B6E',
   'Negro': '#1C1C1A',
-  'Latón': '#C5A55A',
-  'Acero cepillado': '#9B9B9B',
+  'Latón': '#B8860B',
+  'Brass': '#B8860B',
+  'Acero': '#B0B0B0',
+  'Acero Cepillado': '#B0B0B0',
+  'Acero cepillado': '#B0B0B0',
+  'Brushed Steel': '#B0B0B0',
 };
 import { fetchProducts } from '@/lib/shopify';
 
@@ -77,14 +81,22 @@ function ProductCard({ product }: { product: MappedProduct }) {
             aspectRatio: '4/5',
           }}
         >
-          {RENDER_LETTER[product.slug] && (
-            <img
-              src={`/renders/${RENDER_LETTER[product.slug]}-${COLOR_TO_CODE[selectedCardColor || ''] || 'BH'}.webp`}
-              alt={product.name}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-            />
-          )}
+          {(() => {
+            const letter = RENDER_LETTER[product.slug];
+            if (!letter) return null;
+            const isClipCard = product.slug === 'clf-std';
+            const colorCode = isClipCard
+              ? (CLIP_COLOR_TO_CODE[selectedCardColor || ''] || 'BS')
+              : (COLOR_TO_CODE[selectedCardColor || ''] || 'BH');
+            return (
+              <img
+                src={`/renders/${letter}-${colorCode}.webp`}
+                alt={product.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            );
+          })()}
           <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.08em' }}>
             {product.name}
           </span>
