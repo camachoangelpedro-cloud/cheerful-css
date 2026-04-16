@@ -30,10 +30,10 @@ import {
 /* ── Constants ───────────────────────────────────────────── */
 
 const NODO_COLORS = [
-  { code: 'BH', name: 'Blanco Hueso',  hex: '#F2EDE4' },
   { code: 'RO', name: 'Roble Natural', hex: '#D4B896' },
   { code: 'VA', name: 'Verde Agave',   hex: '#7A9080' },
   { code: 'AF', name: 'Azul Fes',      hex: '#2E3B6E' },
+  { code: 'BH', name: 'Blanco Hueso',  hex: '#F2EDE4' },
 ];
 
 const CLIP_COLORS = [

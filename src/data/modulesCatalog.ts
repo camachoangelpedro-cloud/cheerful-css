@@ -16,10 +16,10 @@ export interface NodoProduct {
 }
 
 export const NODO_COLORS: NodoColor[] = [
-  { id: 'BH', name: 'Blanco Hueso', hex: '#F2EDE4', code: 'BH' },
   { id: 'RO', name: 'Roble Natural', hex: '#D4B896', code: 'RO' },
   { id: 'VA', name: 'Verde Agave',   hex: '#7A9080', code: 'VA' },
   { id: 'AF', name: 'Azul Fes',      hex: '#2E3B6E', code: 'AF' },
+  { id: 'BH', name: 'Blanco Hueso',  hex: '#F2EDE4', code: 'BH' },
 ];
 
 const C = ['BH', 'RO', 'VA', 'AF'];

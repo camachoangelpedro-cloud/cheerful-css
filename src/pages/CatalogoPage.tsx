@@ -213,7 +213,12 @@ export default function CatalogoPage() {
         (o: { name: string; values: string[] }) =>
           o.name.toLowerCase() === 'color' || o.name.toLowerCase() === 'acabado'
       );
-      const colors = colorOption?.values ?? [];
+      const COLOR_ORDER = ['Roble Natural', 'Verde Agave', 'Azul Fes', 'Blanco Hueso'];
+      const colors = (colorOption?.values ?? []).slice().sort((a, b) => {
+        const ia = COLOR_ORDER.indexOf(a);
+        const ib = COLOR_ORDER.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      });
 
       const price = parseFloat(p.priceRange?.minVariantPrice?.amount ?? '0');
       const image = p.images?.edges?.[0]?.node?.url ?? '/placeholder.svg';
