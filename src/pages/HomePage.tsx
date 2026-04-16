@@ -72,12 +72,6 @@ function ProductCard({ handle, label }: ProductCardProps) {
         <p className="text-sm mt-1.5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
           Desde COP ${price.toLocaleString('es-CO')}
         </p>
-        <Link
-          to={`/producto/${handle}`}
-          className="inline-block mt-3 rounded-full border border-foreground/30 px-6 py-3 text-xs tracking-wide font-medium hover:bg-foreground hover:text-background transition-all"
-        >
-          Personalízalo
-        </Link>
       </div>
     </div>
   );
@@ -146,8 +140,8 @@ export default function HomePage() {
         <HeroSection />
 
         {/* BLOCK 2 — Editorial split: product slider + value prop */}
-        <section className="nodo-container py-20 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <section className="nodo-container pt-20 lg:pt-28">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-end">
 
             {/* LEFT — 2 product cards */}
             <div className="lg:col-span-2">
@@ -160,7 +154,7 @@ export default function HomePage() {
             {/* RIGHT — Dark value prop */}
             <div
               className="lg:col-span-1 rounded-lg p-8 lg:p-10 flex flex-col justify-between mt-6 lg:mt-0"
-              style={{ backgroundColor: '#1C1C1A', minHeight: '500px' }}
+              style={{ backgroundColor: '#1C1C1A' }}
             >
               <div>
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
