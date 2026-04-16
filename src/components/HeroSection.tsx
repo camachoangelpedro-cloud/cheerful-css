@@ -57,7 +57,7 @@ export function HeroSection() {
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center md:object-[75%_center]"
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/[0.04]" />
         </motion.div>
       </AnimatePresence>
 
