@@ -34,16 +34,26 @@ export function CartDrawer() {
 
   const handleCheckout = () => {
     const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'begin_checkout', {
-          currency: 'COP',
-          value: totalPrice || 0,
-        });
-      }
-      window.open(checkoutUrl, '_blank');
-      setIsOpen(false);
+    if (!checkoutUrl) return;
+
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'begin_checkout', {
+        currency: 'COP',
+        value: totalPrice || 0,
+      });
     }
+
+    // Try to open in a new tab. If blocked (popup blocker or sandboxed iframe),
+    // fall back to top-level navigation so we escape the preview iframe.
+    const popup = window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
+    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+      try {
+        window.top!.location.href = checkoutUrl;
+      } catch {
+        window.location.href = checkoutUrl;
+      }
+    }
+    setIsOpen(false);
   };
 
   return (
