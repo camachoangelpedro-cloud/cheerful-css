@@ -210,7 +210,8 @@ export default function CatalogoPage() {
       const p = edge.node;
 
       const colorOption = p.options?.find(
-        (o: { name: string; values: string[] }) => o.name.toLowerCase() === 'color'
+        (o: { name: string; values: string[] }) =>
+          o.name.toLowerCase() === 'color' || o.name.toLowerCase() === 'acabado'
       );
       const colors = colorOption?.values ?? [];
 
