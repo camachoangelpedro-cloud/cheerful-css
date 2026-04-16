@@ -17,6 +17,17 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        'xs':   ['0.8125rem', { lineHeight: '1.125rem' }],
+        'sm':   ['0.9375rem', { lineHeight: '1.375rem' }],
+        'base': ['1.0625rem', { lineHeight: '1.625rem' }],
+        'lg':   ['1.1875rem', { lineHeight: '1.875rem' }],
+        'xl':   ['1.3125rem', { lineHeight: '1.875rem' }],
+        '2xl':  ['1.5625rem', { lineHeight: '2.125rem' }],
+        '3xl':  ['1.9375rem', { lineHeight: '2.375rem' }],
+        '4xl':  ['2.3125rem', { lineHeight: '2.625rem' }],
+        '5xl':  ['3.0625rem', { lineHeight: '1' }],
+      },
       fontFamily: {
         display: ["PP Neue Montreal", "sans-serif"],
         body: ["PP Neue Montreal", "system-ui", "sans-serif"],

@@ -41,7 +41,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
                   loading="lazy"
                 />
               ) : (
-                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   {label}
                 </span>
               )}
@@ -156,8 +156,8 @@ export default function HomePage() {
 
               {/* Dark box — aspect-ratio 4/5 matches product card image height */}
               <div
-                className="rounded-lg p-8 lg:p-10 flex flex-col overflow-hidden"
-                style={{ backgroundColor: '#1C1C1A', aspectRatio: '0.792' }}
+                className="rounded-lg p-8 lg:p-10 flex flex-col overflow-hidden lg:[aspect-ratio:0.792]"
+                style={{ backgroundColor: '#1C1C1A' }}
               >
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
@@ -261,7 +261,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            <p className="text-center mt-8" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
+            <p className="text-center mt-8" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
               * Testimonios simulados con fines de demostración del MVP.
             </p>
           </div>

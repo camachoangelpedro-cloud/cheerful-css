@@ -186,12 +186,12 @@ export function Footer() {
                 <Link
                   to={item.to}
                   className="font-body hover:text-background/80 transition-colors"
-                  style={{ fontSize: '12px', color: 'rgba(242,237,228,0.45)' }}
+                  style={{ fontSize: '13px', color: 'rgba(242,237,228,0.45)' }}
                 >
                   {item.label}
                 </Link>
                 {i < arr.length - 1 && (
-                  <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.25)' }}>·</span>
+                  <span style={{ fontSize: '13px', color: 'rgba(242,237,228,0.25)' }}>·</span>
                 )}
               </span>
             ))}

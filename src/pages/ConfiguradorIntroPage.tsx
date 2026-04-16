@@ -26,7 +26,7 @@ export default function ConfiguradorIntroPage() {
         </div>
 
         {/* SECTION 2 — Three steps, each in its own dark box */}
-        <div className="max-w-4xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-4xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
 
           <div className="rounded-lg p-8 lg:p-10" style={{ backgroundColor: '#1C1C1A' }}>
             <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>01</p>

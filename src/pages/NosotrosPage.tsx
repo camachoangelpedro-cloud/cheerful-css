@@ -183,7 +183,7 @@ export default function NosotrosPage() {
                 backgroundColor: '#E8E4DC',
                 borderRadius: '6px',
                 color: '#9E9E9C',
-                fontSize: '11px',
+                fontSize: '12px',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
               }}

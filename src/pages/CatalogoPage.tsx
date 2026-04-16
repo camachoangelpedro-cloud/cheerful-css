@@ -127,11 +127,11 @@ function ProductCard({ product }: { product: MappedProduct }) {
         <div className="px-0.5 pt-3">
           <p
             className="leading-tight"
-            style={{ fontSize: '12px', fontWeight: 400, color: '#1C1C1A', letterSpacing: 0 }}
+            style={{ fontSize: '14px', fontWeight: 400, color: '#1C1C1A', letterSpacing: 0 }}
           >
             {product.name}
           </p>
-          <p className="mt-1.5" style={{ fontSize: '12px', fontWeight: 300, color: '#5F5E5A', letterSpacing: 0 }}>
+          <p className="mt-1.5" style={{ fontSize: '14px', fontWeight: 300, color: '#5F5E5A', letterSpacing: 0 }}>
             {COP(product.price)}
           </p>
         </div>
@@ -156,7 +156,7 @@ function LoadingState() {
           />
         ))}
       </div>
-      <p style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}>
+      <p style={{ fontSize: '14px', color: '#9E9E9C', letterSpacing: 0 }}>
         Cargando productos...
       </p>
       <style>{`@keyframes pulse { 0%,100%{opacity:.3}50%{opacity:1} }`}</style>
@@ -299,12 +299,12 @@ export default function CatalogoPage() {
             <Link
               to="/"
               className="hover:underline underline-offset-2 transition-colors"
-              style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}
+              style={{ fontSize: '14px', color: '#9E9E9C', letterSpacing: 0 }}
             >
               Inicio
             </Link>
-            <span style={{ fontSize: '13px', color: '#9E9E9C' }}>›</span>
-            <span style={{ fontSize: '13px', color: '#1C1C1A', letterSpacing: 0 }}>Catálogo</span>
+            <span style={{ fontSize: '14px', color: '#9E9E9C' }}>›</span>
+            <span style={{ fontSize: '14px', color: '#1C1C1A', letterSpacing: 0 }}>Catálogo</span>
           </nav>
         </div>
 
@@ -346,7 +346,7 @@ export default function CatalogoPage() {
               <div className="flex items-center justify-between mb-10 gap-4">
 
                 {/* Result count */}
-                <p style={{ fontSize: '12px', color: '#9E9E9C', letterSpacing: 0 }}>
+                <p style={{ fontSize: '14px', color: '#9E9E9C', letterSpacing: 0 }}>
                   Mostrando {displayed.length} de {catalogProducts.length} productos
                 </p>
 

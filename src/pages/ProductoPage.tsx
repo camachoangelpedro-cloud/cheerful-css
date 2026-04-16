@@ -505,20 +505,20 @@ export default function ProductoPage() {
           <Link
             to="/"
             className="hover:underline underline-offset-2 transition-colors"
-            style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}
+            style={{ fontSize: '15px', color: '#9E9E9C', letterSpacing: 0 }}
           >
             Inicio
           </Link>
-          <span style={{ fontSize: '13px', color: '#9E9E9C' }}>›</span>
+          <span style={{ fontSize: '15px', color: '#9E9E9C' }}>›</span>
           <Link
             to="/catalogo"
             className="hover:underline underline-offset-2 transition-colors"
-            style={{ fontSize: '13px', color: '#9E9E9C', letterSpacing: 0 }}
+            style={{ fontSize: '15px', color: '#9E9E9C', letterSpacing: 0 }}
           >
             Catálogo
           </Link>
-          <span style={{ fontSize: '13px', color: '#9E9E9C' }}>›</span>
-          <span style={{ fontSize: '13px', color: '#1C1C1A', letterSpacing: 0 }}>
+          <span style={{ fontSize: '15px', color: '#9E9E9C' }}>›</span>
+          <span style={{ fontSize: '15px', color: '#1C1C1A', letterSpacing: 0 }}>
             {product.title}
           </span>
         </nav>
@@ -571,9 +571,9 @@ export default function ProductoPage() {
 
             {/* Stock indicator */}
             {selectedVariant && (
-              <p className="font-body mt-2.5" style={{ fontSize: '13px', color: selectedVariant.availableForSale ? '#4A7A5B' : '#A04040' }}>
+              <p className="font-body mt-2.5" style={{ fontSize: '15px', color: selectedVariant.availableForSale ? '#4A7A5B' : '#A04040' }}>
                 {selectedVariant.availableForSale
-                  ? <><span style={{ fontSize: '10px' }}>●</span> Disponible · Fabricado a tu medida</>
+                  ? <><span style={{ fontSize: '11px' }}>●</span> Disponible · Fabricado a tu medida</>
                   : 'Sin stock'}
               </p>
             )}
@@ -782,15 +782,15 @@ export default function ProductoPage() {
 
               {/* Shipping info block */}
               <div className="mt-4 rounded-lg bg-muted/50 px-4 py-3.5 space-y-2">
-                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '15px' }}>
                   <Truck className="w-3.5 h-3.5 shrink-0" />
                   <span>Envío gratis con código LANZAMIENTO</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '15px' }}>
                   <Clock className="w-3.5 h-3.5 shrink-0" />
                   <span>Entrega en Bogotá D.C. en 2 a 3 semanas</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '13px' }}>
+                <div className="flex items-center gap-2.5 text-muted-foreground" style={{ fontSize: '15px' }}>
                   <Package className="w-3.5 h-3.5 shrink-0" />
                   <span>Cada módulo llega armado — solo conéctalos con los clips incluidos</span>
                 </div>
@@ -865,10 +865,10 @@ export default function ProductoPage() {
           <h3 className="font-body text-[9px] tracking-wide text-muted-foreground mb-6">Reseñas</h3>
           <div className="bg-muted/40 rounded-lg px-6 py-10 flex flex-col items-center text-center gap-3">
             <MessageCircle className="w-6 h-6 text-muted-foreground/40" />
-            <p className="font-body text-muted-foreground" style={{ fontSize: '14px' }}>
+            <p className="font-body text-muted-foreground" style={{ fontSize: '15px' }}>
               Las reseñas de clientes estarán disponibles próximamente.
             </p>
-            <p className="font-body text-muted-foreground/60" style={{ fontSize: '14px' }}>
+            <p className="font-body text-muted-foreground/60" style={{ fontSize: '15px' }}>
               ¿Ya tienes un producto NODO? Escríbenos a{' '}
               <a href="mailto:nodomodulardesign@gmail.com" className="underline underline-offset-2 hover:text-foreground transition-colors">nodomodulardesign@gmail.com</a>{' '}
               para compartir tu experiencia.
