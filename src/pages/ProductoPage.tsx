@@ -11,6 +11,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Loader2, Truck, Clock, Package, MessageCircle } from 'lucide-react';
 import { NODO_PRODUCTS } from '@/data/modulesCatalog';
+import { getRenderUrl } from '@/data/renderMap';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/FooterNodo';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -33,6 +34,11 @@ const NODO_COLORS = [
   { code: 'RO', name: 'Roble Natural', hex: '#D4B896' },
   { code: 'VA', name: 'Verde Agave',   hex: '#7A9080' },
   { code: 'AF', name: 'Azul Fes',      hex: '#2E3B6E' },
+];
+
+const CLIP_COLORS = [
+  { code: 'BR', name: 'Latón',  hex: '#B8860B' },
+  { code: 'BS', name: 'Acero',  hex: '#B0B0B0' },
 ];
 
 const COLOR_NAME_MAP: Record<string, string> = {
@@ -97,6 +103,12 @@ function resolveGlbUrl(
     'base-72-36': 'PLT_2X1',
   };
   if (PLT_MAP[handle]) return `${GITHUB_BASE}/${PLT_MAP[handle]}_${colorCode}.glb`;
+
+  /* CLF clips */
+  if (handle === 'clf-std') {
+    const clipColorCode = (colorCode === 'BR') ? 'BR' : 'BS';
+    return encodeURI(`${GITHUB_BASE}/CLF·STD·${clipColorCode}.glb`);
+  }
 
   /* 72×72 special case — double door */
   if (handle === 'modulo-72-72') {
@@ -200,10 +212,12 @@ function NodoViewer({ glbUrl, backgroundColor, moduleWidth = 36 }: { glbUrl: str
 export default function ProductoPage() {
   const { handle } = useParams<{ handle: string }>();
   const nodoProduct = NODO_PRODUCTS.find(p => p.handle === handle);
+  const isClip = handle === 'clf-std';
+  const availableColors = isClip ? CLIP_COLORS : NODO_COLORS;
 
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedColor, setSelectedColor] = useState(NODO_COLORS[0]);
+  const [selectedColor, setSelectedColor] = useState(isClip ? CLIP_COLORS[0] : NODO_COLORS[0]);
   const [selectedPanel, setSelectedPanel] = useState('Con panel');
   const [selectedInterior, setSelectedInterior] = useState('Abierto');
   const [selectedAcabado, setSelectedAcabado] = useState('Acero Cepillado');
@@ -528,6 +542,23 @@ export default function ProductoPage() {
               )}
             </div>
 
+            {/* Render image — lifestyle photo for the selected colour */}
+            {(() => {
+              const renderUrl = handle ? getRenderUrl(handle, selectedColor.code) : null;
+              if (!renderUrl) return null;
+              return (
+                <div className="mt-3 w-full overflow-hidden rounded-lg" style={{ aspectRatio: '4/5', backgroundColor: '#F2EDE4' }}>
+                  <img
+                    key={renderUrl}
+                    src={renderUrl}
+                    alt={`${product.title} — ${selectedColor.name}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })()}
+
           </div>
 
           {/* ── RIGHT: sticky product info ── */}
@@ -557,7 +588,7 @@ export default function ProductoPage() {
               <div className="mb-8">
                 <StepHeader label="Color" suffix={selectedColor.name} />
                 <div className="flex gap-2.5 mt-3 items-center">
-                  {NODO_COLORS.map(c => (
+                  {availableColors.map(c => (
                     <button
                       key={c.code}
                       onClick={() => setSelectedColor(c)}
