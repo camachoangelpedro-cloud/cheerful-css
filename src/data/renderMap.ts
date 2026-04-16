@@ -11,7 +11,7 @@ export const RENDER_LETTER: Record<string, string> = {
   'modulo-h-36-24': 'J',
   'modulo-h-36-36': 'K',
   'modulo-h-72-24': 'L',
-  'clf-std': 'M',
+  'clips-decorativos': 'M',
   'base-36-36': 'N',
   'base-72-36': 'O',
 };

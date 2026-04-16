@@ -167,7 +167,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
   {
     id: 'clip-estructural',
     name: 'Clip estructural',
-    slug: 'clf-std',
+    slug: 'clips-decorativos',
     category: 'clip',
     categoryLabel: 'Clips',
     dimensions: '—',
@@ -179,7 +179,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
   {
     id: 'clip-decorativo-laton',
     name: 'Clip decorativo Latón',
-    slug: 'clf-std',
+    slug: 'clips-decorativos',
     category: 'clip',
     categoryLabel: 'Clips',
     dimensions: '—',
@@ -191,7 +191,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
   {
     id: 'clip-decorativo-acero',
     name: 'Clip decorativo Acero',
-    slug: 'clf-std',
+    slug: 'clips-decorativos',
     category: 'clip',
     categoryLabel: 'Clips',
     dimensions: '—',

@@ -192,7 +192,7 @@ export const NODO_PRODUCTS: NodoProduct[] = [
 
   // ── CLIPS DECORATIVOS ──────────────────────────────────────────────────────
   {
-    handle: 'clf-std', title: 'Clips decorativos', family: 'CLF',
+    handle: 'clips-decorativos', title: 'Clips decorativos', family: 'CLF',
     widthCm: 4, heightCm: 4, depthCm: 2,
     hasOptions: false, isOneOff: false,
     variants: [

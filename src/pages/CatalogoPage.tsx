@@ -85,7 +85,7 @@ function ProductCard({ product }: { product: MappedProduct }) {
           {(() => {
             const letter = RENDER_LETTER[product.slug];
             if (!letter) return null;
-            const isClipCard = product.slug === 'clf-std';
+            const isClipCard = product.slug === 'clips-decorativos';
             const colorCode = isClipCard
               ? (CLIP_COLOR_TO_CODE[selectedCardColor || ''] || 'BS')
               : (COLOR_TO_CODE[selectedCardColor || ''] || 'BH');

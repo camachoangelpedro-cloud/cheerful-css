@@ -105,7 +105,7 @@ function resolveGlbUrl(
   if (PLT_MAP[handle]) return `${GITHUB_BASE}/${PLT_MAP[handle]}_${colorCode}.glb`;
 
   /* CLF clips */
-  if (handle === 'clf-std') {
+  if (handle === 'clips-decorativos') {
     const clipColorCode = (colorCode === 'BR') ? 'BR' : 'BS';
     return encodeURI(`${GITHUB_BASE}/CLF·STD·${clipColorCode}.glb`);
   }
@@ -212,7 +212,7 @@ function NodoViewer({ glbUrl, backgroundColor, moduleWidth = 36 }: { glbUrl: str
 export default function ProductoPage() {
   const { handle } = useParams<{ handle: string }>();
   const nodoProduct = NODO_PRODUCTS.find(p => p.handle === handle);
-  const isClip = handle === 'clf-std';
+  const isClip = handle === 'clips-decorativos';
   const availableColors = isClip ? CLIP_COLORS : NODO_COLORS;
 
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
