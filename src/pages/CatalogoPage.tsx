@@ -286,7 +286,7 @@ export default function CatalogoPage() {
     let list = [...catalogProducts];
 
     if (activeCategories.size > 0) list = list.filter(p => activeCategories.has(p.category));
-    if (activeColors.size > 0)     list = list.filter(p => p.colors.some(c => activeColors.has(c)));
+    if (activeColors.size > 0)     list = list.filter(p => p.category === 'clip' || p.colors.some(c => activeColors.has(c)));
 
     switch (sortBy) {
       case 'price-asc':  list.sort((a, b) => a.price - b.price); break;
