@@ -30,3 +30,9 @@ export const CLIP_COLOR_TO_CODE: Record<string, string> = {
   'Latón': 'BR',
   'Brass': 'BR',
 };
+
+export function getRenderUrl(handle: string, colorCode: string): string | null {
+  const letter = RENDER_LETTER[handle];
+  if (!letter) return null;
+  return `/renders/${letter}-${colorCode}.webp`;
+}
