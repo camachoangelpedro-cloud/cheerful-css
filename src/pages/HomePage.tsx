@@ -157,7 +157,7 @@ export default function HomePage() {
               {/* Dark box — aspect-ratio 4/5 matches product card image height */}
               <div
                 className="rounded-lg p-8 lg:p-10 flex flex-col overflow-hidden"
-                style={{ backgroundColor: '#1C1C1A', aspectRatio: '4/5' }}
+                style={{ backgroundColor: '#1C1C1A', aspectRatio: '0.792' }}
               >
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
