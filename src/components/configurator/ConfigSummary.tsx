@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Loader2, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useConfiguratorStore } from '@/stores/configuratorStore';
 import { NODO_PRODUCTS, NODO_COLORS } from '@/data/modulesCatalog';
 import { useCartStore } from '@/stores/cartStore';
@@ -10,6 +11,7 @@ const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n);
 
 export default function ConfigSummary() {
+  const navigate = useNavigate();
   const { getTotalPrice, getModuleSummary, placedModules } = useConfiguratorStore();
   const { addItem } = useCartStore();
   const summary = getModuleSummary();
@@ -144,8 +146,7 @@ setIsAdding(true);
       <button
         onClick={() => {
           if (addedToCart) {
-            const checkoutUrl = useCartStore.getState().checkoutUrl;
-            if (checkoutUrl) window.open(checkoutUrl, '_blank');
+            navigate('/checkout');
           } else {
             handleAddToCart();
           }
