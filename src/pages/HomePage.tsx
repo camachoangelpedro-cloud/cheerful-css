@@ -235,9 +235,6 @@ export default function HomePage() {
               ))}
             </div>
 
-            <p className="mt-10" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.04em' }}>
-              * Testimonios simulados con fines de demostración.
-            </p>
 
           </div>
         </section>
