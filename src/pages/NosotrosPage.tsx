@@ -215,7 +215,7 @@ export default function NosotrosPage() {
             <Link
               to="/configurador"
               className="inline-flex items-center px-7 py-3 text-sm font-medium transition-opacity hover:opacity-80"
-              style={{ backgroundColor: '#F2EDE4', color: '#1C1C1A', borderRadius: '999px', letterSpacing: 0 }}
+              style={{ backgroundColor: '#F2EDE4', color: '#1C1C1A', borderRadius: '8px', letterSpacing: 0 }}
             >
               Ir al configurador
             </Link>

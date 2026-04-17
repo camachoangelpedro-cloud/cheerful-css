@@ -98,7 +98,7 @@ function FooterNewsletter() {
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="rounded-full border border-background/30 px-6 py-2.5 text-sm font-body hover:bg-background hover:text-foreground transition-colors disabled:opacity-40 flex items-center gap-2"
+          className="rounded-lg border border-background/30 px-6 py-2.5 text-sm font-body hover:bg-background hover:text-foreground transition-colors disabled:opacity-40 flex items-center gap-2"
         >
           {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Suscribir'}
         </button>

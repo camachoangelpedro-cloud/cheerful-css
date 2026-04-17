@@ -394,72 +394,75 @@ export default function ProductoPage() {
         ${locked ? 'opacity-30 pointer-events-none' : ''}`}
     >
       <div className="w-10 h-10 shrink-0 text-foreground">{svg}</div>
-      <span className={`font-body text-[10px] text-center leading-tight mt-1 ${active ? 'text-[#1C1C1A]' : 'text-muted-foreground'}`}>{label}</span>
+      <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.3, marginTop: '4px', color: active ? '#1C1C1A' : '#9E9E9C' }}>{label}</span>
     </div>
   );
 
   /* SVGs */
   const panelConSvg = (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="8" y="8" width="24" height="24" fill="currentColor" fillOpacity=".1" strokeWidth="1.5" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="9" y="9" width="22" height="22" rx="1.5" fill="currentColor" fillOpacity=".1" strokeWidth="1" />
     </svg>
   );
   const panelSinSvg = (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <path d="M10 10L30 30M30 10L10 30" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <line x1="12" y1="12" x2="28" y2="28" strokeWidth="1" opacity=".25" />
+      <line x1="28" y1="12" x2="12" y2="28" strokeWidth="1" opacity=".25" />
     </svg>
   );
   const interiorAbiertoSvg = (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
     </svg>
   );
   const interiorRepisaSvg = (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="3" strokeLinecap="square" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
   const handleCx = selectedApertura === 'Izquierda' ? 13 : 27;
   const interiorPuertaSvg = hasSingleDoor ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <circle cx={handleCx} cy="20" r="2.5" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="26" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1={handleCx} y1="16" x2={handleCx} y2="24" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <circle cx="16.5" cy="20" r="2" fill="currentColor" />
-      <circle cx="23.5" cy="20" r="2" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <rect x="21.5" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="20" y1="7" x2="20" y2="33" strokeWidth="1" opacity=".2" />
+      <line x1="15" y1="16" x2="15" y2="24" strokeWidth="2" strokeLinecap="round" />
+      <line x1="25" y1="16" x2="25" y2="24" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
   const interiorPuertaRepisaSvg = hasSingleDoor ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-      <circle cx={handleCx} cy="13" r="2.5" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="26" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" opacity=".5" />
+      <line x1={handleCx} y1="10" x2={handleCx} y2="17" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-      <circle cx="16.5" cy="14" r="2" fill="currentColor" />
-      <circle cx="23.5" cy="14" r="2" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <rect x="21.5" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="20" y1="7" x2="20" y2="33" strokeWidth="1" opacity=".2" />
+      <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" opacity=".5" />
+      <line x1="15" y1="10" x2="15" y2="17" strokeWidth="2" strokeLinecap="round" />
+      <line x1="25" y1="10" x2="25" y2="17" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
   const cableSvg = (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".06" strokeWidth="1" />
-      <circle cx="20" cy="30" r="4" fill="none" strokeWidth="2" strokeDasharray="3 2" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <circle cx="20" cy="27" r="3.5" strokeWidth="1.5" />
+      <line x1="20" y1="8" x2="20" y2="23" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="2 2" />
     </svg>
   );
 
@@ -487,7 +490,7 @@ export default function ProductoPage() {
             <button
               onClick={handleAddToCart}
               disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-              className="rounded-full bg-[#1C1C1A] text-white px-6 py-3 font-body text-xs tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="rounded-lg bg-[#1C1C1A] text-white px-6 py-3 font-body text-xs tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {addedToCart ? 'Añadido ✓' : 'Añadir'}
             </button>
@@ -751,7 +754,7 @@ export default function ProductoPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={cartLoading || addedToCart || !selectedVariant || !selectedVariant.availableForSale}
-                  className="flex-1 rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 rounded-lg bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {cartLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

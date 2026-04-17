@@ -102,7 +102,7 @@ export default function ConfiguradorIntroPage() {
         <div className="text-center mt-12 mb-8">
           <Link
             to="/configurador/editor"
-            className="inline-flex items-center gap-3 bg-foreground text-background px-10 py-4 font-medium uppercase hover:opacity-90 transition-opacity group"
+            className="inline-flex items-center gap-3 bg-foreground text-background px-10 py-4 font-medium uppercase hover:opacity-90 transition-opacity group rounded-lg"
             style={{ fontSize: '11px', letterSpacing: '0.18em' }}
           >
             Abrir el configurador
