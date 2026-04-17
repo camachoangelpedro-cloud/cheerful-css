@@ -159,7 +159,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://www.instagram.com/nodomodulardesign?igsh=MTZmenlqbGYydDZtcA%3D%3D" target="_blank" rel="noopener noreferrer" className="font-body text-sm hover:opacity-60 transition-opacity">
+                <a href="https://www.instagram.com/nodomodulardesign/" target="_blank" rel="noopener noreferrer" className="font-body text-sm hover:opacity-60 transition-opacity">
                   Instagram
                 </a>
               </li>
@@ -220,7 +220,7 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-6">
               <a
-                href="https://www.instagram.com/nodomodulardesign?igsh=MTZmenlqbGYydDZtcA%3D%3D"
+                href="https://www.instagram.com/nodomodulardesign/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body text-xs text-background/60 hover:text-background transition-colors"
