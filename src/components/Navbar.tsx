@@ -130,20 +130,10 @@ export function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            style={{
-              fontFamily: "'PP Neue Montreal', sans-serif",
-              fontWeight: 700,
-              letterSpacing: '-0.04em',
-              fontSize: '13px',
-              lineHeight: 1,
-              backgroundColor: '#1C1C1A',
-              color: '#F2EDE4',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              display: 'inline-block',
-            }}
+            className="text-foreground"
+            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.04em', fontSize: '20px', lineHeight: 1 }}
           >
-            NODO
+            NO<span style={{ letterSpacing: 0 }}>.</span>DO
           </Link>
 
           {/* Centre Links */}
@@ -213,21 +203,11 @@ export function Navbar() {
         <div className="flex items-center justify-between px-8 h-[60px]">
           <Link
             to="/"
-            style={{
-              fontFamily: "'PP Neue Montreal', sans-serif",
-              fontWeight: 700,
-              letterSpacing: '-0.04em',
-              fontSize: '13px',
-              lineHeight: 1,
-              backgroundColor: '#1C1C1A',
-              color: '#F2EDE4',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              display: 'inline-block',
-            }}
+            className="text-foreground"
+            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.04em', fontSize: '20px', lineHeight: 1 }}
             onClick={() => setMobileOpen(false)}
           >
-            NODO
+            NO<span style={{ letterSpacing: 0 }}>.</span>DO
           </Link>
           <button onClick={() => setMobileOpen(false)} className="hover:opacity-60 transition-opacity">
             <X strokeWidth={1.5} className="w-5 h-5" />
