@@ -25,9 +25,9 @@ function ProductCard({ handle, label }: ProductCardProps) {
 
   return (
     <div className="block group">
-      <Link to={`/producto/${handle}`} className="block overflow-hidden">
+      <Link to={`/producto/${handle}`} className="block overflow-hidden rounded-lg">
         <div
-          className="w-full relative flex items-center justify-center overflow-hidden"
+          className="w-full relative flex items-center justify-center overflow-hidden rounded-lg"
           style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
         >
           {(() => {
@@ -155,21 +155,22 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* EDITORIAL STRIP */}
+        {/* EDITORIAL MARQUEE STRIP */}
         <div
-          className="overflow-hidden py-10 lg:py-14"
+          className="overflow-hidden py-8 lg:py-12"
           style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}
         >
-          <p
-            className="nodo-container nodo-display"
-            style={{
-              fontSize: 'clamp(2rem, 5vw, 5rem)',
-              color: 'rgba(28,28,26,0.1)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Modular · Preciso · Tuyo · Hecho en Bogotá · Fabricado a tu medida
-          </p>
+          <div className="nodo-marquee-track" style={{ animationDuration: '18s' }}>
+            {[0, 1].map(i => (
+              <span
+                key={i}
+                className="nodo-display px-8"
+                style={{ fontSize: 'clamp(2rem, 4.5vw, 4.5rem)', color: 'rgba(28,28,26,0.12)', whiteSpace: 'nowrap' }}
+              >
+                Modular &nbsp;·&nbsp; Preciso &nbsp;·&nbsp; Tuyo &nbsp;·&nbsp; Hecho en Bogotá &nbsp;·&nbsp; Fabricado a tu medida &nbsp;·&nbsp;
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* BLOCK 3 — Editorial quotes */}

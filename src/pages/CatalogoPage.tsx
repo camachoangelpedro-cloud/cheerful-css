@@ -85,7 +85,7 @@ function ProductCard({ product, activeColorFilter }: { product: MappedProduct; a
       {/* Image */}
       <Link to={`/producto/${product.slug}`} className="block">
         <div
-          className="w-full overflow-hidden relative flex items-center justify-center"
+          className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
           style={{
             backgroundColor: selectedCardColor ? COLOR_HEX[selectedCardColor] ?? '#F2EDE4' : '#F2EDE4',
             aspectRatio: '4/5',

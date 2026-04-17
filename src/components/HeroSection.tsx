@@ -13,16 +13,16 @@ const heroSlides = [
   {
     image: '/banner2.webp',
     title: 'Modular.\nPreciso.\nTuyo.',
-    overline: 'Nueva Colección',
-    link: '/catalogo',
-    cta: 'Ver colección',
+    overline: 'Configurador 3D',
+    link: '/configurador',
+    cta: 'Diseña tú mismo',
   },
   {
     image: '/banner3.webp',
     title: 'Hecho en Bogotá\npara cualquier\nespacio.',
-    overline: 'Fabricación Directa',
-    link: '/nosotros',
-    cta: 'Nuestra filosofía',
+    overline: 'Fabricación directa',
+    link: '/configurador',
+    cta: 'Diseña tú mismo',
   },
 ];
 
@@ -79,8 +79,8 @@ export function HeroSection() {
             </p>
 
             <h1
-              className="text-white whitespace-pre-line mb-8 nodo-display"
-              style={{ fontSize: 'clamp(3rem, 6.5vw, 7.5rem)', lineHeight: 0.95 }}
+              className="text-white whitespace-pre-line mb-8 nodo-display-italic"
+              style={{ fontSize: 'clamp(3rem, 6.5vw, 7.5rem)' }}
             >
               {heroSlides[currentSlide].title}
             </h1>

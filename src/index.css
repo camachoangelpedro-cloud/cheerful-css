@@ -289,12 +289,21 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 
-  /* Ultra-thin display text — the "wow" anchor */
+  /* Display — bold, tight, confident */
   .nodo-display {
     font-family: 'PP Neue Montreal', sans-serif;
-    font-weight: 100;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.88;
+  }
+
+  /* Display italic — flowing, editorial, for hero/emotional moments */
+  .nodo-display-italic {
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    line-height: 0.93;
   }
 
   /* Bold uppercase overline — the contrast anchor */
@@ -304,6 +313,18 @@
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: #9E9E9C;
+  }
+
+  /* Announcement bar + editorial strip marquee */
+  @keyframes nodo-marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .nodo-marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: nodo-marquee 24s linear infinite;
+    will-change: transform;
   }
 }
 

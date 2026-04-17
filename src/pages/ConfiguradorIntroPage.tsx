@@ -66,7 +66,7 @@ export default function ConfiguradorIntroPage() {
           ].map(step => (
             <div
               key={step.num}
-              className="p-8 lg:p-10 flex flex-col"
+              className="rounded-lg p-8 lg:p-10 flex flex-col"
               style={{ backgroundColor: '#1C1C1A' }}
             >
               <p

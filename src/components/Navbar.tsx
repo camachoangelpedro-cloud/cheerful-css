@@ -99,17 +99,22 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
 
-      {/* Announcement Bar */}
+      {/* Announcement Bar — always-animated marquee */}
       <div
-        className="flex items-center justify-center"
+        className="overflow-hidden flex items-center"
         style={{ backgroundColor: '#1C1C1A', height: '30px' }}
       >
-        <span
-          className="font-medium uppercase tracking-widest"
-          style={{ fontSize: '10px', color: 'rgba(242,237,228,0.45)', letterSpacing: '0.2em' }}
-        >
-          Diseño Modular · Hecho en Colombia · Primeros Envíos Gratis
-        </span>
+        <div className="nodo-marquee-track">
+          {[0, 1].map(i => (
+            <span
+              key={i}
+              className="px-10"
+              style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(242,237,228,0.45)' }}
+            >
+              Diseño Modular &nbsp;·&nbsp; Hecho en Colombia &nbsp;·&nbsp; Primeros Envíos Gratis &nbsp;·&nbsp; Fabricado a tu medida &nbsp;·&nbsp;
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Main Nav */}
