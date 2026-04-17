@@ -104,7 +104,7 @@ function OptionBtn({ active, locked, icon, label, onClick }: OptionBtnProps) {
         ${locked  ? 'opacity-30 pointer-events-none' : ''}`}
     >
       <div className="w-10 h-10 shrink-0 text-foreground">{icon}</div>
-      <span style={{ fontSize: '8px', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.3, marginTop: '3px', color: active ? '#1C1C1A' : '#9E9E9C' }}>{label}</span>
+      <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.3, marginTop: '3px', color: active ? '#1C1C1A' : '#9E9E9C' }}>{label}</span>
     </button>
   );
 }
@@ -155,10 +155,10 @@ export default function ModuleEditPanel() {
   const handlePasacables = (val: boolean)       => updateModule(selectedId, { pasacables: val });
 
   return (
-    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm rounded-lg w-52 pointer-events-auto">
+    <div className="absolute top-4 left-4 z-10 bg-background border border-border shadow-sm rounded-lg w-60 pointer-events-auto">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <span className="font-body text-[9px] tracking-wide font-medium">
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-border">
+        <span className="font-body text-xs tracking-wide font-medium">
           {product.title}
         </span>
         <button onClick={() => selectInstance(null)} className="text-muted-foreground hover:text-foreground">
@@ -170,7 +170,7 @@ export default function ModuleEditPanel() {
 
         {/* Color */}
         <div>
-          <p className="font-body text-[8px] tracking-wide text-muted-foreground mb-1.5">Color</p>
+          <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2">Color</p>
           <div className="flex gap-1.5">
             {NODO_COLORS.map(c => (
               <button
@@ -193,20 +193,20 @@ export default function ModuleEditPanel() {
         {/* Step 1 — Panel trasero (same as product page step 1) */}
         {hasPanelOption && (
           <div>
-            <p className="font-body text-[8px] tracking-wide text-muted-foreground mb-1.5">
-              1 · Panel trasero
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-1.5">
+              1 · Fondo
             </p>
             <div className="flex gap-1.5">
               <OptionBtn
                 active={mod.panel === 'Con panel'}
                 icon={<PanelConSvg />}
-                label="Con panel"
+                label="Con fondo"
                 onClick={() => handlePanel('Con panel')}
               />
               <OptionBtn
                 active={mod.panel === 'Sin panel'}
                 icon={<PanelSinSvg />}
-                label="Sin panel"
+                label="Sin fondo"
                 onClick={() => handlePanel('Sin panel')}
               />
             </div>
@@ -216,7 +216,7 @@ export default function ModuleEditPanel() {
         {/* Step 2 — Interior (only for products with multiple interiors) */}
         {uniqueInteriors.length > 1 && (
           <div>
-            <p className="font-body text-[8px] tracking-wide text-muted-foreground mb-1.5">
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-1.5">
               2 · Interior
             </p>
             <div className="flex gap-1 flex-wrap">
@@ -261,7 +261,7 @@ export default function ModuleEditPanel() {
         {/* Tirador — sub-step, only for single-door handles with door interior */}
         {showTirador && (
           <div>
-            <p className="font-body text-[8px] tracking-wide text-muted-foreground mb-1.5">
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-1.5">
               Tirador
             </p>
             <div className="flex gap-1.5">
@@ -269,7 +269,7 @@ export default function ModuleEditPanel() {
                 <button
                   key={ap}
                   onClick={() => handleApertura(ap)}
-                  className={`flex-1 font-body text-[8px] tracking-wide px-2 py-1.5 border rounded-lg transition-colors
+                  className={`flex-1 font-body text-[10px] tracking-wide px-2 py-1.5 border rounded-lg transition-colors
                     ${mod.apertura === ap
                       ? 'border-[#1C1C1A] bg-[#1C1C1A] text-white'
                       : 'border-border text-foreground hover:border-foreground/60'}`}
@@ -284,7 +284,7 @@ export default function ModuleEditPanel() {
         {/* Pasacables */}
         {showPasacables && (
           <div>
-            <p className="font-body text-[8px] tracking-wide text-muted-foreground mb-1.5">
+            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-1.5">
               Pasacables
             </p>
             <div className="flex gap-1.5">
@@ -307,7 +307,7 @@ export default function ModuleEditPanel() {
         {/* Delete */}
         <button
           onClick={() => { removeModule(selectedId); selectInstance(null); }}
-          className="flex items-center gap-1.5 font-body text-[8px] tracking-wide text-red-500 hover:text-red-700 transition-colors pt-1 border-t border-border"
+          className="flex items-center gap-1.5 font-body text-[10px] tracking-wide text-red-500 hover:text-red-700 transition-colors pt-2 mt-1 border-t border-border"
         >
           <Trash2 className="w-3 h-3" />
           Eliminar módulo

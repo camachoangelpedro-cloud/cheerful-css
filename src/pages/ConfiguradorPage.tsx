@@ -30,7 +30,7 @@ export default function ConfiguradorPage() {
         </p>
         <a
           href="/catalogo"
-          className="rounded-full bg-foreground text-background px-8 py-3.5 text-sm tracking-wide hover:opacity-85 transition-opacity"
+          className="rounded-lg bg-foreground text-background px-8 py-3.5 text-sm tracking-wide hover:opacity-85 transition-opacity"
         >
           Explorar nuestros muebles
         </a>
@@ -51,10 +51,10 @@ export default function ConfiguradorPage() {
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="font-body text-[10px] tracking-wide">Volver</span>
+          <span className="font-body text-xs tracking-wide">Volver</span>
         </Link>
         <div className="flex-1 text-center">
-          <h1 className="font-body text-[10px] tracking-wide font-medium">
+          <h1 className="font-body text-xs tracking-wide font-medium">
             Configurador
           </h1>
         </div>

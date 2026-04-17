@@ -613,10 +613,10 @@ export default function ProductoPage() {
             {/* Step 1 — Panel trasero */}
             {(pType === 'TYPE_FULL' || pType === 'TYPE_PANEL') && (
               <div className="mb-8">
-                <StepHeader num="1" label="Panel trasero" />
+                <StepHeader num="1" label="Fondo" />
                 <div className="flex gap-2 flex-wrap mt-3">
-                  <OptionCard active={selectedPanel === 'Con panel'} svg={panelConSvg} label="Con panel" onClick={() => setSelectedPanel('Con panel')} />
-                  <OptionCard active={selectedPanel === 'Sin panel'} svg={panelSinSvg} label="Sin panel" onClick={() => setSelectedPanel('Sin panel')} />
+                  <OptionCard active={selectedPanel === 'Con panel'} svg={panelConSvg} label="Con fondo" onClick={() => setSelectedPanel('Con panel')} />
+                  <OptionCard active={selectedPanel === 'Sin panel'} svg={panelSinSvg} label="Sin fondo" onClick={() => setSelectedPanel('Sin panel')} />
                 </div>
               </div>
             )}

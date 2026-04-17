@@ -42,7 +42,7 @@ export default function ConfigToolbar() {
         </button>
       </div>
 
-      <span className="font-body text-[10px] text-muted-foreground">
+      <span className="font-body text-xs text-muted-foreground">
         {placedModules.length} módulo{placedModules.length !== 1 ? 's' : ''}
       </span>
 

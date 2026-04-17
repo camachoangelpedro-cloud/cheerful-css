@@ -50,13 +50,13 @@ export default function ModuleCatalog() {
             borderRadius: '3px',
           }}
         />
-        <span className="font-body text-[10px] tracking-wide font-medium text-foreground/80 text-center leading-tight">
+        <span className="font-body text-xs tracking-wide font-medium text-foreground/80 text-center leading-tight">
           {product.title}
         </span>
-        <span className="font-body text-[9px] text-muted-foreground">
+        <span className="font-body text-[11px] text-muted-foreground">
           {product.widthCm}×{product.heightCm} cm
         </span>
-        <span className="font-body text-[9px] font-medium text-foreground">
+        <span className="font-body text-[11px] font-medium text-foreground">
           desde {COP(getStartingPrice(product))}
         </span>
       </div>
@@ -67,10 +67,10 @@ export default function ModuleCatalog() {
     const qty = clfQuantities[product.handle] ?? 0;
     return (
       <div className="flex flex-col gap-1.5 p-2.5 border border-border rounded-lg">
-        <span className="font-body text-[10px] tracking-wide font-medium text-foreground/80 leading-tight">
+        <span className="font-body text-xs tracking-wide font-medium text-foreground/80 leading-tight">
           {product.title}
         </span>
-        <span className="font-body text-[9px] font-medium text-foreground">
+        <span className="font-body text-[11px] font-medium text-foreground">
           {COP(product.variants[0]?.price ?? 0)} c/u
         </span>
         <div className="flex items-center gap-2 mt-0.5">
@@ -81,7 +81,7 @@ export default function ModuleCatalog() {
           >
             <Minus className="w-2.5 h-2.5" />
           </button>
-          <span className="font-body text-[10px] w-4 text-center">{qty}</span>
+          <span className="font-body text-xs w-4 text-center">{qty}</span>
           <button
             onClick={() => setClfQuantity(product.handle, qty + 1)}
             className="w-5 h-5 border border-border flex items-center justify-center hover:bg-muted/50 transition-colors"
@@ -100,7 +100,7 @@ export default function ModuleCatalog() {
       onClick={toggle}
       className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-muted/30 transition-colors"
     >
-      <span className="font-body text-[10px] tracking-wide font-medium text-foreground">
+      <span className="font-body text-xs tracking-wide font-medium text-foreground">
         {label}
       </span>
       {open
@@ -111,11 +111,11 @@ export default function ModuleCatalog() {
   );
 
   return (
-    <div className="w-64 border-l border-border bg-background flex flex-col h-full overflow-y-auto shrink-0">
+    <div className="w-72 border-l border-border bg-background flex flex-col h-full overflow-y-auto shrink-0">
 
       {/* Color selector */}
       <div className="p-4 border-b border-border shrink-0">
-        <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2.5">Color</p>
+        <p className="font-body text-xs tracking-wide text-muted-foreground mb-2.5">Color</p>
         <div className="flex gap-2 mb-1.5">
           {NODO_COLORS.map(color => (
             <button
@@ -133,12 +133,12 @@ export default function ModuleCatalog() {
             />
           ))}
         </div>
-        <p className="font-body text-[9px] text-muted-foreground">{currentColor.name}</p>
+        <p className="font-body text-[11px] text-muted-foreground">{currentColor.name}</p>
       </div>
 
       {/* Drag hint */}
       <div className="px-4 py-2 border-b border-border shrink-0">
-        <p className="font-body text-[9px] text-muted-foreground/60 leading-tight">
+        <p className="font-body text-[11px] text-muted-foreground/60 leading-tight">
           Arrastra un módulo al canvas para colocarlo
         </p>
       </div>

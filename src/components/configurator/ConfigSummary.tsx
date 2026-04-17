@@ -98,10 +98,10 @@ setIsAdding(true);
 
   return (
     <div className="border-t border-border bg-background p-4 space-y-3 shrink-0">
-      <p className="font-body text-[10px] tracking-wide text-muted-foreground">Resumen</p>
+      <p className="font-body text-xs tracking-wide text-muted-foreground">Resumen</p>
 
       {summary.length === 0 ? (
-        <p className="font-body text-[10px] text-muted-foreground/60">Sin módulos colocados</p>
+        <p className="font-body text-xs text-muted-foreground/60">Sin módulos colocados</p>
       ) : (
         <div className="space-y-1 max-h-36 overflow-y-auto">
           {summary.map((item, i) => {
@@ -114,13 +114,13 @@ setIsAdding(true);
                     className="w-3 h-3 rounded-full shrink-0"
                     style={{ background: color?.hex ?? '#ccc', border: '1px solid rgba(0,0,0,0.10)' }}
                   />
-                  <span className="font-body text-[9px] text-foreground/80 leading-tight">
+                  <span className="font-body text-[11px] text-foreground/80 leading-tight">
                     {product?.title ?? item.handle}
                     {item.interior ? ` · ${item.interior}` : ''}
                   </span>
-                  <span className="font-body text-[9px] text-muted-foreground">×{item.count}</span>
+                  <span className="font-body text-[11px] text-muted-foreground">×{item.count}</span>
                 </div>
-                <span className="font-body text-[9px] font-medium shrink-0 ml-2">
+                <span className="font-body text-[11px] font-medium shrink-0 ml-2">
                   {COP(item.unitPrice * item.count)}
                 </span>
               </div>
@@ -130,7 +130,7 @@ setIsAdding(true);
       )}
 
       <div className="flex items-center justify-between pt-2 border-t border-border">
-        <span className="font-body text-[10px] tracking-wide text-muted-foreground">Total</span>
+        <span className="font-body text-xs tracking-wide text-muted-foreground">Total</span>
         <span className="font-body text-sm font-semibold">{COP(total)}</span>
       </div>
 

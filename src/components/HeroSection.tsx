@@ -56,14 +56,15 @@ export function HeroSection() {
           <img
             src={slide.image}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: idx === 1 ? 'center center' : 'center 62%' }}
           />
-          <div className="absolute inset-0 bg-black/25" />
+          <div className="absolute inset-0 bg-black/15" />
         </div>
       ))}
 
-      {/* Content — bottom left */}
-      <div className="absolute bottom-12 left-8 lg:left-16 z-10">
+      {/* Content — bottom left on mobile, lower-third on desktop */}
+      <div className="absolute bottom-14 lg:bottom-[22%] left-8 lg:left-16 z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${currentSlide}`}
@@ -99,7 +100,7 @@ export function HeroSection() {
       </div>
 
       {/* Counter + prev/next — bottom right */}
-      <div className="absolute bottom-12 right-8 lg:right-16 z-10 flex items-center gap-5">
+      <div className="absolute bottom-14 lg:bottom-[22%] right-8 lg:right-16 z-10 flex items-center gap-5">
         <button
           onClick={prevSlide}
           className="text-white/40 hover:text-white transition-colors"

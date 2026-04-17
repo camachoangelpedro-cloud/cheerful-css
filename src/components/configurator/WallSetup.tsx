@@ -65,7 +65,7 @@ export default function WallSetup() {
 
         {/* ── Live preview ──────────────────────────────── */}
         <div className="flex flex-col items-center gap-3">
-          <p className="font-body text-[10px] tracking-wide text-muted-foreground">Vista previa</p>
+          <p className="font-body text-xs tracking-wide text-muted-foreground">Vista previa</p>
 
           <svg width={pW} height={pH} className="border border-border/50 shadow-sm">
             {/* Wall */}
@@ -131,7 +131,7 @@ export default function WallSetup() {
 
           {/* Width */}
           <div>
-            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2">
+            <p className="font-body text-xs tracking-wide text-muted-foreground mb-2">
               Ancho — {widthCm} cm
             </p>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -144,7 +144,7 @@ export default function WallSetup() {
 
           {/* Height */}
           <div>
-            <p className="font-body text-[10px] tracking-wide text-muted-foreground mb-2">
+            <p className="font-body text-xs tracking-wide text-muted-foreground mb-2">
               Alto — {heightCm} cm
             </p>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -163,7 +163,7 @@ export default function WallSetup() {
                 onChange={e => setHasWindow(e.target.checked)}
                 className="w-4 h-4 accent-[#1C1C1A]"
               />
-              <span className="font-body text-[10px] tracking-wide font-medium">
+              <span className="font-body text-xs tracking-wide font-medium">
                 Añadir ventana
               </span>
             </label>
@@ -178,7 +178,7 @@ export default function WallSetup() {
                 ] as [string, number, (v: number) => void, number, number][]).map(
                   ([label, val, setter, min, max]) => (
                     <div key={label}>
-                      <p className="font-body text-[9px] text-muted-foreground mb-1">{label} (cm)</p>
+                      <p className="font-body text-[11px] text-muted-foreground mb-1">{label} (cm)</p>
                       <input
                         type="number" value={val} min={min} max={max} step={1}
                         onChange={e => setter(Number(e.target.value))}
