@@ -195,19 +195,19 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
               {[
                 {
-                  quote: '"Me mudé dos veces en un año y mi NODO se vino conmigo las dos veces."',
+                  quote: '"Me mudé dos veces en un año y mi NODO se vino conmigo las dos veces. Primero de Chapinero a Palermo, luego a un apartamento más pequeño en La Soledad. En ambos casos desarmé todo en una tarde, lo acomodé al nuevo espacio y quedó como si siempre hubiera sido de ese lugar. Con cualquier otro mueble eso no habría sido posible."',
                   name: 'Valentina R.',
                   location: 'Chapinero, Bogotá',
                   num: '01',
                 },
                 {
-                  quote: '"Armé exactamente lo que necesitaba y el precio nunca cambió de lo que me mostraba la página."',
+                  quote: '"Armé exactamente lo que necesitaba usando el configurador — ninguna sorpresa, ningún cobro extra. El precio que vi en pantalla fue el mismo que pagué. Lo que más me gustó fue poder ver cómo iba a quedar antes de pedir cualquier cosa. Llegó armado, lo conecté con los clips y listo. Nunca había comprado un mueble tan fácil."',
                   name: 'Andrés M.',
                   location: 'Usaquén, Bogotá',
                   num: '02',
                 },
                 {
-                  quote: '"Cuando un huésped dañó un módulo, pedí solo esa pieza. Con un mueble normal habría tocado cambiar todo."',
+                  quote: '"Tengo un apartamento en Airbnb y un huésped dañó uno de los módulos. Con cualquier otro mueble habría tocado cambiar todo el sistema o conformarse con un parche visible. Con NODO simplemente pedí esa pieza, llegó en el mismo color y quedó idéntico. Eso no tiene precio cuando el diseño de tu espacio es parte de lo que le vendes a tus huéspedes."',
                   name: 'Carolina G.',
                   location: 'Superhost · Bogotá',
                   num: '03',
