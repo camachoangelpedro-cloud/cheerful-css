@@ -16,6 +16,7 @@ const PoliticaPrivacidadPage = lazy(() => import('@/pages/PoliticaPrivacidadPage
 const TerminosPage           = lazy(() => import('@/pages/TerminosPage'));
 const EnviosDevolucionesPage = lazy(() => import('@/pages/EnviosDevolucionesPage'));
 const NotFoundPage           = lazy(() => import('@/pages/NotFoundPage'));
+const CheckoutComingSoonPage = lazy(() => import('@/pages/CheckoutComingSoonPage'));
 
 function AppContent() {
   useCartSync();
@@ -35,6 +36,7 @@ function AppContent() {
         <Route path="/envios"                 element={<Navigate to="/envios-y-devoluciones" replace />} />
         <Route path="/devoluciones"           element={<Navigate to="/envios-y-devoluciones" replace />} />
         <Route path="/envios-devoluciones"    element={<Navigate to="/envios-y-devoluciones" replace />} />
+        <Route path="/checkout"               element={<CheckoutComingSoonPage />} />
         <Route path="*"                       element={<NotFoundPage />} />
       </Routes>
     </Suspense>
