@@ -15,8 +15,8 @@ export default function ConfiguradorIntroPage() {
 
       <main className="px-6 md:px-12">
 
-        {/* SECTION 1 — Hero */}
-        <div className="text-center pt-32 md:pt-40 pb-4">
+        {/* SECTION 1 — Hero + CTA (all above fold) */}
+        <div className="text-center pt-28 md:pt-36 pb-4">
           <p className="nodo-overline mb-6">Configurador 3D</p>
           <h1>
             <span
@@ -39,13 +39,34 @@ export default function ConfiguradorIntroPage() {
               Sistema de almacenamiento
             </span>
           </h1>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto mt-6" style={{ fontWeight: 300 }}>
-            Crea una configuración única en minutos. Así funciona:
+
+          <p className="text-sm text-muted-foreground max-w-md mx-auto mt-6 mb-10" style={{ fontWeight: 300 }}>
+            Crea una configuración única en minutos. Sin herramientas, sin compromiso.
+          </p>
+
+          {/* CTA — visible without scrolling */}
+          <Link
+            to="/configurador/editor"
+            className="inline-flex items-center gap-3 bg-foreground text-background px-10 py-4 font-medium uppercase hover:opacity-90 transition-opacity group rounded-lg"
+            style={{ fontSize: '11px', letterSpacing: '0.18em' }}
+          >
+            Abrir el configurador
+            <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+          </Link>
+
+          <p className="text-xs text-muted-foreground mt-5" style={{ fontWeight: 300 }}>
+            Disponible en escritorio. En móvil puedes explorar desde{' '}
+            <Link to="/catalogo" className="underline underline-offset-2 hover:opacity-60 transition-opacity">
+              nuestro catálogo
+            </Link>.
           </p>
         </div>
 
-        {/* SECTION 2 — Three steps */}
-        <div className="max-w-4xl mx-auto mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Divider */}
+        <div className="max-w-4xl mx-auto mt-16 mb-2" style={{ height: '1px', backgroundColor: 'rgba(0,0,0,0.07)' }} />
+
+        {/* SECTION 2 — Three steps (scroll to learn) */}
+        <div className="max-w-4xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
 
           {[
             {
@@ -90,7 +111,7 @@ export default function ConfiguradorIntroPage() {
         </div>
 
         {/* SECTION 3 — Tip */}
-        <div className="max-w-2xl mx-auto mt-10 p-6 text-center" style={{ backgroundColor: '#F5F5F3' }}>
+        <div className="max-w-2xl mx-auto mt-8 p-6 text-center rounded-lg" style={{ backgroundColor: '#F5F5F3' }}>
           <p className="text-sm text-muted-foreground leading-relaxed" style={{ fontWeight: 300 }}>
             Orden recomendado de abajo hacia arriba:{' '}
             <strong className="text-foreground" style={{ fontWeight: 600 }}>Base → Profundidad completa → Media profundidad</strong>.
@@ -98,26 +119,8 @@ export default function ConfiguradorIntroPage() {
           </p>
         </div>
 
-        {/* SECTION 4 — CTA */}
-        <div className="text-center mt-12 mb-8">
-          <Link
-            to="/configurador/editor"
-            className="inline-flex items-center gap-3 bg-foreground text-background px-10 py-4 font-medium uppercase hover:opacity-90 transition-opacity group rounded-lg"
-            style={{ fontSize: '11px', letterSpacing: '0.18em' }}
-          >
-            Abrir el configurador
-            <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
-          </Link>
-          <p className="text-xs text-muted-foreground mt-5" style={{ fontWeight: 300 }}>
-            Disponible en escritorio. En móvil puedes comprar muebles individuales desde{' '}
-            <Link to="/catalogo" className="underline underline-offset-2 hover:opacity-60 transition-opacity">
-              nuestro catálogo
-            </Link>.
-          </p>
-        </div>
-
-        {/* SECTION 5 — Extra info */}
-        <div className="max-w-xl mx-auto text-center mt-6 mb-20">
+        {/* SECTION 4 — Extra info */}
+        <div className="max-w-xl mx-auto text-center mt-8 mb-20">
           <p className="text-xs text-muted-foreground" style={{ fontWeight: 300 }}>
             Tu configuración es completamente libre. No hay reglas fijas — experimenta con diferentes combinaciones hasta que encuentres la que mejor se adapte a tu espacio.
           </p>

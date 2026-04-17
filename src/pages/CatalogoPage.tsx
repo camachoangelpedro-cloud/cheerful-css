@@ -335,11 +335,10 @@ export default function CatalogoPage() {
             Catálogo
           </h1>
           <p
-            className="text-sm leading-relaxed max-w-[460px] mt-5"
-            style={{ color: '#5F5E5A', letterSpacing: 0, fontWeight: 300 }}
+            className="mt-5 max-w-[480px]"
+            style={{ fontSize: '1rem', fontWeight: 300, color: '#5F5E5A', lineHeight: 1.7, letterSpacing: 0 }}
           >
-            Sistema modular NODO — cada módulo se conecta sin herramientas.
-            Configura tu espacio libremente y crece cuando quieras.
+            Cada módulo se conecta sin herramientas. Configura libremente y crece cuando quieras.
           </p>
         </div>
 

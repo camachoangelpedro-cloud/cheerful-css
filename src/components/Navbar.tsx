@@ -131,7 +131,7 @@ export function Navbar() {
           <Link
             to="/"
             className="font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.06em', fontSize: '18px' }}
+            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '-0.03em', fontSize: '21px' }}
           >
             NODO
           </Link>

@@ -40,10 +40,14 @@ export function NewsletterSignup({ compact = false }: NewsletterSignupProps) {
     <div>
       {!compact && (
         <>
-          <p className="font-display text-2xl lg:text-3xl mb-3" style={{ letterSpacing: 0 }}>
+          <p className="nodo-overline mb-5">Newsletter</p>
+          <h2
+            className="nodo-display mb-4"
+            style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#1C1C1A' }}
+          >
             Sé el primero en conocer nuestras novedades
-          </p>
-          <p className="font-body text-sm mb-6" style={{ color: '#5F5E5A' }}>
+          </h2>
+          <p className="font-body text-sm mb-7" style={{ color: '#5F5E5A', fontWeight: 300 }}>
             Recibe inspiración, lanzamientos y ofertas exclusivas directamente en tu correo.
           </p>
         </>
@@ -57,12 +61,12 @@ export function NewsletterSignup({ compact = false }: NewsletterSignupProps) {
           placeholder="tu@email.com"
           required
           disabled={status === 'loading' || status === 'success'}
-          className="flex-1 border border-border/60 bg-background px-4 py-2.5 font-body text-sm focus:outline-none focus:border-foreground/40 placeholder:text-muted-foreground disabled:opacity-50"
+          className="flex-1 border border-border/60 rounded-lg bg-background px-4 py-2.5 font-body text-sm focus:outline-none focus:border-foreground/40 placeholder:text-muted-foreground disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="rounded-full border border-foreground/20 bg-foreground text-background px-5 py-2.5 font-body text-sm hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center gap-2 whitespace-nowrap"
+          className="rounded-lg border border-foreground/20 bg-foreground text-background px-5 py-2.5 font-body text-sm hover:opacity-85 transition-opacity disabled:opacity-40 flex items-center gap-2 whitespace-nowrap"
         >
           {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Suscribirse'}
         </button>
