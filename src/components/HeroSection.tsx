@@ -57,7 +57,7 @@ export function HeroSection() {
             src={slide.image}
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: idx === 1 ? 'center center' : '48% 20%' }}
+            style={{ objectPosition: idx === 1 ? 'center center' : '50.2% 20%' }}
           />
           <div className="absolute inset-0 bg-black/15" />
         </div>
