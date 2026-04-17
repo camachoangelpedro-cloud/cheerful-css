@@ -215,7 +215,7 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-6">
               <a
-                href="https://instagram.com/nodo.co"
+                href="https://www.instagram.com/nodomodulardesign/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body text-xs text-background/60 hover:text-background transition-colors"
