@@ -209,7 +209,7 @@ export default function ContactoPage() {
                   </div>
                 </a>
                 <a
-                  href="https://instagram.com/nodo.co"
+                  href="https://www.instagram.com/nodomodulardesign/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 p-6 border border-border/40 hover:border-foreground/20 transition-colors group"
