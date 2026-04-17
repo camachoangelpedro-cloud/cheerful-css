@@ -156,20 +156,20 @@ export default function HomePage() {
 
               {/* Dark box — aspect-ratio 4/5 matches product card image height */}
               <div
-                className="rounded-lg p-8 lg:p-10 flex flex-col overflow-hidden lg:[aspect-ratio:0.792]"
+                className="rounded-lg p-8 lg:p-10 flex flex-col"
                 style={{ backgroundColor: '#1C1C1A' }}
               >
                 <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Nuestra propuesta
                 </p>
                 <h2
-                  className="font-display text-2xl lg:text-3xl font-light mt-3"
+                  className="font-display text-2xl lg:text-2xl xl:text-3xl font-light mt-3"
                   style={{ color: '#FFFFFF', lineHeight: 1.2 }}
                 >
                   Muebles que se adaptan a ti
                 </h2>
 
-                <div className="mt-8 flex flex-col gap-6">
+                <div className="mt-6 flex flex-col gap-4 lg:gap-5">
                   <div>
                     <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Diseña a tu medida</p>
                     <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
