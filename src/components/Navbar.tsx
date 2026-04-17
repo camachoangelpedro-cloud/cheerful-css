@@ -100,36 +100,24 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* Announcement Bar */}
-      <div className="py-[10px] flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF' }}>
-        <style>{`
-          @keyframes nodo-ticker {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .nodo-ticker-inner { display: flex; white-space: nowrap; animation: nodo-ticker 22s linear infinite; }
-          @media (min-width: 640px) { .nodo-ticker-inner { animation: none; } }
-        `}</style>
-        {/* Mobile: scrolling ticker. Desktop: static centered */}
-        <span className="hidden sm:block text-xs font-light" style={{ letterSpacing: 0 }}>
-          Diseño Modular · Módulos Armados · Hecho en Colombia · Primeros Envíos Gratis
+      <div
+        className="flex items-center justify-center"
+        style={{ backgroundColor: '#1C1C1A', height: '30px' }}
+      >
+        <span
+          className="font-medium uppercase tracking-widest"
+          style={{ fontSize: '10px', color: 'rgba(242,237,228,0.45)', letterSpacing: '0.2em' }}
+        >
+          Diseño Modular · Hecho en Colombia · Primeros Envíos Gratis
         </span>
-        <div className="sm:hidden w-full overflow-hidden">
-          <div className="nodo-ticker-inner">
-            {[0, 1].map(i => (
-              <span key={i} className="text-xs font-light px-8" style={{ letterSpacing: 0 }}>
-                Diseño Modular · Módulos Armados · Hecho en Colombia · Primeros Envíos Gratis &nbsp;&nbsp;&nbsp;
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Main Nav */}
       <nav
-        className="h-[60px] transition-all duration-200"
+        className="h-[56px] transition-colors duration-300"
         style={{
-          backgroundColor: scrolled ? '#FFFFFF' : '#FAFAF8',
-          boxShadow: scrolled ? '0 1px 0 rgba(0,0,0,0.08)' : 'none',
+          backgroundColor: '#FAFAF8',
+          borderBottom: scrolled ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(0,0,0,0.05)',
         }}
       >
         <div className="flex items-center justify-between h-full px-8 lg:px-16">
@@ -137,68 +125,61 @@ export function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="text-lg font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.2em' }}
+            className="font-extrabold text-foreground"
+            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.22em', fontSize: '15px' }}
           >
             NODO
           </Link>
 
           {/* Centre Links */}
           <div className="hidden lg:flex items-center gap-10">
-            <Link
-              to="/configurador"
-              className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
-              style={{ letterSpacing: 0 }}
-            >
-              Diseña tú Mismo
-            </Link>
-            <Link
-              to="/catalogo"
-              className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
-              style={{ letterSpacing: 0 }}
-            >
-              Nuestros Muebles
-            </Link>
-            <Link
-              to="/nosotros"
-              className="text-sm font-normal text-foreground hover:opacity-60 transition-opacity"
-              style={{ letterSpacing: 0 }}
-            >
-              Nuestra Filosofía
-            </Link>
+            {[
+              { to: '/configurador', label: 'Diseña tú mismo' },
+              { to: '/catalogo',     label: 'Muebles' },
+              { to: '/nosotros',     label: 'Nosotros' },
+            ].map(l => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="font-medium uppercase text-foreground/50 hover:text-foreground transition-colors duration-200"
+                style={{ fontSize: '11px', letterSpacing: '0.12em' }}
+              >
+                {l.label}
+              </Link>
+            ))}
           </div>
 
           {/* Right Icons */}
           <div className="flex items-center gap-5">
             <button
               onClick={() => setSearchOpen(true)}
-              className="hover:opacity-60 transition-opacity"
+              className="text-foreground/60 hover:text-foreground transition-colors"
               aria-label="Buscar"
             >
-              <Search strokeWidth={1.5} className="w-5 h-5" />
+              <Search strokeWidth={1.5} className="w-[18px] h-[18px]" />
             </button>
             <button
               onClick={() => { setAuthTab('login'); setAuthOpen(true); }}
-              className="hidden lg:block hover:opacity-60 transition-opacity"
+              className="hidden lg:block text-foreground/60 hover:text-foreground transition-colors"
               aria-label="Mi cuenta"
             >
-              <User strokeWidth={1.5} className="w-5 h-5" />
+              <User strokeWidth={1.5} className="w-[18px] h-[18px]" />
             </button>
             <button
-              className="lg:hidden hover:opacity-60 transition-opacity"
+              className="lg:hidden text-foreground/60 hover:text-foreground transition-colors"
               onClick={() => setMobileOpen(true)}
               aria-label="Menú"
             >
-              <Menu strokeWidth={1.5} className="w-5 h-5" />
+              <Menu strokeWidth={1.5} className="w-[18px] h-[18px]" />
             </button>
             <button
               onClick={() => setIsOpen(true)}
-              className="relative hover:opacity-60 transition-opacity"
+              className="relative text-foreground/60 hover:text-foreground transition-colors"
               aria-label="Carrito"
             >
-              <ShoppingBag strokeWidth={1.5} className="w-5 h-5" />
+              <ShoppingBag strokeWidth={1.5} className="w-[18px] h-[18px]" />
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 bg-foreground text-background text-[9px] w-[14px] h-[14px] rounded-full flex items-center justify-center font-medium">
                   {totalItems}
                 </span>
               )}
@@ -228,31 +209,22 @@ export function Navbar() {
           </button>
         </div>
 
-        <div className="flex flex-col px-8 py-12 gap-6">
-          <Link
-            to="/configurador"
-            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
-            style={{ letterSpacing: 0 }}
-            onClick={() => setMobileOpen(false)}
-          >
-            Diseña tú Mismo
-          </Link>
-          <Link
-            to="/catalogo"
-            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
-            style={{ letterSpacing: 0 }}
-            onClick={() => setMobileOpen(false)}
-          >
-            Nuestros Muebles
-          </Link>
-          <Link
-            to="/nosotros"
-            className="text-lg font-medium text-foreground hover:opacity-60 transition-opacity"
-            style={{ letterSpacing: 0 }}
-            onClick={() => setMobileOpen(false)}
-          >
-            Nuestra Filosofía
-          </Link>
+        <div className="flex flex-col px-8 py-12 gap-8">
+          {[
+            { to: '/configurador', label: 'Diseña tú mismo' },
+            { to: '/catalogo',     label: 'Muebles' },
+            { to: '/nosotros',     label: 'Nosotros' },
+          ].map(l => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="font-medium uppercase text-foreground/40 hover:text-foreground transition-colors"
+              style={{ fontSize: '12px', letterSpacing: '0.15em' }}
+              onClick={() => setMobileOpen(false)}
+            >
+              {l.label}
+            </Link>
+          ))}
         </div>
       </div>
 

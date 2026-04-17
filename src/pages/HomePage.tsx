@@ -9,7 +9,7 @@ import { NewsletterSignup } from '@/components/NewsletterSignup';
 import { NODO_PRODUCTS, NODO_COLORS, getStartingPrice } from '@/data/modulesCatalog';
 import { getRenderUrl } from '@/data/renderMap';
 
-/* ── Product card for slider ──────────────────────────────── */
+/* ── Product card ─────────────────────────────────────── */
 
 interface ProductCardProps {
   handle: string;
@@ -24,52 +24,45 @@ function ProductCard({ handle, label }: ProductCardProps) {
   const activeColor = NODO_COLORS.find(c => c.id === colorId);
 
   return (
-    <div className="block group pb-2">
-      <Link to={`/producto/${handle}`} className="block">
-        {(() => {
-          const renderUrl = getRenderUrl(handle, colorId);
-          return (
-            <div
-              className="w-full overflow-hidden relative flex items-center justify-center rounded-lg"
-              style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
-            >
-              {renderUrl ? (
-                <img
-                  src={renderUrl}
-                  alt={label}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {label}
-                </span>
-              )}
-            </div>
-          );
-        })()}
+    <div className="block group">
+      <Link to={`/producto/${handle}`} className="block overflow-hidden">
+        <div
+          className="w-full relative flex items-center justify-center overflow-hidden"
+          style={{ backgroundColor: activeColor?.hex ?? '#ECEAE7', aspectRatio: '4/5' }}
+        >
+          {(() => {
+            const renderUrl = getRenderUrl(handle, colorId);
+            return renderUrl ? (
+              <img
+                src={renderUrl}
+                alt={label}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+            ) : (
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                {label}
+              </span>
+            );
+          })()}
+        </div>
       </Link>
 
-      <div
-        className="flex items-center gap-[5px] pt-4"
-        onClick={e => e.preventDefault()}
-      >
+      <div className="flex items-center gap-[5px] pt-3" onClick={e => e.preventDefault()}>
         {NODO_COLORS.map(c => (
           <button
             key={c.id}
             onClick={e => { e.preventDefault(); setColorId(c.id); }}
             aria-label={c.name}
-            className={`w-4 h-4 rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-1 ring-foreground scale-110' : 'hover:scale-110'}`}
+            className={`w-[14px] h-[14px] rounded-full transition-transform ${colorId === c.id ? 'ring-2 ring-offset-1 ring-foreground scale-110' : 'hover:scale-110'}`}
             style={{ backgroundColor: c.hex, border: c.id === 'BH' ? '1px solid rgba(0,0,0,0.15)' : '1px solid transparent' }}
           />
         ))}
       </div>
 
-      <div className="pt-3">
-        <p className="text-sm font-medium" style={{ color: '#1C1C1A', letterSpacing: 0 }}>
-          {label}
-        </p>
-        <p className="text-sm mt-1.5" style={{ color: '#5F5E5A', letterSpacing: 0 }}>
+      <div className="pt-2.5">
+        <p style={{ fontSize: '13px', fontWeight: 400, color: '#1C1C1A', letterSpacing: 0 }}>{label}</p>
+        <p className="mt-1" style={{ fontSize: '13px', fontWeight: 300, color: '#9E9E9C', letterSpacing: 0 }}>
           Desde COP ${price.toLocaleString('es-CO')}
         </p>
       </div>
@@ -77,53 +70,7 @@ function ProductCard({ handle, label }: ProductCardProps) {
   );
 }
 
-/* ── Star rating components ───────────────────────────────── */
-
-const STAR_PATH = 'M10 1l2.47 5.01L18 6.9l-4 3.9.94 5.5L10 13.4l-4.94 2.9.94-5.5-4-3.9 5.53-.89z';
-
-function FullStar() {
-  return (
-    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" aria-hidden="true">
-      <path d={STAR_PATH} fill="rgba(255,255,255,0.55)" />
-    </svg>
-  );
-}
-
-function HalfStar({ uid }: { uid: string }) {
-  return (
-    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" aria-hidden="true">
-      <defs>
-        <clipPath id={`half-${uid}`}>
-          <rect x="0" y="0" width="10" height="20" />
-        </clipPath>
-      </defs>
-      <path d={STAR_PATH} fill="rgba(255,255,255,0.15)" />
-      <path d={STAR_PATH} fill="rgba(255,255,255,0.55)" clipPath={`url(#half-${uid})`} />
-    </svg>
-  );
-}
-
-function EmptyStar() {
-  return (
-    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" aria-hidden="true">
-      <path d={STAR_PATH} fill="rgba(255,255,255,0.15)" />
-    </svg>
-  );
-}
-
-function StarRating({ rating, uid }: { rating: number; uid: string }) {
-  return (
-    <div className="flex gap-1 mb-4">
-      {[1, 2, 3, 4, 5].map(i => {
-        if (i <= Math.floor(rating)) return <FullStar key={i} />;
-        if (i === Math.ceil(rating) && rating % 1 !== 0) return <HalfStar key={i} uid={`${uid}-${i}`} />;
-        return <EmptyStar key={i} />;
-      })}
-    </div>
-  );
-}
-
-/* ── Page ─────────────────────────────────────────────────── */
+/* ── Page ─────────────────────────────────────────────── */
 
 export default function HomePage() {
   return (
@@ -139,131 +86,141 @@ export default function HomePage() {
         {/* BLOCK 1 — Hero */}
         <HeroSection />
 
-        {/* BLOCK 2 — Editorial split: product slider + value prop */}
+        {/* BLOCK 2 — Products + editorial */}
         <section className="nodo-container py-20 lg:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
             {/* LEFT — 2 product cards */}
             <div className="lg:col-span-2">
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-5 lg:gap-6">
                 <ProductCard handle="modulo-72-72" label="Módulo 72×72" />
                 <ProductCard handle="modulo-36-18" label="Módulo 36×18" />
               </div>
             </div>
 
-            {/* RIGHT — Dark value prop + CTA below */}
-            <div className="lg:col-span-1 flex flex-col mt-6 lg:mt-0">
-
-              {/* Dark box — aspect-ratio 4/5 matches product card image height */}
+            {/* RIGHT — editorial dark panel */}
+            <div className="lg:col-span-1 flex flex-col mt-4 lg:mt-0">
               <div
-                className="rounded-lg p-8 lg:p-10 flex flex-col"
+                className="flex flex-col p-8 lg:p-10"
                 style={{ backgroundColor: '#1C1C1A' }}
               >
-                <p className="text-xs tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                  Nuestra propuesta
-                </p>
-                <h2
-                  className="font-display text-2xl lg:text-2xl xl:text-3xl font-light mt-3"
-                  style={{ color: '#FFFFFF', lineHeight: 1.2 }}
+                <span
+                  className="font-medium uppercase"
+                  style={{ fontSize: '10px', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.25)' }}
                 >
-                  Muebles que se adaptan a ti
+                  Nuestra propuesta
+                </span>
+
+                <h2
+                  className="font-light mt-5 mb-10"
+                  style={{ color: '#FFFFFF', fontSize: '1.45rem', lineHeight: 1.2, letterSpacing: '-0.01em' }}
+                >
+                  Muebles que se adaptan a ti, no al revés.
                 </h2>
 
-                <div className="mt-6 flex flex-col gap-4 lg:gap-5">
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Diseña a tu medida</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                      Elige módulos, colores y configuraciones que se ajusten exactamente a tu espacio. Sin catálogos genéricos — tu estantería, tus reglas.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Precio claro, sin sorpresas</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                      Cada módulo tiene un precio fijo. Configura, suma y compra con total transparencia — sin cotizaciones ocultas ni costos inesperados.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>Se mueve contigo</p>
-                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                      Sistema modular que se conecta y se desconecta en minutos. Te cambias de apartamento, tu NODO va contigo — y crece cuando lo necesitas.
-                    </p>
-                  </div>
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                  {[
+                    { num: '01', label: 'Diseñado a tu medida' },
+                    { num: '02', label: 'Precio claro, sin sorpresas' },
+                    { num: '03', label: 'Se mueve contigo' },
+                  ].map(item => (
+                    <div
+                      key={item.num}
+                      className="flex items-center justify-between py-4"
+                      style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+                    >
+                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', fontWeight: 400 }}>
+                        {item.label}
+                      </span>
+                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em' }}>
+                        {item.num}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* CTA sits below the box */}
-              <div className="pt-4">
+              <div className="pt-5">
                 <Link
                   to="/catalogo"
-                  className="inline-block rounded-full border border-foreground/30 px-6 py-3 text-xs tracking-wide font-medium hover:bg-foreground hover:text-background transition-all"
-                  style={{ color: '#1C1C1A' }}
+                  className="inline-flex items-center gap-3 font-medium uppercase transition-all duration-300 group"
+                  style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#1C1C1A' }}
                 >
                   Ver todos los muebles
+                  <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
                 </Link>
               </div>
-
             </div>
 
           </div>
         </section>
 
-        {/* BLOCK 3 — Dark testimonials band */}
+        {/* BLOCK 3 — Editorial quotes */}
         <section style={{ backgroundColor: '#1C1C1A' }} className="py-20 lg:py-28">
           <div className="nodo-container">
-            <h2
-              className="font-display text-2xl md:text-3xl font-light mb-12"
-              style={{ color: '#FFFFFF' }}
-            >
-              Lo que dicen nuestros clientes
-            </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+            <div className="flex items-end justify-between mb-12" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '24px' }}>
+              <h2
+                className="font-light"
+                style={{ color: '#FFFFFF', fontSize: '1.1rem', letterSpacing: '-0.01em' }}
+              >
+                Lo que dicen
+              </h2>
+              <span
+                className="font-medium uppercase"
+                style={{ fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.25)' }}
+              >
+                Testimonios
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
               {[
                 {
-                  uid: 'valentina',
-                  rating: 5,
-                  quote: 'Me mudé dos veces en un año y mi NODO se vino conmigo las dos veces. Lo desarmé un domingo en la tarde y al otro día ya estaba armado en el apartamento nuevo. Ningún carpintero te da eso.',
+                  quote: '"Me mudé dos veces en un año y mi NODO se vino conmigo las dos veces."',
                   name: 'Valentina R.',
                   location: 'Chapinero, Bogotá',
+                  num: '01',
                 },
                 {
-                  uid: 'andres',
-                  rating: 4.5,
-                  quote: 'Siempre quise una estantería que no pareciera sacada de catálogo. Con el configurador armé exactamente lo que necesitaba para mi estudio y el precio nunca cambió de lo que me mostraba la página. Cero sorpresas.',
+                  quote: '"Armé exactamente lo que necesitaba y el precio nunca cambió de lo que me mostraba la página."',
                   name: 'Andrés M.',
                   location: 'Usaquén, Bogotá',
+                  num: '02',
                 },
                 {
-                  uid: 'carolina',
-                  rating: 5,
-                  quote: 'Tengo tres apartamentos en Airbnb y los tres tienen NODO. Cuando un huésped dañó un módulo, pedí solo esa pieza y me llegó en una semana. Con un mueble normal habría tocado cambiar todo.',
+                  quote: '"Cuando un huésped dañó un módulo, pedí solo esa pieza. Con un mueble normal habría tocado cambiar todo."',
                   name: 'Carolina G.',
                   location: 'Superhost · Bogotá',
+                  num: '03',
                 },
-              ].map(t => (
+              ].map((t, i) => (
                 <div
-                  key={t.uid}
-                  className="flex flex-col rounded-lg p-7"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
+                  key={t.num}
+                  className="py-8 pr-8"
+                  style={{
+                    borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+                    paddingLeft: i > 0 ? '32px' : '0',
+                  }}
                 >
-                  <StarRating rating={t.rating} uid={t.uid} />
                   <p
-                    className="text-sm italic leading-relaxed flex-1 mb-5"
-                    style={{ color: 'rgba(255,255,255,0.75)' }}
+                    className="font-light leading-relaxed mb-8"
+                    style={{ color: 'rgba(255,255,255,0.60)', fontSize: '0.95rem', letterSpacing: '-0.005em' }}
                   >
                     {t.quote}
                   </p>
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.10)', paddingTop: '16px' }}>
-                    <p className="text-sm font-medium" style={{ color: '#FFFFFF' }}>{t.name}</p>
-                    <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>{t.location}</p>
+                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '16px' }}>
+                    <p style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 500 }}>{t.name}</p>
+                    <p className="mt-0.5" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.04em' }}>{t.location}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <p className="text-center mt-8" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
-              * Testimonios simulados con fines de demostración del MVP.
+            <p className="mt-10" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.04em' }}>
+              * Testimonios simulados con fines de demostración.
             </p>
+
           </div>
         </section>
 
