@@ -175,30 +175,15 @@ export default function NosotrosPage() {
             Quién está detrás
           </h2>
           <div className="flex flex-col lg:flex-row gap-10 items-start">
-            {/* Photo placeholder */}
-            <div
-              className="shrink-0 flex items-center justify-center text-center"
-              style={{
-                width: '200px',
-                height: '200px',
-                backgroundColor: '#E8E4DC',
-                borderRadius: '6px',
-                color: '#9E9E9C',
-                fontSize: '12px',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}
-            >
-              Foto del fundador
-            </div>
             <p
               className="text-base leading-relaxed max-w-xl"
               style={{ color: '#5F5E5A', letterSpacing: 0 }}
             >
-              NODO fue creado por un diseñador colombiano con formación en diseño espacial y de producto,
-              convencido de que las condiciones que permitieron a marcas como Tylko escalar en Europa ya
-              existen en el mercado colombiano. Este proyecto es su tesis de grado en el BBA de IE University
-              — y el primer paso de una empresa real.
+              NODO fue fundado por un diseñador colombiano con formación en diseño espacial y de producto.
+              Después de años buscando muebles que se adaptaran a la forma en que los colombianos realmente
+              viven — moviéndose, arrendando, reconfigurando sus espacios — decidió construir el sistema que
+              nunca encontró. NODO es esa respuesta: fabricación directa, precios claros y un diseño pensado
+              para durar más que cualquier apartamento.
             </p>
           </div>
         </section>
