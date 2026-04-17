@@ -59,7 +59,7 @@ export function HeroSection() {
             className="absolute inset-0 w-full h-full object-cover"
             style={{ objectPosition: idx === 1 ? 'center center' : '50.2% 20%' }}
           />
-          <div className="absolute inset-0 bg-black/10" />
+          <div className="absolute inset-0 bg-black/5" />
         </div>
       ))}
 
