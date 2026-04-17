@@ -159,6 +159,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
+                <a href="https://www.instagram.com/nodomodulardesign/" target="_blank" rel="noopener noreferrer" className="font-body text-sm hover:opacity-60 transition-opacity">
+                  Instagram
+                </a>
+              </li>
+              <li>
                 <a href="mailto:nodomodulardesign@gmail.com" className="font-body text-sm hover:opacity-60 transition-opacity">
                   nodomodulardesign@gmail.com
                 </a>
