@@ -130,8 +130,8 @@ export function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '-0.03em', fontSize: '21px' }}
+            className="text-foreground"
+            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.05em', fontSize: '22px', lineHeight: 1 }}
           >
             NODO
           </Link>
@@ -203,8 +203,8 @@ export function Navbar() {
         <div className="flex items-center justify-between px-8 h-[60px]">
           <Link
             to="/"
-            className="text-lg font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.06em' }}
+            className="text-foreground"
+            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.05em', fontSize: '22px', lineHeight: 1 }}
             onClick={() => setMobileOpen(false)}
           >
             NODO
