@@ -1,7 +1,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ExternalLink, Loader2, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { formatPrice } from "@/lib/shopify";
 
@@ -32,18 +32,17 @@ export function CartDrawer() {
     if (open) syncCart();
   };
 
+  const navigate = useNavigate();
+
   const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'begin_checkout', {
-          currency: 'COP',
-          value: totalPrice || 0,
-        });
-      }
-      window.open(checkoutUrl, '_blank');
-      setIsOpen(false);
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'begin_checkout', {
+        currency: 'COP',
+        value: totalPrice || 0,
+      });
     }
+    setIsOpen(false);
+    navigate('/checkout');
   };
 
   return (
@@ -176,10 +175,7 @@ export function CartDrawer() {
                   {isLoading || isSyncing ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Finalizar Compra
-                    </>
+                    'Finalizar Compra'
                   )}
                 </Button>
               </div>
