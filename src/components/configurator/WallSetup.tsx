@@ -55,7 +55,7 @@ export default function WallSetup() {
     <input
       type="number" value={value} min={min} max={max} step={step}
       onChange={e => setter(Math.max(min, Number(e.target.value)))}
-      className="font-body text-sm border border-border px-3 py-1.5 w-full focus:outline-none focus:border-foreground/60 bg-transparent"
+      className="font-body text-sm border border-border rounded-lg px-3 py-1.5 w-full focus:outline-none focus:border-foreground/60 bg-transparent"
     />
   );
 
@@ -182,7 +182,7 @@ export default function WallSetup() {
                       <input
                         type="number" value={val} min={min} max={max} step={1}
                         onChange={e => setter(Number(e.target.value))}
-                        className="font-body text-sm border border-border px-2 py-1 w-full focus:outline-none focus:border-foreground/60 bg-transparent"
+                        className="font-body text-sm border border-border rounded-lg px-2 py-1 w-full focus:outline-none focus:border-foreground/60 bg-transparent"
                       />
                     </div>
                   )
@@ -194,7 +194,7 @@ export default function WallSetup() {
           <button
             onClick={handleConfirm}
             disabled={widthCm < 72 || heightCm < 100}
-            className="w-full rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
+            className="w-full rounded-lg bg-[#1C1C1A] text-white px-8 py-3.5 font-body text-sm tracking-wide font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
           >
             Empezar a diseñar →
           </button>

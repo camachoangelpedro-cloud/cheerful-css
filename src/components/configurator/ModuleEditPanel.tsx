@@ -8,77 +8,83 @@ const SINGLE_DOOR_HANDLES = ['modulo-36-36', 'modulo-36-72', 'modulo-h-36-36'];
 /* Handles that have AP (pasacables) GLB variants */
 const PASACABLES_HANDLES  = ['modulo-36-36', 'modulo-36-72', 'modulo-72-36', 'modulo-72-72', 'modulo-h-36-36', 'modulo-h-72-24'];
 
-/* SVG icons matching product page */
+/* SVG icons — matching redesigned PDP icons */
 const PanelConSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
-    <rect x="8" y="8" width="24" height="24" fill="currentColor" fillOpacity=".1" strokeWidth="1.5" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
+    <rect x="9" y="9" width="22" height="22" rx="1.5" fill="currentColor" fillOpacity=".1" strokeWidth="1" />
   </svg>
 );
 const PanelSinSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
-    <path d="M10 10L30 30M30 10L10 30" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
+    <line x1="12" y1="12" x2="28" y2="28" strokeWidth="1" opacity=".25" />
+    <line x1="28" y1="12" x2="12" y2="28" strokeWidth="1" opacity=".25" />
   </svg>
 );
 const InteriorAbiertoSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
   </svg>
 );
 const InteriorRepisaSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
-    <line x1="7" y1="20" x2="33" y2="20" strokeWidth="3" strokeLinecap="square" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
+    <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
-const InteriorPuertaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
-  isSingle ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <circle cx={handleLeft ? 13 : 27} cy="20" r="2.5" fill="currentColor" />
+const InteriorPuertaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) => {
+  const hx = handleLeft ? 13 : 27;
+  return isSingle ? (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="26" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1={hx} y1="16" x2={hx} y2="24" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <circle cx="16.5" cy="20" r="2" fill="currentColor" />
-      <circle cx="23.5" cy="20" r="2" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <rect x="21.5" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="20" y1="7" x2="20" y2="33" strokeWidth="1" opacity=".2" />
+      <line x1="15" y1="16" x2="15" y2="24" strokeWidth="2" strokeLinecap="round" />
+      <line x1="25" y1="16" x2="25" y2="24" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
-const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) =>
-  isSingle ? (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="26" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-      <circle cx={handleLeft ? 13 : 27} cy="13" r="2.5" fill="currentColor" />
+};
+const InteriorPuertaRepisaSvg = ({ isSingle, handleLeft }: { isSingle: boolean; handleLeft: boolean }) => {
+  const hx = handleLeft ? 13 : 27;
+  return isSingle ? (
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="26" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" opacity=".5" />
+      <line x1={hx} y1="10" x2={hx} y2="17" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ) : (
-    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-      <rect x="3" y="3" width="34" height="34" rx="1" />
-      <rect x="7" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <rect x="21" y="7" width="12" height="26" fill="currentColor" fillOpacity=".08" strokeWidth="1.5" />
-      <line x1="7" y1="20" x2="33" y2="20" strokeWidth="2" strokeLinecap="square" />
-      <circle cx="16.5" cy="14" r="2" fill="currentColor" />
-      <circle cx="23.5" cy="14" r="2" fill="currentColor" />
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+      <rect x="3" y="3" width="34" height="34" rx="2.5" />
+      <rect x="7" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <rect x="21.5" y="7" width="11.5" height="26" rx="1" fill="currentColor" fillOpacity=".08" strokeWidth="1" />
+      <line x1="20" y1="7" x2="20" y2="33" strokeWidth="1" opacity=".2" />
+      <line x1="8" y1="20" x2="32" y2="20" strokeWidth="1.5" strokeLinecap="round" opacity=".5" />
+      <line x1="15" y1="10" x2="15" y2="17" strokeWidth="2" strokeLinecap="round" />
+      <line x1="25" y1="10" x2="25" y2="17" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
-
+};
 const PasacablesOnSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
-    <circle cx="20" cy="28" r="4" strokeWidth="1.5" />
-    <line x1="20" y1="24" x2="20" y2="16" strokeWidth="1.5" />
-    <line x1="17" y1="16" x2="23" y2="16" strokeWidth="1.5" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
+    <circle cx="20" cy="27" r="3.5" strokeWidth="1.5" />
+    <line x1="20" y1="8" x2="20" y2="23" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="2 2" />
   </svg>
 );
 const PasacablesOffSvg = () => (
-  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="2" className="w-10 h-10">
-    <rect x="3" y="3" width="34" height="34" rx="1" />
-    <line x1="14" y1="26" x2="26" y2="26" strokeWidth="1.5" opacity=".35" strokeDasharray="3 2" />
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
+    <rect x="3" y="3" width="34" height="34" rx="2.5" />
+    <line x1="12" y1="12" x2="28" y2="28" strokeWidth="1" opacity=".25" />
+    <line x1="28" y1="12" x2="12" y2="28" strokeWidth="1" opacity=".25" />
   </svg>
 );
 
@@ -98,7 +104,7 @@ function OptionBtn({ active, locked, icon, label, onClick }: OptionBtnProps) {
         ${locked  ? 'opacity-30 pointer-events-none' : ''}`}
     >
       <div className="w-10 h-10 shrink-0 text-foreground">{icon}</div>
-      <span className={`font-body text-[10px] text-center leading-tight mt-1 ${active ? 'text-[#1C1C1A]' : 'text-muted-foreground'}`}>{label}</span>
+      <span style={{ fontSize: '8px', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.3, marginTop: '3px', color: active ? '#1C1C1A' : '#9E9E9C' }}>{label}</span>
     </button>
   );
 }

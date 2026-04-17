@@ -260,11 +260,11 @@
   }
 
   .nodo-button {
-    @apply bg-foreground text-background px-8 py-3 text-sm transition-all duration-200 hover:opacity-90 rounded-full;
+    @apply bg-foreground text-background px-8 py-3 text-sm transition-all duration-200 hover:opacity-90 rounded-lg;
   }
 
   .nodo-button-outline {
-    @apply border border-foreground/30 px-8 py-3 text-sm transition-all duration-200 hover:bg-foreground hover:text-background rounded-full;
+    @apply border border-foreground/30 px-8 py-3 text-sm transition-all duration-200 hover:bg-foreground hover:text-background rounded-lg;
   }
 
   @keyframes marquee {
@@ -320,11 +320,27 @@
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+  /* 3-copy variant for the announcement bar (-33.33%) */
+  @keyframes nodo-marquee-3 {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-33.333%); }
+  }
   .nodo-marquee-track {
     display: flex;
-    white-space: nowrap;
-    animation: nodo-marquee 24s linear infinite;
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: nodo-marquee 18s linear infinite;
     will-change: transform;
+  }
+  /* Announcement bar — 3 copies, faster on mobile, slower on desktop */
+  .nodo-marquee-bar {
+    animation-name: nodo-marquee-3;
+    animation-duration: 16s;
+  }
+  @media (min-width: 768px) {
+    .nodo-marquee-bar {
+      animation-duration: 28s;
+    }
   }
 }
 

@@ -47,6 +47,7 @@ export default function ModuleCatalog() {
             height: `${previewH}px`,
             background: currentColor.hex,
             border: '1px solid rgba(0,0,0,0.10)',
+            borderRadius: '3px',
           }}
         />
         <span className="font-body text-[10px] tracking-wide font-medium text-foreground/80 text-center leading-tight">
@@ -76,7 +77,7 @@ export default function ModuleCatalog() {
           <button
             onClick={() => setClfQuantity(product.handle, qty - 1)}
             disabled={qty === 0}
-            className="w-5 h-5 border border-border flex items-center justify-center hover:bg-muted/50 transition-colors disabled:opacity-30"
+            className="w-5 h-5 border border-border rounded flex items-center justify-center hover:bg-muted/50 transition-colors disabled:opacity-30"
           >
             <Minus className="w-2.5 h-2.5" />
           </button>

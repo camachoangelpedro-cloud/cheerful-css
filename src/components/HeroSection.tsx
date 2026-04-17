@@ -42,34 +42,35 @@ export function HeroSection() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
 
-      {/* Slides */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0, scale: 1.03 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: [0.25, 0.1, 0.25, 1] }}
+      {/* All slides always rendered — crossfade via CSS opacity */}
+      {heroSlides.map((slide, idx) => (
+        <div
+          key={slide.image}
           className="absolute inset-0"
+          style={{
+            opacity: idx === currentSlide ? 1 : 0,
+            transition: 'opacity 2s ease-in-out',
+            zIndex: idx === currentSlide ? 1 : 0,
+          }}
         >
           <img
-            src={heroSlides[currentSlide].image}
+            src={slide.image}
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/25" />
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      ))}
 
       {/* Content — bottom left */}
       <div className="absolute bottom-12 left-8 lg:left-16 z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${currentSlide}`}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.55, delay: 0.4 }}
           >
             <p
               className="text-white/50 font-medium uppercase mb-5"

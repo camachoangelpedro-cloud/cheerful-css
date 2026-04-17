@@ -104,12 +104,12 @@ export function Navbar() {
         className="overflow-hidden flex items-center"
         style={{ backgroundColor: '#1C1C1A', height: '30px' }}
       >
-        <div className="nodo-marquee-track">
-          {[0, 1].map(i => (
+        <div className="nodo-marquee-track nodo-marquee-bar">
+          {[0, 1, 2].map(i => (
             <span
               key={i}
               className="px-10"
-              style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(242,237,228,0.45)' }}
+              style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(242,237,228,0.45)', whiteSpace: 'nowrap', flexShrink: 0 }}
             >
               Diseño Modular &nbsp;·&nbsp; Hecho en Colombia &nbsp;·&nbsp; Primeros Envíos Gratis &nbsp;·&nbsp; Fabricado a tu medida &nbsp;·&nbsp;
             </span>
@@ -131,7 +131,7 @@ export function Navbar() {
           <Link
             to="/"
             className="font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.22em', fontSize: '15px' }}
+            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.06em', fontSize: '18px' }}
           >
             NODO
           </Link>
@@ -204,7 +204,7 @@ export function Navbar() {
           <Link
             to="/"
             className="text-lg font-extrabold text-foreground"
-            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'Syne, sans-serif', letterSpacing: '0.06em' }}
             onClick={() => setMobileOpen(false)}
           >
             NODO
@@ -346,7 +346,7 @@ export function Navbar() {
         >
           <div
             className="w-full max-w-sm relative"
-            style={{ backgroundColor: '#FAFAF8', borderRadius: 0, padding: '40px 32px 36px' }}
+            style={{ backgroundColor: '#FAFAF8', borderRadius: '12px', padding: '40px 32px 36px' }}
             onClick={e => e.stopPropagation()}
           >
             {/* Close */}
@@ -385,19 +385,19 @@ export function Navbar() {
                   type="email"
                   placeholder="tu@email.com"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <input
                   type="password"
                   placeholder="Contraseña"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <button
                   onClick={handleAuthSubmit}
                   disabled={authLoading}
                   className="w-full flex items-center justify-center gap-2 mt-1 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-70"
-                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '9999px', letterSpacing: 0 }}
+                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '8px', letterSpacing: 0 }}
                 >
                   {authLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                   Iniciar sesión
@@ -427,25 +427,25 @@ export function Navbar() {
                   type="text"
                   placeholder="Tu nombre"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <input
                   type="email"
                   placeholder="tu@email.com"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <input
                   type="password"
                   placeholder="Contraseña"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <input
                   type="password"
                   placeholder="Confirmar contraseña"
                   className="w-full border px-3 py-2.5 text-sm outline-none focus:border-[#1C1C1A] transition-colors bg-transparent"
-                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: 0, letterSpacing: 0 }}
+                  style={{ borderColor: 'rgba(0,0,0,0.15)', color: '#1C1C1A', borderRadius: '6px', letterSpacing: 0 }}
                 />
                 <label className="flex items-start gap-2 cursor-pointer py-1">
                   <input type="checkbox" className="mt-0.5 accent-[#1C1C1A]" />
@@ -457,7 +457,7 @@ export function Navbar() {
                   onClick={handleAuthSubmit}
                   disabled={authLoading}
                   className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-70"
-                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '9999px', letterSpacing: 0 }}
+                  style={{ backgroundColor: '#1C1C1A', color: '#FFFFFF', borderRadius: '8px', letterSpacing: 0 }}
                 >
                   {authLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                   Crear cuenta

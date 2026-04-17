@@ -215,11 +215,11 @@ export default function HomePage() {
               ].map((t, i) => (
                 <div
                   key={t.num}
-                  className="py-8 pr-8"
-                  style={{
-                    borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                    paddingLeft: i > 0 ? '32px' : '0',
-                  }}
+                  className={`py-6 sm:py-8 sm:pr-8 ${
+                    i > 0
+                      ? 'border-t border-white/[0.08] pt-6 sm:border-t-0 sm:border-l sm:border-white/[0.08] sm:pt-8 sm:pl-8'
+                      : ''
+                  }`}
                 >
                   <p
                     className="font-light leading-relaxed mb-8"

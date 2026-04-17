@@ -34,26 +34,16 @@ export function CartDrawer() {
 
   const handleCheckout = () => {
     const checkoutUrl = getCheckoutUrl();
-    if (!checkoutUrl) return;
-
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'begin_checkout', {
-        currency: 'COP',
-        value: totalPrice || 0,
-      });
-    }
-
-    // Try to open in a new tab. If blocked (popup blocker or sandboxed iframe),
-    // fall back to top-level navigation so we escape the preview iframe.
-    const popup = window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
-    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-      try {
-        window.top!.location.href = checkoutUrl;
-      } catch {
-        window.location.href = checkoutUrl;
+    if (checkoutUrl) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'begin_checkout', {
+          currency: 'COP',
+          value: totalPrice || 0,
+        });
       }
+      window.open(checkoutUrl, '_blank');
+      setIsOpen(false);
     }
-    setIsOpen(false);
   };
 
   return (
@@ -180,7 +170,7 @@ export function CartDrawer() {
                 </p>
                 <Button 
                   onClick={handleCheckout} 
-                  className="w-full nodo-button rounded-full bg-[#1C1C1A] text-white px-8 py-3.5 text-sm tracking-wide font-medium hover:opacity-90 transition-opacity"
+                  className="w-full nodo-button rounded-lg bg-[#1C1C1A] text-white px-8 py-3.5 text-sm tracking-wide font-medium hover:opacity-90 transition-opacity"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? (

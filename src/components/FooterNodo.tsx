@@ -9,7 +9,7 @@ function PaymentBadge({ label }: { label: string }) {
       className="inline-flex items-center justify-center font-body text-[10px] font-medium"
       style={{
         border: '1px solid rgba(242,237,228,0.2)',
-        borderRadius: 0,
+        borderRadius: '4px',
         padding: '3px 7px',
         color: 'rgba(242,237,228,0.45)',
         letterSpacing: '0.04em',
