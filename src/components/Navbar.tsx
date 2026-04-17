@@ -131,7 +131,7 @@ export function Navbar() {
           <Link
             to="/"
             className="text-foreground"
-            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, fontStyle: 'italic', letterSpacing: '-0.04em', fontSize: '26px', lineHeight: 1 }}
+            style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.04em', fontSize: '20px', lineHeight: 1 }}
           >
             NO<span style={{ letterSpacing: 0 }}>.</span>DO
           </Link>
