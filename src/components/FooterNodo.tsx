@@ -123,8 +123,12 @@ export function Footer() {
 
           {/* Brand + Newsletter */}
           <div className="lg:col-span-1">
-            <Link to="/" className="text-2xl tracking-[0.2em] font-extrabold" style={{ fontFamily: 'Syne, sans-serif' }}>
-              NODO
+            <Link
+              to="/"
+              className="text-background"
+              style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, letterSpacing: '-0.04em', fontSize: '20px', lineHeight: 1 }}
+            >
+              NO<span style={{ letterSpacing: 0 }}>.</span>DO
             </Link>
             <p className="font-body text-sm text-background/60 mt-4 max-w-sm leading-relaxed">
               Sistemas modulares de precisión. Diseño colombiano que evoluciona contigo.
