@@ -288,6 +288,23 @@
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
+
+  /* Ultra-thin display text — the "wow" anchor */
+  .nodo-display {
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-weight: 100;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+
+  /* Bold uppercase overline — the contrast anchor */
+  .nodo-overline {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #9E9E9C;
+  }
 }
 
 /* Configurator option buttons must NOT become pills */

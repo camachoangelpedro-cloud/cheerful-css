@@ -17,47 +17,84 @@ export default function ConfiguradorIntroPage() {
 
         {/* SECTION 1 — Hero */}
         <div className="text-center pt-32 md:pt-40 pb-4">
-          <h1 className="font-display font-light text-4xl md:text-5xl">
-            Diseña tu sistema de almacenamiento
+          <p className="nodo-overline mb-6">Configurador 3D</p>
+          <h1>
+            <span
+              className="block nodo-display"
+              style={{ fontSize: 'clamp(3rem, 7vw, 7.5rem)', color: '#1C1C1A' }}
+            >
+              Diseña tu
+            </span>
+            <span
+              className="block"
+              style={{
+                fontSize: 'clamp(1.1rem, 2.5vw, 2.2rem)',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#1C1C1A',
+                marginTop: '4px',
+              }}
+            >
+              Sistema de almacenamiento
+            </span>
           </h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-lg mx-auto mt-4">
+          <p className="text-sm text-muted-foreground max-w-md mx-auto mt-6" style={{ fontWeight: 300 }}>
             Crea una configuración única en minutos. Así funciona:
           </p>
         </div>
 
-        {/* SECTION 2 — Three steps, each in its own dark box */}
-        <div className="max-w-4xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* SECTION 2 — Three steps */}
+        <div className="max-w-4xl mx-auto mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
 
-          <div className="rounded-lg p-8 lg:p-10" style={{ backgroundColor: '#1C1C1A' }}>
-            <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>01</p>
-            <h3 className="font-body font-medium text-base mt-3" style={{ color: '#FFFFFF' }}>Empieza por la base</h3>
-            <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Arrastra una base al canvas. Es el punto de apoyo de tu sistema — define dónde empieza tu mueble.
-            </p>
-          </div>
-
-          <div className="rounded-lg p-8 lg:p-10" style={{ backgroundColor: '#1C1C1A' }}>
-            <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>02</p>
-            <h3 className="font-body font-medium text-base mt-3" style={{ color: '#FFFFFF' }}>Apila tus muebles</h3>
-            <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Elige muebles del menú derecho y colócalos encima de la base o de otros muebles. Recomendamos colocar los de profundidad completa abajo y los de media profundidad arriba.
-            </p>
-          </div>
-
-          <div className="rounded-lg p-8 lg:p-10" style={{ backgroundColor: '#1C1C1A' }}>
-            <p className="text-5xl font-light" style={{ color: 'rgba(255,255,255,0.15)' }}>03</p>
-            <h3 className="font-body font-medium text-base mt-3" style={{ color: '#FFFFFF' }}>Conecta y compra</h3>
-            <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Cuando tu diseño esté listo, revisa el resumen con el precio total y añádelo al carrito. Cada mueble llega armado — solo los conectas con los clips incluidos.
-            </p>
-          </div>
+          {[
+            {
+              num: '01',
+              title: 'Empieza por la base',
+              body: 'Arrastra una base al canvas. Es el punto de apoyo de tu sistema — define dónde empieza tu mueble.',
+            },
+            {
+              num: '02',
+              title: 'Apila tus muebles',
+              body: 'Elige muebles del menú derecho y colócalos encima de la base o de otros muebles. Profundidad completa abajo, media profundidad arriba.',
+            },
+            {
+              num: '03',
+              title: 'Conecta y compra',
+              body: 'Cuando tu diseño esté listo, revisa el resumen con el precio total y añádelo al carrito. Cada mueble llega armado.',
+            },
+          ].map(step => (
+            <div
+              key={step.num}
+              className="p-8 lg:p-10 flex flex-col"
+              style={{ backgroundColor: '#1C1C1A' }}
+            >
+              <p
+                className="nodo-display"
+                style={{ fontSize: '5rem', color: 'rgba(255,255,255,0.07)', lineHeight: 1, marginBottom: '16px' }}
+              >
+                {step.num}
+              </p>
+              <h3
+                className="uppercase"
+                style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', color: '#FFFFFF', marginBottom: '12px' }}
+              >
+                {step.title}
+              </h3>
+              <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>
+                {step.body}
+              </p>
+            </div>
+          ))}
 
         </div>
 
         {/* SECTION 3 — Tip */}
-        <div className="max-w-2xl mx-auto mt-12 bg-muted rounded-lg p-6 text-center">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Orden recomendado de abajo hacia arriba: <strong className="text-foreground font-medium">Base → Muebles profundidad completa → Muebles media profundidad</strong>. Los clips se añaden automáticamente.
+        <div className="max-w-2xl mx-auto mt-10 p-6 text-center" style={{ backgroundColor: '#F5F5F3' }}>
+          <p className="text-sm text-muted-foreground leading-relaxed" style={{ fontWeight: 300 }}>
+            Orden recomendado de abajo hacia arriba:{' '}
+            <strong className="text-foreground" style={{ fontWeight: 600 }}>Base → Profundidad completa → Media profundidad</strong>.
+            Los clips se añaden automáticamente.
           </p>
         </div>
 
@@ -65,22 +102,23 @@ export default function ConfiguradorIntroPage() {
         <div className="text-center mt-12 mb-8">
           <Link
             to="/configurador/editor"
-            className="rounded-full bg-foreground text-background px-10 py-4 text-base tracking-wide inline-block hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-3 bg-foreground text-background px-10 py-4 font-medium uppercase hover:opacity-90 transition-opacity group"
+            style={{ fontSize: '11px', letterSpacing: '0.18em' }}
           >
             Abrir el configurador
+            <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
           </Link>
-          <p className="text-xs text-muted-foreground mt-4">
+          <p className="text-xs text-muted-foreground mt-5" style={{ fontWeight: 300 }}>
             Disponible en escritorio. En móvil puedes comprar muebles individuales desde{' '}
             <Link to="/catalogo" className="underline underline-offset-2 hover:opacity-60 transition-opacity">
               nuestro catálogo
-            </Link>
-            .
+            </Link>.
           </p>
         </div>
 
         {/* SECTION 5 — Extra info */}
-        <div className="max-w-xl mx-auto text-center mt-8 mb-20">
-          <p className="text-xs text-muted-foreground">
+        <div className="max-w-xl mx-auto text-center mt-6 mb-20">
+          <p className="text-xs text-muted-foreground" style={{ fontWeight: 300 }}>
             Tu configuración es completamente libre. No hay reglas fijas — experimenta con diferentes combinaciones hasta que encuentres la que mejor se adapte a tu espacio.
           </p>
         </div>

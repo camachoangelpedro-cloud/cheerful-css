@@ -112,8 +112,8 @@ export default function HomePage() {
                 </span>
 
                 <h2
-                  className="font-light mt-5 mb-10"
-                  style={{ color: '#FFFFFF', fontSize: '1.45rem', lineHeight: 1.2, letterSpacing: '-0.01em' }}
+                  className="nodo-display mt-5 mb-10"
+                  style={{ color: '#FFFFFF', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}
                 >
                   Muebles que se adaptan a ti, no al revés.
                 </h2>
@@ -154,6 +154,23 @@ export default function HomePage() {
 
           </div>
         </section>
+
+        {/* EDITORIAL STRIP */}
+        <div
+          className="overflow-hidden py-10 lg:py-14"
+          style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}
+        >
+          <p
+            className="nodo-container nodo-display"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 5rem)',
+              color: 'rgba(28,28,26,0.1)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Modular · Preciso · Tuyo · Hecho en Bogotá · Fabricado a tu medida
+          </p>
+        </div>
 
         {/* BLOCK 3 — Editorial quotes */}
         <section style={{ backgroundColor: '#1C1C1A' }} className="py-20 lg:py-28">

@@ -17,17 +17,18 @@ export default function NosotrosPage() {
       <main className="pt-[96px]">
 
         {/* ── SECTION 1 — Hero ─────────────────────────────────────────────── */}
-        <section style={{ backgroundColor: '#F5F5F5' }} className="py-20 lg:py-28">
+        <section style={{ backgroundColor: '#F5F5F3' }} className="pt-20 lg:pt-28 pb-16 lg:pb-20">
           <div className="nodo-container">
+            <p className="nodo-overline mb-6">Quiénes somos</p>
             <h1
-              className="text-4xl lg:text-5xl max-w-2xl"
-              style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.15 }}
+              className="nodo-display max-w-4xl"
+              style={{ fontSize: 'clamp(3rem, 7vw, 7rem)', color: '#1C1C1A' }}
             >
               Muebles modulares diseñados para la vida real.
             </h1>
             <p
-              className="text-base mt-6 max-w-xl leading-relaxed"
-              style={{ color: '#5F5E5A', letterSpacing: 0 }}
+              className="text-base mt-8 max-w-lg leading-relaxed"
+              style={{ color: '#5F5E5A', fontWeight: 300 }}
             >
               NODO nace de una convicción simple: que el diseño de calidad no debería exigirte elegir
               entre lo genérico y lo caro, entre lo impersonal y lo impredecible.
@@ -38,8 +39,8 @@ export default function NosotrosPage() {
         {/* ── SECTION 2 — El problema ──────────────────────────────────────── */}
         <section className="nodo-container py-20 lg:py-28">
           <h2
-            className="text-3xl lg:text-4xl mb-8"
-            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+            className="nodo-display mb-8"
+            style={{ fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#1C1C1A' }}
           >
             El problema que resolvemos
           </h2>
@@ -62,8 +63,8 @@ export default function NosotrosPage() {
           style={{ borderColor: 'rgba(0,0,0,0.06)' }}
         >
           <h2
-            className="text-3xl lg:text-4xl mb-10 lg:mb-14"
-            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+            className="nodo-display mb-10 lg:mb-14"
+            style={{ fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#1C1C1A' }}
           >
             NODO es la tercera opción.
           </h2>
@@ -109,8 +110,8 @@ export default function NosotrosPage() {
           style={{ borderColor: 'rgba(0,0,0,0.06)' }}
         >
           <h2
-            className="text-3xl lg:text-4xl mb-10 lg:mb-14"
-            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+            className="nodo-display mb-10 lg:mb-14"
+            style={{ fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#1C1C1A' }}
           >
             Cómo funciona
           </h2>
@@ -168,8 +169,8 @@ export default function NosotrosPage() {
           style={{ borderColor: 'rgba(0,0,0,0.06)' }}
         >
           <h2
-            className="text-3xl lg:text-4xl mb-10"
-            style={{ fontWeight: 300, color: '#1C1C1A', letterSpacing: 0, lineHeight: 1.1 }}
+            className="nodo-display mb-10"
+            style={{ fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#1C1C1A' }}
           >
             Quién está detrás
           </h2>

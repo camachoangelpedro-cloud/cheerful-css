@@ -375,17 +375,13 @@ export default function ProductoPage() {
   /* helpers */
   const StepHeader = ({ num, label, suffix }: { num?: string; label: string; suffix?: string }) => (
     <div className="flex items-center gap-2 mb-3">
-      {num && (
-        <span className="w-5 h-5 rounded-full border border-border flex items-center justify-center text-[10px] text-muted-foreground">
-          {num}
-        </span>
-      )}
-      <span className="font-body text-[10px] tracking-wide text-muted-foreground font-medium">{label}</span>
+      <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#9E9E9C' }}>
+        {num ? `${num} · ` : ''}{label}
+      </span>
       {suffix && (
-        <>
-          <span className="font-body text-[10px] text-muted-foreground/50">—</span>
-          <span className="font-body text-[10px] text-foreground font-medium">{suffix}</span>
-        </>
+        <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: '#1C1C1A' }}>
+          {suffix}
+        </span>
       )}
     </div>
   );
@@ -564,10 +560,19 @@ export default function ProductoPage() {
           {/* ── RIGHT: sticky product info ── */}
           <div className="lg:sticky lg:top-8">
 
-            {/* Title block — compact, name + dims + price read as one unit */}
-            <h1 className="font-display font-light text-3xl md:text-4xl leading-snug">{product.title}</h1>
-            {dims && <p className="font-body text-xs text-muted-foreground tracking-wide mt-1.5">{dims}</p>}
-            <p className="font-body text-xl font-medium mt-5">{priceDisplay}</p>
+            {/* Title block */}
+            <h1
+              className="nodo-display"
+              style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4.5rem)', color: '#1C1C1A' }}
+            >
+              {product.title}
+            </h1>
+            {dims && (
+              <p className="nodo-overline mt-3">{dims}</p>
+            )}
+            <p style={{ fontSize: '1.4rem', fontWeight: 300, color: '#1C1C1A', marginTop: '14px', letterSpacing: '-0.01em' }}>
+              {priceDisplay}
+            </p>
 
             {/* Stock indicator */}
             {selectedVariant && (

@@ -326,16 +326,17 @@ export default function CatalogoPage() {
         </div>
 
         {/* Category header */}
-        <div className="nodo-container pt-5 pb-8">
+        <div className="nodo-container pt-8 pb-10">
+          <p className="nodo-overline mb-4">Colección completa</p>
           <h1
-            className="text-4xl"
-            style={{ fontWeight: 300, letterSpacing: 0, lineHeight: 1.1 }}
+            className="nodo-display"
+            style={{ fontSize: 'clamp(3.5rem, 9.5vw, 9rem)', color: '#1C1C1A' }}
           >
             Catálogo
           </h1>
           <p
-            className="text-sm leading-relaxed max-w-[500px] mt-3"
-            style={{ color: '#5F5E5A', letterSpacing: 0 }}
+            className="text-sm leading-relaxed max-w-[460px] mt-5"
+            style={{ color: '#5F5E5A', letterSpacing: 0, fontWeight: 300 }}
           >
             Sistema modular NODO — cada módulo se conecta sin herramientas.
             Configura tu espacio libremente y crece cuando quieras.

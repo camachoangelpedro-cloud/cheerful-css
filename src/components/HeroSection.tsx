@@ -79,12 +79,8 @@ export function HeroSection() {
             </p>
 
             <h1
-              className="text-white font-light whitespace-pre-line mb-8"
-              style={{
-                fontSize: 'clamp(2.6rem, 4.8vw, 5rem)',
-                lineHeight: 1.02,
-                letterSpacing: '-0.01em',
-              }}
+              className="text-white whitespace-pre-line mb-8 nodo-display"
+              style={{ fontSize: 'clamp(3rem, 6.5vw, 7.5rem)', lineHeight: 0.95 }}
             >
               {heroSlides[currentSlide].title}
             </h1>
