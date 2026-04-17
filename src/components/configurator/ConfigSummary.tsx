@@ -87,6 +87,13 @@ setIsAdding(true);
       } else {
         toast.success('¡Módulos añadidos al carrito!');
         setAddedToCart(true);
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'configurator_add_to_cart', {
+            page_location: window.location.href,
+            event_category: 'configurator',
+            event_label: 'add_to_cart_from_configurator',
+          });
+        }
       }
     } catch (err) {
       console.error('Error adding configurator items to cart:', err);
