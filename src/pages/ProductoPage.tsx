@@ -539,6 +539,16 @@ export default function ProductoPage() {
                   <span className="font-display font-semibold text-xl text-foreground/20">{product.title}</span>
                 </div>
               )}
+              {glbUrl && (
+                <div
+                  className="absolute bottom-3 right-3 w-9 h-9 rounded-full flex items-center justify-center pointer-events-none"
+                  style={{ backgroundColor: 'rgba(28,28,26,0.45)', backdropFilter: 'blur(4px)' }}
+                >
+                  <span style={{ fontFamily: "'PP Neue Montreal', sans-serif", fontWeight: 700, fontSize: '10px', letterSpacing: '0.04em', color: 'rgba(255,255,255,0.85)' }}>
+                    3D
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Render image — lifestyle photo for the selected colour */}
